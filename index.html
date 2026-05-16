@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldenFuture Premium App</title>
+    <style>
+        :root {
+            --bg-color: #fbf9f3;          /* မြန်မာ့ရိုးရာ ကရေကရာရောင် ခပ်ဖျော့ဖျော့ */
+            --card-bg: #ffffff;           /* ကတ်ပြားနောက်ခံ အဖြူရောင် */
+            --text-main: #2c1d11;         /* စာသားအဓိက အရောင်ရင့် */
+            --text-muted: #6d5e53;        /* စာသားအဖျော့ */
+            --primary-color: #800020;     /* ပတ္တမြား နီညိုရောင် (Maroon) */
+            --accent-color: #cda33b;      /* နန်းတွင်း ရွှေဝါရောင် (Myanmar Gold) */
+            --border-color: #e7dfd1;      /* ဘောင်အရောင်ဖျော့ */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+
+        /* Premium Header Section */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #4e0013);
+            color: #ffffff;
+            text-align: center;
+            padding: 45px 20px;
+            border-bottom: 4px solid var(--accent-color);
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: 0 4px 15px rgba(128,0,32,0.15);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--accent-color);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 6px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Edit Control Panel Badge */
+        .edit-info-badge {
+            background-color: #fff8e1;
+            color: #b78103;
+            border: 1px solid #ffe082;
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .auth-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(128,0,32,0.2);
+            transition: background 0.2s;
+        }
+
+        .auth-btn:hover {
+            background-color: #5a0016;
+        }
+
+        .auth-btn.unlocked-status {
+            background-color: #2e7d32;
+        }
+
+        /* Navigation Tabs */
+        .tab-container {
+            display: flex;
+            background: #f1e7d3;
+            border-radius: 14px;
+            padding: 5px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: #ffffff;
+            box-shadow: 0 3px 8px rgba(128,0,32,0.25);
+        }
+
+        /* Service Content Cards */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 12px rgba(44,29,17,0.03);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Editable Text Setup */
+        .editable-field {
+            border: 1px dashed transparent;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .editable-field[contenteditable="true"]:hover {
+            background-color: #fffef7;
+            border-color: var(--accent-color);
+            cursor: pointer;
+        }
+
+        .editable-field[contenteditable="true"]:focus {
+            background-color: #ffffff;
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 6px rgba(128,0,32,0.15);
+        }
+
+        /* Requirements List */
+        .req-list {
+            list-style: none;
+        }
+
+        .req-list li {
+            position: relative;
+            padding-left: 26px;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .req-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* Pricing Badge */
+        .price-tag {
+            background: #fffefb;
+            border-left: 4px solid var(--accent-color);
+            padding: 14px;
+            border-radius: 6px;
+            margin-top: 14px;
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .price-highlight {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 17px;
+        }
+
+        /* Travel Route Area */
+        .route-info {
+            background: #fffefc;
+            border: 1px dashed var(--accent-color);
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        /* Gift Items Grid */
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .gift-item {
+            background: #fffdf7;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+    <!-- Firebase SDK Modules (v10+) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Firebase Configuration 
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5_PJT9Pvv1L24TTUrAY85GDSjtKoSQjA",
+            authDomain: "goldenfuture-cd579.firebaseapp.com",
+            databaseURL: "https://goldenfuture-cd579-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "goldenfuture-cd579",
+            storageBucket: "goldenfuture-cd579.firebasestorage.app",
+            messagingSenderId: "974767484310",
+            appId: "1:974767484310:web:c867994d5a8620ac9cc1b7",
+            measurementId: "G-DFQ4S6FEYJ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Global Edit State
+        let isEditable = false;
+
+        // 1. Database မှ ဒေတာများကို ဆွဲယူပြီး App မှာ ပြသခြင်း (Realtime Sync)
+        const appDataRef = ref(db, 'appData');
+        onValue(appDataRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // ကုဒ်ထဲက သက်ဆိုင်ရာ id အလိုက် စာသားတွေကို အလိုအလျောက် ပြောင်းပေးမယ်
+                for (const key in data) {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.innerHTML = data[key];
+                    }
+                }
+            }
+        });
+
+        // 2. Lock / Unlock ခလုပ်နှိပ်သည့် စနစ်
+        window.toggleEditMode = function() {
+            const fields = document.querySelectorAll('.editable-field');
+            const statusText = document.getElementById('status-text');
+            const lockBtn = document.getElementById('lock-btn');
+
+            if (!isEditable) {
+                const password = prompt("စာသားများ ပြင်ဆင်ရန် Password ရိုက်ထည့်ပါ:");
+                if (password === "246810") {
+                    isEditable = true;
+                    fields.forEach(field => field.setAttribute('contenteditable', 'true'));
+                    statusText.innerText = "🔓 စာသားများကို စိတ်ကြိုက် နှိပ်ပြင်နိုင်ပါပြီ။";
+                    lockBtn.innerText = "💾 ပြင်ဆင်ပြီးပါက သိမ်းဆည်းရန်";
+                    lockBtn.classList.add('unlocked-status');
+                } else if (password !== null) {
+                    alert("⚠️ Password မှားယွင်းနေပါသည်။");
+                }
+            } else {
+                // ဒေတာများကို Firebase Database သို့ သိမ်းဆည်းခြင်း
+                let updatedData = {};
+                fields.forEach(field => {
+                    if(field.id) {
+                        updatedData[field.id] = field.innerHTML;
+                    }
+                });
+
+                set(ref(db, 'appData'), updatedData)
+                    .then(() => {
+                        alert("✅ အချက်အလက်များကို Firebase Database ထဲသို့ အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။");
+                    })
+                    .catch((error) => {
+                        alert("❌ သိမ်းဆည်းရာတွင် အမှားအယွင်းရှိခဲ့သည်: " + error.message);
+                    });
+
+                // Lock ပြန်ပိတ်ခြင်း
+                isEditable = false;
+                fields.forEach(field => field.setAttribute('contenteditable', 'false'));
+                statusText.innerText = "🔒 လက်ရှိတွင် စာသားများ ပြင်ဆင်ခြင်းကို ပိတ်ထားပါသည်။";
+                lockBtn.innerText = "🔐 စာသားပြင်ရန် Password ရိုက်ပါ";
+                lockBtn.classList.remove('unlocked-status');
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="header">
+        <h1 class="editable-field" id="app-title" contenteditable="false">GoldenFuture</h1>
+        <p class="editable-field" id="app-subtitle" contenteditable="false">ထိုင်း-မြန်မာ ခရီးသွားနှင့် ပတ်စပို့ဝန်ဆောင်မှု</p>
+    </div>
+
+    <div class="container">
+        
+        <!-- Password Control Panel -->
+        <div class="edit-info-badge">
+            <span id="status-text">🔒 လက်ရှိတွင် စာသားများ ပြင်ဆင်ခြင်းကို ပိတ်ထားပါသည်။</span>
+            <button class="auth-btn" id="lock-btn" onclick="toggleEditMode()">🔐 စာသားပြင်ရန် Password ရိုက်ပါ</button>
+        </div>
+        
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="openTab(event, 'passport')">ပတ်စပို့ ဝန်ဆောင်မှု</button>
+            <button class="tab-btn" onclick="openTab(event, 'travel')">ထိုင်းခရီးစဉ် လမ်းကြောင်း</button>
+        </div>
+
+        <div id="passport" class="content-section active">
+            
+            <div class="card">
+                <div class="card-title editable-field" id="pass-title-1" contenteditable="false">🇲🇲 မြန်မာပြည်ပတ်စပို့ ဆောင်ရွက်ပေးခြင်း</div>
+                <p style="font-size: 14px; color: var(--text-muted);" class="editable-field" id="pass-desc-1" contenteditable="false">မြန်မာပြည်တွင် ပတ်စပို့ အမြန်ပြုလုပ်ပေးသည့် ဝန်ဆောင်မှု ဖြစ်ပါသည်။</p>
+                
+                <div class="price-tag">
+                    <span class="editable-field" id="pass-price-1" contenteditable="false"><strong>QR ဝန်ဆောင်ခ:</strong> <span class="price-highlight">၇၀,၀၀၀ ကျပ်</span></span><br>
+                    <span class="editable-field" id="pass-price-2" contenteditable="false"><strong>ရုံးအတွင်းကုန်ကျငွေ:</strong> ၃/၄ သောင်းခန့်</span><br>
+                    <span style="font-size: 12px; color: var(--text-muted);" class="editable-field" id="pass-price-note" contenteditable="false">(စုစုပေါင်း ၁ သိန်းဝန်းကျင်ခန့်ဖြင့် အပြီးအစီး ရရှိနိုင်ပါသည်)</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title editable-field" id="pv-title" contenteditable="false">📋 PV Passport လျှောက်ထားရန်</div>
+                <ul class="req-list">
+                    <li class="editable-field" id="pv-req-1" contenteditable="false">အိမ်ထောင်စုစာရင်း</li>
+                    <li class="editable-field" id="pv-req-2" contenteditable="false">နိုင်ငံသားစိစစ်ရေး ကတ်ပြား (မှတ်ပုံတင်)</li>
+                    <li class="editable-field" id="pv-req-3" contenteditable="false">စမတ်ကတ် (Smart Card)</li>
+                </ul>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;" class="editable-field" id="pv-note" contenteditable="false">⚠️ အထက်ပါအချက်အလက်များ ရှိရုံဖြင့် လျှောက်ထားနိုင်ပါပြီ။</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title editable-field" id="pj-title" contenteditable="false">📋 PJ Passport လျှောက်ထားရန်</div>
+                <ul class="req-list">
+                    <li class="editable-field" id="pj-req-1" contenteditable="false">အိမ်ထောင်စုစာရင်း</li>
+                    <li class="editable-field" id="pj-req-2" contenteditable="false">နိုင်ငံသားစိစစ်ရေး ကတ်ပြား (မှတ်ပုံတင်)</li>
+                    <li class="editable-field" id="pj-req-3" contenteditable="false">စမတ်ကတ် (Smart Card)</li>
+                    <li class="editable-field" id="pj-req-4" contenteditable="false">လေဘာကတ် (Labour Card) လုပ်ဆောင်ရပါမည်</li>
+                </ul>
+                <div class="price-tag" style="background: #fffdf7;">
+                    <span class="editable-field" id="pj-note" contenteditable="false">ℹ️ <strong>ကုန်ကျစရိတ်:</strong> ၅,၀၀၀ / ၁၀,၀၀၀ ကျပ်ခန့် ပိုမို ကုန်ကျနိုင်ပါသည်။</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="travel" class="content-section">
+            
+            <div class="card">
+                <div class="card-title editable-field" id="th-route-title" contenteditable="false">🇹🇭 Thailand သို့ လာရောက်နိုင်မည့် လမ်းကြောင်းများ</div>
+                <p style="font-size: 14px; margin-bottom: 12px;" class="editable-field" id="th-route-desc" contenteditable="false">မြန်မာနိုင်ငံမှ ထိုင်းနိုင်ငံသို့ <strong>တရားဝင်လမ်းကြောင်း</strong> နှင့် <strong>တရားမဝင်လမ်းကြောင်း</strong> နှစ်မျိုးလုံးဖြင့် လာရောက်နိုင်ပါသည်။</p>
+                
+                <div style="font-weight: bold; margin-bottom: 8px;" class="editable-field" id="th-route-sub" contenteditable="false"> GoldenFuture မှ တရားဝင်လမ်းကြောင်း ဝန်ဆောင်မှုများ -</div>
+                
+                <div class="price-tag">
+                    <span class="editable-field" id="route-car" contenteditable="false"><strong>🏎️ ကားလမ်းကြောင်းဖြင့်</strong></span><br>
+                    <span class="editable-field" id="route-car-price" contenteditable="false">မြန်မာမှ ထိုင်းနိုင်ငံ အရောက် ➡️ <span class="price-highlight">ဘတ် ၂၄,၀၀၀</span></span>
+                </div>
+
+                <div class="price-tag">
+                    <span class="editable-field" id="route-flight" contenteditable="false"><strong>🛩️ လေယာဉ်လမ်းကြောင်းဖြင့်</strong></span><br>
+                    <span class="editable-field" id="route-flight-price" contenteditable="false">မြန်မာမှ ထိုင်းနိုင်ငံ အရောက် ➡️ <span class="price-highlight">ဘတ် ၃၀,၀၀၀</span></span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title editable-field" id="pickup-title" contenteditable="false">📍 ကြိုဆိုမည့် စတင်ရာနေရာများ</div>
+                <p class="editable-field" id="pickup-desc" contenteditable="false"><strong>မန္တလေးမြို့</strong> နှင့် <strong>ရန်ကုန်မြို့</strong> များမှ စတင်၍ သေချာစွာ တာဝန်ယူ ကြိုဆိုပေးပါသည်။</p>
+                
+                <div class="route-info">
+                    <strong class="editable-field" id="route-status-title" contenteditable="false">🛣️ လမ်းကြောင်းအခြေအနေ:</strong>
+                    <div style="margin-top: 5px;" class="editable-field" id="route-status-mdy" contenteditable="false">• မန္တလေးမှ တာချီလိတ်</div>
+                    <div class="editable-field" id="route-status-ygn" contenteditable="false">• ရန်ကုန်မှ တာချီလိတ်</div>
+                </div>
+
+                <p style="font-size: 13px; margin-top: 12px; color: var(--text-muted);" class="editable-field" id="route-warn-note" contenteditable="false">
+                    * လေယာဉ်ဖြင့်ဆိုလျှင် မည်သည့်နေရာမဆို အဆင်ပြေပါသည်။<br>
+                    * ကားလမ်းကြောင်းဖြင့်ဆိုပါက သွားလာ၍မရသော လမ်းပိုင်းအချို့ ရှိနိုင်ပါသည်။
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-title editable-field" id="tcl-service-title" contenteditable="false">🤝 တတာချီလိတ်ရောက်သည်နှင့် အထူးဝန်ဆောင်မှုများ</div>
+                <p style="font-size: 14px;" class="editable-field" id="tcl-service-desc" contenteditable="false">တာချီလိတ်သို့ ရောက်ရှိသည်နှင့် ကျွန်တော်တို့ <strong>GoldenFuture</strong> မှ လူကိုယ်တိုင် လာရောက်ကြိုဆိုပေးမည် ဖြစ်ပြီး အောက်ပါ ဝန်ဆောင်မှုများကိုပါ တစ်ပါတည်း စီစဉ်ပေးသွားပါမည် -</p>
+                
+                <div class="gift-grid">
+                    <div class="gift-item editable-field" id="gift-1" contenteditable="false">🌉 ဆိုင်တံတား ကူးပေးခြင်း</div>
+                    <div class="gift-item editable-field" id="gift-2" contenteditable="false">🎫 ဘန်ကောက် ကားလက်မှတ် ဖြတ်ပေးခြင်း</div>
+                    <div class="gift-item editable-field" id="gift-3" contenteditable="false">🏠 နေစရာ စီစဉ်ပေးခြင်း</div>
+                    <div class="gift-item editable-field" id="gift-4" contenteditable="false">🍽️ ထမင်း အခမဲ့ ကျွေးမွေးခြင်း</div>
+                </div>
+
+                <div class="price-tag" style="text-align: center; font-weight: bold; background: #fffdf7;" class="editable-field" id="gift-sim" contenteditable="false">
+                    🎁 ဖုန်းဆင်းကတ် (Sim Card) လည်း လက်ဆောင် ထည့်ပေးပါမည်။
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Tab switching function
+        function openTab(evt, tabName) {
+            var i, contentSection, tabBtn;
+            
+            contentSection = document.getElementsByClassName("content-section");
+            for (i = 0; i < contentSection.length; i++) {
+                contentSection[i].style.display = "none";
+                contentSection[i].classList.remove("active");
+            }
+            
+            tabBtn = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tabBtn.length; i++) {
+                tabBtn[i].className = tabBtn[i].className.replace(" active", "");
+            }
+            
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.className += " active";
+        }
+    </script>
+
+</body>
+</html>
