@@ -39,10 +39,9 @@
             padding: 45px 20px 25px 20px;
             border-bottom: 4px solid var(--accent-color);
             box-shadow: 0 4px 15px rgba(128,0,32,0.15);
-            position: relative; /* သော့ Icon ကို Header ထိပ်မှာ ကပ်ရန် */
+            position: relative;
         }
 
-        /* ခေါင်းစဉ်ကြီး စာသားကို 20% ပိုကြီးအောင် ပြင်ဆင်ခြင်း (32px -> 38px) */
         .header h1 {
             font-size: 38px;
             font-weight: 700;
@@ -60,7 +59,7 @@
             min-height: 20px;
         }
 
-        /* သော့ Icon ကို App ရဲ့ အပေါ်ဆုံးထိပ်ဆုံး ညာဘက်ဒေါင့်သို့ ပို့ခြင်း */
+        /* စနစ်ခွဲခလုတ်နေရာ */
         .edit-info-container {
             position: absolute;
             top: 15px; 
@@ -68,33 +67,48 @@
             z-index: 100;
         }
 
-        /* သော့ပုံစံ ခလုတ်လေး */
+        /* Premium Admin Auth Button */
         .auth-btn {
-            background-color: rgba(0, 0, 0, 0.4); /* Header နောက်ခံနှင့် လိုက်ဖက်အောင် အမှောင်ဖျော့စပ်ထားခြင်း */
+            background-color: rgba(0, 0, 0, 0.4); 
             color: white;
             border: 1.5px solid var(--accent-color);
-            width: 38px;
-            height: 38px;
-            font-size: 14px;
-            border-radius: 50%;
+            padding: 0 14px;
+            height: 36px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 18px;
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 6px;
         }
 
         .auth-btn:hover {
-            transform: scale(1.05);
+            transform: scale(1.03);
             background-color: rgba(0, 0, 0, 0.6);
         }
 
-        /* ပွင့်သွားချိန်တွင် ပြောင်းလဲမည့်အရောင် */
-        .auth-btn.unlocked-status {
+        .auth-btn.admin-mode-active {
             background-color: #2e7d32;
             border-color: #a3e635;
             box-shadow: 0 3px 8px rgba(46,125,50,0.4);
+        }
+
+        /* Admin ဆိုင်းဘုတ်ပြသချက် */
+        .admin-badge {
+            display: none;
+            background-color: #2e7d32;
+            color: white;
+            padding: 4px 14px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin: 12px auto 0 auto;
+            width: fit-content;
+            animation: fadeIn 0.3s ease;
         }
 
         /* Main Container Setup */
@@ -183,7 +197,6 @@
             box-shadow: 0 4px 12px rgba(44,29,17,0.03);
         }
 
-        /* ကတ်ပြား ခေါင်းစဉ်စာသားများကို 20% ပိုကြီးအောင် ပြင်ဆင်ခြင်း (18px -> 22px) */
         .card-title {
             font-size: 22px;
             font-weight: 700;
@@ -204,13 +217,17 @@
             transition: all 0.2s;
         }
         
-        .editable-field[contenteditable="true"]:hover {
+        body.admin-mode-unlocked .editable-field {
+            border-color: rgba(205, 163, 59, 0.4);
+        }
+
+        body.admin-mode-unlocked .editable-field:hover {
             background-color: #fffef7;
             border-color: var(--accent-color);
             cursor: pointer;
         }
 
-        .editable-field[contenteditable="true"]:focus {
+        body.admin-mode-unlocked .editable-field:focus {
             background-color: #ffffff;
             border-color: var(--primary-color);
             outline: none;
@@ -218,25 +235,9 @@
         }
 
         /* Requirements List */
-        .req-list {
-            list-style: none;
-        }
-
-        .req-list li {
-            position: relative;
-            padding-left: 26px;
-            margin-bottom: 12px;
-            font-size: 15px;
-        }
-
-        .req-list li::before {
-            content: "✦";
-            position: absolute;
-            left: 0;
-            color: var(--accent-color);
-            font-weight: bold;
-            font-size: 16px;
-        }
+        .req-list { list-style: none; }
+        .req-list li { position: relative; padding-left: 26px; margin-bottom: 12px; font-size: 15px; }
+        .req-list li::before { content: "✦"; position: absolute; left: 0; color: var(--accent-color); font-weight: bold; font-size: 16px; }
 
         /* Pricing Badge */
         .price-tag {
@@ -251,69 +252,15 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .price-highlight {
-            font-weight: 700;
-            color: var(--primary-color);
-            font-size: 17px;
-        }
-
-        /* Travel Route Area */
-        .route-info {
-            background: #fffefc;
-            border: 1px dashed var(--accent-color);
-            padding: 14px;
-            border-radius: 10px;
-            margin-top: 12px;
-            font-size: 14px;
-        }
-
-        /* Gift Items Grid */
-        .gift-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 14px;
-        }
-
-        .gift-item {
-            background: #fffdf7;
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
-        }
+        .price-highlight { font-weight: 700; color: var(--primary-color); font-size: 17px; }
+        .route-info { background: #fffefc; border: 1px dashed var(--accent-color); padding: 14px; border-radius: 10px; margin-top: 12px; font-size: 14px; }
+        .gift-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 14px; }
+        .gift-item { background: #fffdf7; border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; text-align: center; font-size: 14px; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.01); }
 
         /* Contact & Payment List Styling */
-        .info-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            background: #fffdf9;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px 16px;
-            gap: 15px;
-        }
-
-        .info-icon-wrapper {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
+        .info-list { display: flex; flex-direction: column; gap: 12px; }
+        .info-item { display: flex; align-items: center; background: #fffdf9; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; gap: 15px; }
+        .info-icon-wrapper { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 18px; flex-shrink: 0; }
 
         .icon-viber { background-color: #7328F1; }
         .icon-line { background-color: #06C755; }
@@ -322,122 +269,49 @@
         .icon-phone-th { background-color: #FF9800; }
         .icon-bank { background-color: var(--primary-color); }
 
-        .info-details {
-            flex-grow: 1;
-        }
-
-        .info-label {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .info-value {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-main);
-            display: block;
-            min-height: 22px;
-        }
+        .info-details { flex-grow: 1; }
+        .info-label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .info-value { font-size: 15px; font-weight: 700; color: var(--text-main); display: block; min-height: 22px; }
 
         /* Profile Styles */
-        .profile-container {
-            text-align: center;
-            padding: 10px 0;
-        }
+        .profile-container { text-align: center; padding: 10px 0; }
+        .profile-img-wrapper { position: relative; width: 110px; height: 110px; margin: 0 auto 15px auto; }
+        .profile-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-color); box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; }
+        .upload-hint { font-size: 11px; color: var(--primary-color); margin-top: 5px; font-weight: bold; display: none; }
+        .bio-text { font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 20px; padding: 0 10px; min-height: 22px; }
+        .blessing-box { background: linear-gradient(135deg, #fffcf6, #f7f1e3); border: 1px solid var(--accent-color); border-radius: 12px; padding: 16px; font-size: 14px; text-align: center; color: var(--text-main); line-height: 1.7; }
 
-        .profile-img-wrapper {
-            position: relative;
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 15px auto;
-        }
-
-        .profile-pic {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--accent-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-        }
-
-        .upload-hint {
-            font-size: 11px;
-            color: var(--primary-color);
-            margin-top: 5px;
-            font-weight: bold;
-            display: none;
-        }
-
-        .bio-text {
-            font-size: 14px;
-            color: var(--text-muted);
-            font-style: italic;
-            margin-bottom: 20px;
-            padding: 0 10px;
-            min-height: 22px;
-        }
-
-        .blessing-box {
-            background: linear-gradient(135deg, #fffcf6, #f7f1e3);
-            border: 1px solid var(--accent-color);
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 14px;
-            text-align: center;
-            color: var(--text-main);
-            line-height: 1.7;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div class="header">
         <div class="edit-info-container">
-            <button class="auth-btn" id="lock-btn" onclick="toggleEditMode()">
-                <i class="fa-solid fa-lock" id="lock-icon"></i>
+            <button class="auth-btn" id="lock-btn" onclick="toggleAdminAccess()">
+                <i class="fa-solid fa-user-gear" id="lock-icon"></i> <span id="btn-text">Admin ဝင်ရန်</span>
             </button>
         </div>
 
         <h1 class="editable-field" data-id="h1_title" contenteditable="false">GoldenFuture</h1>
         <p class="editable-field" data-id="p_subtitle" contenteditable="false">ထိုင်း-မြန်မာ ခရီးသွားနှင့် ပတ်စပို့ဝန်ဆောင်မှု</p>
+        
+        <div class="admin-badge" id="admin-indicator">⚙️ Admin Mode (စီမံခန့်ခွဲသူစနစ်သို့ ရောက်ရှိနေပါသည်)</div>
     </div>
 
     <div class="container">
         
         <div class="tab-scroll-wrapper">
             <div class="tab-container">
-                <button class="tab-btn active" onclick="openTab(event, 'passport')">
-                    <i class="fa-solid fa-passport"></i>
-                    <span>ပတ်စပို့</span>
-                </button>
-                <button class="tab-btn" onclick="openTab(event, 'travel')">
-                    <i class="fa-solid fa-route"></i>
-                    <span>ထိုင်းခရီးစဉ်</span>
-                </button>
-                <button class="tab-btn" onclick="openTab(event, 'contact')">
-                    <i class="fa-solid fa-address-book"></i>
-                    <span>ဆက်သွယ်ရန်</span>
-                </button>
-                <button class="tab-btn" onclick="openTab(event, 'payment')">
-                    <i class="fa-solid fa-credit-card"></i>
-                    <span>ငွေပေးချေရန်</span>
-                </button>
-                <button class="tab-btn" onclick="openTab(event, 'profile')">
-                    <i class="fa-solid fa-user"></i>
-                    <span>Bio / Profile</span>
-                </button>
+                <button class="tab-btn active" onclick="openTab(event, 'passport')"><i class="fa-solid fa-passport"></i><span>ပတ်စပို့</span></button>
+                <button class="tab-btn" onclick="openTab(event, 'travel')"><i class="fa-solid fa-route"></i><span>ထိုင်းခရီးစဉ်</span></button>
+                <button class="tab-btn" onclick="openTab(event, 'contact')"><i class="fa-solid fa-address-book"></i><span>ဆက်သွယ်ရန်</span></button>
+                <button class="tab-btn" onclick="openTab(event, 'payment')"><i class="fa-solid fa-credit-card"></i><span>ငွေပေးချေရန်</span></button>
+                <button class="tab-btn" onclick="openTab(event, 'profile')"><i class="fa-solid fa-user"></i><span>Bio / Profile</span></button>
             </div>
         </div>
 
+        <!-- Passport Tab -->
         <div id="passport" class="content-section active">
             <div class="card">
                 <div class="card-title editable-field" data-id="pass_title1" contenteditable="false">🇲🇲 မြန်မာပြည်ပတ်စပို့ ဆောင်ရွက်ပေးခြင်း</div>
@@ -474,6 +348,7 @@
             </div>
         </div>
 
+        <!-- Travel Tab -->
         <div id="travel" class="content-section">
             <div class="card">
                 <div class="card-title editable-field" data-id="tr_title" contenteditable="false">🇹🇭 Thailand သို့ လာရောက်နိုင်မည့် လမ်းကြောင်းများ</div>
@@ -520,6 +395,7 @@
             </div>
         </div>
 
+        <!-- Contact Tab -->
         <div id="contact" class="content-section">
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-address-book" style="color: var(--accent-color);"></i> ဆက်သွယ်ရန် လိပ်စာများ</div>
@@ -563,15 +439,16 @@
             </div>
         </div>
 
+        <!-- Payment Tab -->
         <div id="payment" class="content-section">
             <div class="card">
-                <div class="card-title"><i class="fa-solid fa-credit-card" style="color: var(--accent-color);"></i> ငွေပေးချေရန် ဘဏ်အကောင့်များ</div>
+                <div class="card-title"><i class="fa-solid fa-credit-card" style="color: var(--accent-color);"></i> Ngwe Pay Chya Ran Bank Account Myar</div>
                 <div class="info-list">
                     <div class="info-item">
                         <div class="info-icon-wrapper icon-bank"><i class="fa-solid fa-building-columns"></i></div>
                         <div class="info-details">
                             <div class="info-label">KBZ Bank</div>
-                            <div class="info-value editable-field" data-id="pay_kbz" contenteditable="false">ဦးအောင်လှ (၁၂၃၄၅၆၇၈၉၀၁၂၃၄၅၆)</div>
+                            <div class="info-value editable-field" data-id="pay_kbz" contenteditable="false">U Aung Hla (1234567890123456)</div>
                         </div>
                     </div>
                     <div class="info-item">
@@ -597,11 +474,12 @@
                     </div>
                 </div>
                 <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 15px;" class="editable-field" data-id="pay_note" contenteditable="false">
-                    ⚠️ ငွေလွှဲပြီးပါက ငွေလွှဲဖြတ်ပိုင်း (Screenshot) ကို ပေးပို့ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။
+                    ⚠️ Ngwe Lwāl Pi Par Ka Ngwe Lwāl Phrat Puing (Screenshot) Ko Pay Phoat Pay Par Ran Myittar Rap Khan At Par Thee.
                 </p>
             </div>
         </div>
 
+        <!-- Profile Tab -->
         <div id="profile" class="content-section">
             <div class="card">
                 <div class="profile-container">
@@ -626,84 +504,145 @@
 
     </div>
 
-    <script>
-        let isEditable = false;
+    <!-- Firebase Realtime Database Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-        // App စတင်ပွင့်ချိန်တွင် သိမ်းဆည်းထားသော ဒေတာများကို ပြန်ခေါ်ယူခြင်း
+    <script>
+        // လူကြီးမင်း ပေးပို့လာသော ကိုယ်ပိုင် Firebase Configuration အချက်အလက်များ
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5_PJT9Pvv1L24TTUrAY85GDSjtKoSQjA",
+            authDomain: "goldenfuture-cd579.firebaseapp.com",
+            databaseURL: "https://goldenfuture-cd579-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "goldenfuture-cd579",
+            storageBucket: "goldenfuture-cd579.firebasestorage.app",
+            messagingSenderId: "974767484310",
+            appId: "1:974767484310:web:c867994d5a8620ac9cc1b7"
+        };
+
+        // Firebase စတင်အလုပ်လုပ်စေခြင်း
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let isAdminMode = false;
+
+        // Firebase database မှ ဒေတာများကို Realtime နားထောင်ပြီး အလိုအလျောက် ပြောင်းလဲပေးခြင်း
         document.addEventListener("DOMContentLoaded", () => {
-            loadSavedData();
+            database.ref('gf_app_data').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const fields = document.querySelectorAll('.editable-field');
+                    fields.forEach(field => {
+                        const id = field.getAttribute('data-id');
+                        if (id && data[id] !== undefined) {
+                            if (document.activeElement !== field) {
+                                field.innerHTML = data[id];
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Cloud ပေါ်မှ ပုံကို အလိုအလျောက် ဆွဲယူပြောင်းလဲပေးခြင်း
+            database.ref('gf_profile_photo').on('value', (snapshot) => {
+                const photoUrl = snapshot.val();
+                if (photoUrl) {
+                    document.getElementById('profile-display').src = photoUrl;
+                }
+            });
         });
 
-        // သော့ပုံစံ ခလုတ်ဖြင့် Edit Mode ထိန်းချုပ်စနစ်
-        function toggleEditMode() {
+        // Admin စနစ်သို့ Password ဖြင့် ဝင်ရောက်ခြင်းနှင့် ထွက်ခြင်း
+        function toggleAdminAccess() {
             const fields = document.querySelectorAll('.editable-field');
             const lockBtn = document.getElementById('lock-btn');
             const lockIcon = document.getElementById('lock-icon');
+            const btnText = document.getElementById('btn-text');
             const uploadText = document.getElementById('upload-text');
+            const adminIndicator = document.getElementById('admin-indicator');
 
-            if (!isEditable) {
-                const password = prompt("စာသားများနှင့် အချက်အလက်များ ပြင်ဆင်ရန် Password ရိုက်ထည့်ပါ:");
+            if (!isAdminMode) {
+                const password = prompt("စီမံခန့်ခွဲသူစနစ် (Admin Mode) သို့ ဝင်ရောက်ရန် Password ရိုက်ထည့်ပါ:");
                 if (password === "246810") {
-                    isEditable = true;
+                    isAdminMode = true;
+                    document.body.classList.add('admin-mode-unlocked');
                     fields.forEach(field => field.setAttribute('contenteditable', 'true'));
-                    lockIcon.className = "fa-solid fa-lock-open"; // သော့ပွင့်ပုံပြောင်းရန်
-                    lockBtn.classList.add('unlocked-status');
-                    if(uploadText) uploadText.style.display = "block";
                     
-                    // ပြင်ဆင်မှုတိုင်းကို ချက်ချင်းသိမ်းဆည်းရန် Listener ထည့်ခြင်း
+                    lockIcon.className = "fa-solid fa-arrow-right-from-bracket"; 
+                    btnText.innerText = "Admin ထွက်ရန်";
+                    lockBtn.classList.add('admin-mode-active');
+                    if(uploadText) uploadText.style.display = "block";
+                    if(adminIndicator) adminIndicator.style.display = "block";
+                    
                     fields.forEach(field => {
-                        field.addEventListener('input', saveData);
+                        field.addEventListener('input', pushDataToFirebase);
                     });
 
-                    alert("Password (၂၄၆၈၁၀) မှန်ကန်ပါသည်။ ပြင်ဆင်လိုသော စာသားပေါ်နှိပ်၍ ပြင်ဆင်နိုင်ပါပြီ။ (ပြင်ဆင်မှုများသည် Auto Save ဖြစ်သွားပါမည်)");
+                    alert("🔓 Admin စနစ်သို့ ရောက်ရှိပါပြီ။ ပြင်ဆင်မှုအားလုံးသည် User ဖုန်းများတွင် Auto Save ဖြစ်သွားပါမည်။");
                 } else if (password !== null) {
                     alert("⚠️ Password မှားယွင်းနေပါသည်။");
                 }
             } else {
-                isEditable = false;
+                isAdminMode = false;
+                document.body.classList.remove('admin-mode-unlocked');
                 fields.forEach(field => {
                     field.setAttribute('contenteditable', 'false');
-                    field.removeEventListener('input', saveData);
+                    field.removeEventListener('input', pushDataToFirebase);
                 });
-                lockIcon.className = "fa-solid fa-lock"; // သော့ပိတ်ပုံပြန်ပြောင်းရန်
-                lockBtn.classList.remove('unlocked-status');
+                lockIcon.className = "fa-solid fa-user-gear"; 
+                btnText.innerText = "Admin ဝင်ရန်";
+                lockBtn.classList.remove('admin-mode-active');
                 if(uploadText) uploadText.style.display = "none";
-                alert("ပြင်ဆင်မှုများကို ပိတ်သိမ်းပြီး အောင်မြင်စွာ သိမ်းဆည်းလိုက်ပါပြီ။");
+                if(adminIndicator) adminIndicator.style.display = "none";
+                alert("🔒 Admin စနစ်မှ ထွက်ပြီး သာမန် User စနစ်သို့ ပြန်ရောက်ပါပြီ။");
             }
         }
 
-        // စာသားများကို LocalStorage တွင် သိမ်းဆည်းခြင်း
-        function saveData() {
-            const fields = document.querySelectorAll('.editable-field');
-            fields.forEach(field => {
-                const id = field.getAttribute('data-id');
-                if (id) {
-                    localStorage.setItem('gf_' + id, field.innerHTML);
-                }
-            });
+        // စာသားများကို Firebase Cloud ပေါ်သို့ တိုက်ရိုက်သိမ်းဆည်းခြင်း
+        function pushDataToFirebase(event) {
+            if (!isAdminMode) return; 
+            const field = event.target;
+            const id = field.getAttribute('data-id');
+            if (id) {
+                database.ref('gf_app_data/' + id).set(field.innerHTML);
+            }
         }
 
-        // LocalStorage မှ စာသားများကို ပြန်လည်ဖတ်ရှုခြင်း
-        function loadSavedData() {
-            const fields = document.querySelectorAll('.editable-field');
-            fields.forEach(field => {
-                const id = field.getAttribute('data-id');
-                if (id) {
-                    const savedValue = localStorage.getItem('gf_' + id);
-                    if (savedValue !== null) {
-                        field.innerHTML = savedValue;
+        // Profile ပုံကို ကလစ်နှိပ်၍ ရွေးချယ်စေခြင်း (Admin သာ ခွင့်ပြုသည်)
+        function triggerPhotoUpload() {
+            if (isAdminMode) {
+                document.getElementById('photo-input').click();
+            } else {
+                alert("🔒 Profile ပုံကို ပြောင်းလဲရန် ပထမဦးစွာ Admin ဝင်ပေးပါ။");
+            }
+        }
+
+        // ပုံအရွယ်အစားကို ချုံ့ပြီး Firebase သို့ တင်ခြင်း
+        function loadPhoto(event) {
+            const file = event.target.files[0];
+            if (file && isAdminMode) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = 250;
+                        canvas.height = 250;
+                        ctx.drawImage(img, 0, 0, 250, 250);
+                        
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                        document.getElementById('profile-display').src = compressedBase64;
+                        
+                        database.ref('gf_profile_photo').set(compressedBase64);
                     }
                 }
-            });
-
-            // သိမ်းဆည်းထားသော Profile ပုံကို ပြန်ခေါ်ခြင်း
-            const savedPhoto = localStorage.getItem('gf_profile_photo');
-            if (savedPhoto) {
-                document.getElementById('profile-display').src = savedPhoto;
+                reader.readAsDataURL(file);
             }
         }
 
-        // Tab ပြောင်းလဲပေးသည့်စနစ်
+        // Tab Layout စနစ်
         function openTab(evt, tabName) {
             var i, contentSection, tabBtn;
             
@@ -722,7 +661,6 @@
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.className += " active";
 
-            // Tab ကို အလယ်ဗဟိုရောက်အောင် အလိုအလျောက် ရွှေ့ပေးသည့်စနစ်
             const container = document.querySelector('.tab-container');
             const target = evt.currentTarget;
             container.scrollTo({
@@ -730,29 +668,6 @@
                 behavior: 'smooth'
             });
         }
-
-        function triggerPhotoUpload() {
-            if (isEditable) {
-                document.getElementById('photo-input').click();
-            } else {
-                alert("🔒 Profile ပုံကို ပြောင်းလဲရန် ပထမဦးစွာ သော့ခလုတ်ကို နှိပ်၍ Edit Mode ဖွင့်ပေးပါ။");
-            }
-        }
-
-        // ပုံကို Base64 Format ဖြင့် LocalStorage တွင် သိမ်းဆည်းခြင်း
-        function loadPhoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64Url = e.target.result;
-                    document.getElementById('profile-display').src = base64Url;
-                    localStorage.setItem('gf_profile_photo', base64Url); // ပုံကို သိမ်းဆည်းခြင်း
-                }
-                reader.readAsDataURL(file);
-            }
-        }
     </script>
-
 </body>
 </html>
