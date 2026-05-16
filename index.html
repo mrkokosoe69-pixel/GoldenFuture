@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoldenFuture Premium App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg-color: #fbf9f3;          /* မြန်မာ့ရိုးရာ ကရေကရာရောင် ခပ်ဖျော့ဖျော့ */
             --card-bg: #ffffff;           /* ကတ်ပြားနောက်ခံ အဖြူရောင် */
             --text-main: #2c1d11;         /* စာသားအဓိက အရောင်ရင့် */
-            --text-muted: #6d5e53;        /* စာသားအဖျော့ */
+            --text-muted: #7d6e63;        /* စာသားအဖျော့ */
             --primary-color: #800020;     /* ပတ္တမြား နီညိုရောင် (Maroon) */
             --accent-color: #cda33b;      /* နန်းတွင်း ရွှေဝါရောင် (Myanmar Gold) */
             --border-color: #e7dfd1;      /* ဘောင်အရောင်ဖျော့ */
@@ -35,98 +36,132 @@
             background: linear-gradient(135deg, var(--primary-color), #4e0013);
             color: #ffffff;
             text-align: center;
-            padding: 45px 20px;
+            padding: 45px 20px 25px 20px;
             border-bottom: 4px solid var(--accent-color);
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
             box-shadow: 0 4px 15px rgba(128,0,32,0.15);
+            position: relative; /* သော့ Icon ကို Header ထိပ်မှာ ကပ်ရန် */
         }
 
+        /* ခေါင်းစဉ်ကြီး စာသားကို 20% ပိုကြီးအောင် ပြင်ဆင်ခြင်း (32px -> 38px) */
         .header h1 {
-            font-size: 32px;
+            font-size: 38px;
             font-weight: 700;
             letter-spacing: 1px;
             color: var(--accent-color);
             text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            display: inline-block;
+            min-width: 200px;
         }
 
         .header p {
-            font-size: 14px;
+            font-size: 15px;
             opacity: 0.9;
             margin-top: 6px;
+            min-height: 20px;
         }
 
+        /* သော့ Icon ကို App ရဲ့ အပေါ်ဆုံးထိပ်ဆုံး ညာဘက်ဒေါင့်သို့ ပို့ခြင်း */
+        .edit-info-container {
+            position: absolute;
+            top: 15px; 
+            right: 15px;
+            z-index: 100;
+        }
+
+        /* သော့ပုံစံ ခလုတ်လေး */
+        .auth-btn {
+            background-color: rgba(0, 0, 0, 0.4); /* Header နောက်ခံနှင့် လိုက်ဖက်အောင် အမှောင်ဖျော့စပ်ထားခြင်း */
+            color: white;
+            border: 1.5px solid var(--accent-color);
+            width: 38px;
+            height: 38px;
+            font-size: 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-btn:hover {
+            transform: scale(1.05);
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        /* ပွင့်သွားချိန်တွင် ပြောင်းလဲမည့်အရောင် */
+        .auth-btn.unlocked-status {
+            background-color: #2e7d32;
+            border-color: #a3e635;
+            box-shadow: 0 3px 8px rgba(46,125,50,0.4);
+        }
+
+        /* Main Container Setup */
         .container {
             max-width: 500px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* Edit Control Panel Badge */
-        .edit-info-badge {
-            background-color: #fff8e1;
-            color: #b78103;
-            border: 1px solid #ffe082;
-            padding: 14px;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 13px;
-            margin-bottom: 20px;
-            font-weight: 600;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
+        /* Tab Layout */
+        .tab-scroll-wrapper {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-top: 5px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(44,29,17,0.04);
+            overflow: hidden;
         }
 
-        .auth-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(128,0,32,0.2);
-            transition: background 0.2s;
-        }
-
-        .auth-btn:hover {
-            background-color: #5a0016;
-        }
-
-        .auth-btn.unlocked-status {
-            background-color: #2e7d32;
-        }
-
-        /* Navigation Tabs */
         .tab-container {
             display: flex;
-            background: #f1e7d3;
-            border-radius: 14px;
-            padding: 5px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-container::-webkit-scrollbar {
+            display: none;
         }
 
         .tab-btn {
-            flex: 1;
+            flex: 0 0 auto;
+            width: 105px;
             border: none;
             background: none;
-            padding: 12px;
-            font-size: 14px;
+            padding: 12px 5px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--text-muted);
             cursor: pointer;
-            border-radius: 10px;
             transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 3px solid transparent;
+            opacity: 0.75;
+        }
+
+        .tab-btn i {
+            font-size: 18px;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
         }
 
         .tab-btn.active {
-            background: var(--primary-color);
-            color: #ffffff;
-            box-shadow: 0 3px 8px rgba(128,0,32,0.25);
+            color: var(--primary-color);
+            border-bottom-color: var(--accent-color);
+            background-color: #fffbf2;
+            opacity: 1;
+        }
+
+        .tab-btn.active i {
+            color: var(--primary-color);
         }
 
         /* Service Content Cards */
@@ -148,8 +183,9 @@
             box-shadow: 0 4px 12px rgba(44,29,17,0.03);
         }
 
+        /* ကတ်ပြား ခေါင်းစဉ်စာသားများကို 20% ပိုကြီးအောင် ပြင်ဆင်ခြင်း (18px -> 22px) */
         .card-title {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--primary-color);
             border-bottom: 2px solid var(--accent-color);
@@ -250,210 +286,424 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.01);
         }
 
+        /* Contact & Payment List Styling */
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            background: #fffdf9;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            gap: 15px;
+        }
+
+        .info-icon-wrapper {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .icon-viber { background-color: #7328F1; }
+        .icon-line { background-color: #06C755; }
+        .icon-facebook { background-color: #1877F2; }
+        .icon-phone-mm { background-color: #4CAF50; }
+        .icon-phone-th { background-color: #FF9800; }
+        .icon-bank { background-color: var(--primary-color); }
+
+        .info-details {
+            flex-grow: 1;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: block;
+            min-height: 22px;
+        }
+
+        /* Profile Styles */
+        .profile-container {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .profile-img-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 15px auto;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .upload-hint {
+            font-size: 11px;
+            color: var(--primary-color);
+            margin-top: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .bio-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 20px;
+            padding: 0 10px;
+            min-height: 22px;
+        }
+
+        .blessing-box {
+            background: linear-gradient(135deg, #fffcf6, #f7f1e3);
+            border: 1px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 14px;
+            text-align: center;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
-
-    <!-- Firebase SDK Modules (v10+) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-        // Firebase Configuration 
-        const firebaseConfig = {
-            apiKey: "AIzaSyC5_PJT9Pvv1L24TTUrAY85GDSjtKoSQjA",
-            authDomain: "goldenfuture-cd579.firebaseapp.com",
-            databaseURL: "https://goldenfuture-cd579-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "goldenfuture-cd579",
-            storageBucket: "goldenfuture-cd579.firebasestorage.app",
-            messagingSenderId: "974767484310",
-            appId: "1:974767484310:web:c867994d5a8620ac9cc1b7",
-            measurementId: "G-DFQ4S6FEYJ"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // Global Edit State
-        let isEditable = false;
-
-        // 1. Database မှ ဒေတာများကို ဆွဲယူပြီး App မှာ ပြသခြင်း (Realtime Sync)
-        const appDataRef = ref(db, 'appData');
-        onValue(appDataRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                // ကုဒ်ထဲက သက်ဆိုင်ရာ id အလိုက် စာသားတွေကို အလိုအလျောက် ပြောင်းပေးမယ်
-                for (const key in data) {
-                    const element = document.getElementById(key);
-                    if (element) {
-                        element.innerHTML = data[key];
-                    }
-                }
-            }
-        });
-
-        // 2. Lock / Unlock ခလုပ်နှိပ်သည့် စနစ်
-        window.toggleEditMode = function() {
-            const fields = document.querySelectorAll('.editable-field');
-            const statusText = document.getElementById('status-text');
-            const lockBtn = document.getElementById('lock-btn');
-
-            if (!isEditable) {
-                const password = prompt("စာသားများ ပြင်ဆင်ရန် Password ရိုက်ထည့်ပါ:");
-                if (password === "246810") {
-                    isEditable = true;
-                    fields.forEach(field => field.setAttribute('contenteditable', 'true'));
-                    statusText.innerText = "🔓 စာသားများကို စိတ်ကြိုက် နှိပ်ပြင်နိုင်ပါပြီ။";
-                    lockBtn.innerText = "💾 ပြင်ဆင်ပြီးပါက သိမ်းဆည်းရန်";
-                    lockBtn.classList.add('unlocked-status');
-                } else if (password !== null) {
-                    alert("⚠️ Password မှားယွင်းနေပါသည်။");
-                }
-            } else {
-                // ဒေတာများကို Firebase Database သို့ သိမ်းဆည်းခြင်း
-                let updatedData = {};
-                fields.forEach(field => {
-                    if(field.id) {
-                        updatedData[field.id] = field.innerHTML;
-                    }
-                });
-
-                set(ref(db, 'appData'), updatedData)
-                    .then(() => {
-                        alert("✅ အချက်အလက်များကို Firebase Database ထဲသို့ အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။");
-                    })
-                    .catch((error) => {
-                        alert("❌ သိမ်းဆည်းရာတွင် အမှားအယွင်းရှိခဲ့သည်: " + error.message);
-                    });
-
-                // Lock ပြန်ပိတ်ခြင်း
-                isEditable = false;
-                fields.forEach(field => field.setAttribute('contenteditable', 'false'));
-                statusText.innerText = "🔒 လက်ရှိတွင် စာသားများ ပြင်ဆင်ခြင်းကို ပိတ်ထားပါသည်။";
-                lockBtn.innerText = "🔐 စာသားပြင်ရန် Password ရိုက်ပါ";
-                lockBtn.classList.remove('unlocked-status');
-            }
-        }
-    </script>
 </head>
 <body>
 
     <div class="header">
-        <h1 class="editable-field" id="app-title" contenteditable="false">GoldenFuture</h1>
-        <p class="editable-field" id="app-subtitle" contenteditable="false">ထိုင်း-မြန်မာ ခရီးသွားနှင့် ပတ်စပို့ဝန်ဆောင်မှု</p>
+        <div class="edit-info-container">
+            <button class="auth-btn" id="lock-btn" onclick="toggleEditMode()">
+                <i class="fa-solid fa-lock" id="lock-icon"></i>
+            </button>
+        </div>
+
+        <h1 class="editable-field" data-id="h1_title" contenteditable="false">GoldenFuture</h1>
+        <p class="editable-field" data-id="p_subtitle" contenteditable="false">ထိုင်း-မြန်မာ ခရီးသွားနှင့် ပတ်စပို့ဝန်ဆောင်မှု</p>
     </div>
 
     <div class="container">
         
-        <!-- Password Control Panel -->
-        <div class="edit-info-badge">
-            <span id="status-text">🔒 လက်ရှိတွင် စာသားများ ပြင်ဆင်ခြင်းကို ပိတ်ထားပါသည်။</span>
-            <button class="auth-btn" id="lock-btn" onclick="toggleEditMode()">🔐 စာသားပြင်ရန် Password ရိုက်ပါ</button>
-        </div>
-        
-        <div class="tab-container">
-            <button class="tab-btn active" onclick="openTab(event, 'passport')">ပတ်စပို့ ဝန်ဆောင်မှု</button>
-            <button class="tab-btn" onclick="openTab(event, 'travel')">ထိုင်းခရီးစဉ် လမ်းကြောင်း</button>
+        <div class="tab-scroll-wrapper">
+            <div class="tab-container">
+                <button class="tab-btn active" onclick="openTab(event, 'passport')">
+                    <i class="fa-solid fa-passport"></i>
+                    <span>ပတ်စပို့</span>
+                </button>
+                <button class="tab-btn" onclick="openTab(event, 'travel')">
+                    <i class="fa-solid fa-route"></i>
+                    <span>ထိုင်းခရီးစဉ်</span>
+                </button>
+                <button class="tab-btn" onclick="openTab(event, 'contact')">
+                    <i class="fa-solid fa-address-book"></i>
+                    <span>ဆက်သွယ်ရန်</span>
+                </button>
+                <button class="tab-btn" onclick="openTab(event, 'payment')">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <span>ငွေပေးချေရန်</span>
+                </button>
+                <button class="tab-btn" onclick="openTab(event, 'profile')">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Bio / Profile</span>
+                </button>
+            </div>
         </div>
 
         <div id="passport" class="content-section active">
-            
             <div class="card">
-                <div class="card-title editable-field" id="pass-title-1" contenteditable="false">🇲🇲 မြန်မာပြည်ပတ်စပို့ ဆောင်ရွက်ပေးခြင်း</div>
-                <p style="font-size: 14px; color: var(--text-muted);" class="editable-field" id="pass-desc-1" contenteditable="false">မြန်မာပြည်တွင် ပတ်စပို့ အမြန်ပြုလုပ်ပေးသည့် ဝန်ဆောင်မှု ဖြစ်ပါသည်။</p>
+                <div class="card-title editable-field" data-id="pass_title1" contenteditable="false">🇲🇲 မြန်မာပြည်ပတ်စပို့ ဆောင်ရွက်ပေးခြင်း</div>
+                <p style="font-size: 14px; color: var(--text-muted);" class="editable-field" data-id="pass_desc1" contenteditable="false">မြန်မာပြည်တွင် ပတ်စပို့ အမြန်ပြုလုပ်ပေးသည့် ဝန်ဆောင်မှု ဖြစ်ပါသည်။</p>
                 
                 <div class="price-tag">
-                    <span class="editable-field" id="pass-price-1" contenteditable="false"><strong>QR ဝန်ဆောင်ခ:</strong> <span class="price-highlight">၇၀,၀၀၀ ကျပ်</span></span><br>
-                    <span class="editable-field" id="pass-price-2" contenteditable="false"><strong>ရုံးအတွင်းကုန်ကျငွေ:</strong> ၃/၄ သောင်းခန့်</span><br>
-                    <span style="font-size: 12px; color: var(--text-muted);" class="editable-field" id="pass-price-note" contenteditable="false">(စုစုပေါင်း ၁ သိန်းဝန်းကျင်ခန့်ဖြင့် အပြီးအစီး ရရှိနိုင်ပါသည်)</span>
+                    <div class="editable-field" data-id="pass_price1" contenteditable="false"><strong>QR ဝန်ဆောင်ခ:</strong> <span class="price-highlight">၇၀,၀၀၀ ကျပ်</span></div>
+                    <div class="editable-field" data-id="pass_price2" contenteditable="false"><strong>ရုံးအတွင်းကုန်ကျငွေ:</strong> ၃/၄ သောင်းခန့်</div>
+                    <div style="font-size: 12px; color: var(--text-muted);" class="editable-field" data-id="pass_price3" contenteditable="false">(စုစုပေါင်း ၁ သိန်းဝန်းကျင်ခန့်ဖြင့် အပြီးအစီး ရရှိနိုင်ပါသည်)</div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-title editable-field" id="pv-title" contenteditable="false">📋 PV Passport လျှောက်ထားရန်</div>
+                <div class="card-title editable-field" data-id="pv_title" contenteditable="false">📋 PV Passport လျှောက်ထားရန်</div>
                 <ul class="req-list">
-                    <li class="editable-field" id="pv-req-1" contenteditable="false">အိမ်ထောင်စုစာရင်း</li>
-                    <li class="editable-field" id="pv-req-2" contenteditable="false">နိုင်ငံသားစိစစ်ရေး ကတ်ပြား (မှတ်ပုံတင်)</li>
-                    <li class="editable-field" id="pv-req-3" contenteditable="false">စမတ်ကတ် (Smart Card)</li>
+                    <li class="editable-field" data-id="pv_req1" contenteditable="false">အိမ်ထောင်စုစာရင်း</li>
+                    <li class="editable-field" data-id="pv_req2" contenteditable="false">နိုင်ငံသားစိစစ်ရေး ကတ်ပြား (မှတ်ပုံတင်)</li>
+                    <li class="editable-field" data-id="pv_req3" contenteditable="false">စမတ်ကတ် (Smart Card)</li>
                 </ul>
-                <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;" class="editable-field" id="pv-note" contenteditable="false">⚠️ အထက်ပါအချက်အလက်များ ရှိရုံဖြင့် လျှောက်ထားနိုင်ပါပြီ။</p>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;" class="editable-field" data-id="pv_note" contenteditable="false">⚠️ အထက်ပါအချက်အလက်များ ရှိရုံဖြင့် လျှောက်ထားနိုင်ပါပြီ။</p>
             </div>
 
             <div class="card">
-                <div class="card-title editable-field" id="pj-title" contenteditable="false">📋 PJ Passport လျှောက်ထားရန်</div>
+                <div class="card-title editable-field" data-id="pj_title" contenteditable="false">📋 PJ Passport လျှောက်ထားရန်</div>
                 <ul class="req-list">
-                    <li class="editable-field" id="pj-req-1" contenteditable="false">အိမ်ထောင်စုစာရင်း</li>
-                    <li class="editable-field" id="pj-req-2" contenteditable="false">နိုင်ငံသားစိစစ်ရေး ကတ်ပြား (မှတ်ပုံတင်)</li>
-                    <li class="editable-field" id="pj-req-3" contenteditable="false">စမတ်ကတ် (Smart Card)</li>
-                    <li class="editable-field" id="pj-req-4" contenteditable="false">လေဘာကတ် (Labour Card) လုပ်ဆောင်ရပါမည်</li>
+                    <li class="editable-field" data-id="pj_req1" contenteditable="false">အိမ်ထောင်စုစာရင်း</li>
+                    <li class="editable-field" data-id="pj_req2" contenteditable="false">နိုင်ငံသားစိစစ်ရေး ကတ်ပြား (မှတ်ပုံတင်)</li>
+                    <li class="editable-field" data-id="pj_req3" contenteditable="false">စမတ်ကတ် (Smart Card)</li>
+                    <li class="editable-field" data-id="pj_req4" contenteditable="false">လေဘာကတ် (Labour Card) လုပ်ဆောင်ရပါမည်</li>
                 </ul>
                 <div class="price-tag" style="background: #fffdf7;">
-                    <span class="editable-field" id="pj-note" contenteditable="false">ℹ️ <strong>ကုန်ကျစရိတ်:</strong> ၅,၀၀၀ / ၁၀,၀၀၀ ကျပ်ခန့် ပိုမို ကုန်ကျနိုင်ပါသည်။</span>
+                    <div class="editable-field" data-id="pj_note" contenteditable="false">ℹ️ <strong>ကုန်ကျစရိတ်:</strong> ၅,၀၀၀ / ၁၀,၀၀၀ ကျပ်ခန့် ပိုမို ကုန်ကျနိုင်ပါသည်။</div>
                 </div>
             </div>
-
         </div>
 
         <div id="travel" class="content-section">
-            
             <div class="card">
-                <div class="card-title editable-field" id="th-route-title" contenteditable="false">🇹🇭 Thailand သို့ လာရောက်နိုင်မည့် လမ်းကြောင်းများ</div>
-                <p style="font-size: 14px; margin-bottom: 12px;" class="editable-field" id="th-route-desc" contenteditable="false">မြန်မာနိုင်ငံမှ ထိုင်းနိုင်ငံသို့ <strong>တရားဝင်လမ်းကြောင်း</strong> နှင့် <strong>တရားမဝင်လမ်းကြောင်း</strong> နှစ်မျိုးလုံးဖြင့် လာရောက်နိုင်ပါသည်။</p>
+                <div class="card-title editable-field" data-id="tr_title" contenteditable="false">🇹🇭 Thailand သို့ လာရောက်နိုင်မည့် လမ်းကြောင်းများ</div>
+                <p style="font-size: 14px; margin-bottom: 12px;" class="editable-field" data-id="tr_desc" contenteditable="false">မြန်မာနိုင်ငံမှ ထိုင်းနိုင်ငံသို့ <strong>တရားဝင်လမ်းကြောင်း</strong> ဖြင့် ဘေးကင်းစွာ လာရောက်နိုင်ပါသည်။</p>
                 
-                <div style="font-weight: bold; margin-bottom: 8px;" class="editable-field" id="th-route-sub" contenteditable="false"> GoldenFuture မှ တရားဝင်လမ်းကြောင်း ဝန်ဆောင်မှုများ -</div>
+                <div style="font-weight: bold; margin-bottom: 8px;" class="editable-field" data-id="tr_sub" contenteditable="false"> GoldenFuture မှ တရားဝင်လမ်းကြောင်း ဝန်ဆောင်မှုများ -</div>
                 
                 <div class="price-tag">
-                    <span class="editable-field" id="route-car" contenteditable="false"><strong>🏎️ ကားလမ်းကြောင်းဖြင့်</strong></span><br>
-                    <span class="editable-field" id="route-car-price" contenteditable="false">မြန်မာမှ ထိုင်းနိုင်ငံ အရောက် ➡️ <span class="price-highlight">ဘတ် ၂၄,၀၀၀</span></span>
+                    <div class="editable-field" data-id="tr_car" contenteditable="false"><strong>🏎️ ကားလမ်းကြောင်းဖြင့်</strong></div>
+                    <div class="editable-field" data-id="tr_car_p" contenteditable="false">မြန်မာမှ ထိုင်းနိုင်ငံ အရောက် ➡️ <span class="price-highlight">ဘတ် ၂၄,၀၀၀</span></div>
                 </div>
 
                 <div class="price-tag">
-                    <span class="editable-field" id="route-flight" contenteditable="false"><strong>🛩️ လေယာဉ်လမ်းကြောင်းဖြင့်</strong></span><br>
-                    <span class="editable-field" id="route-flight-price" contenteditable="false">မြန်မာမှ ထိုင်းနိုင်ငံ အရောက် ➡️ <span class="price-highlight">ဘတ် ၃၀,၀၀၀</span></span>
+                    <div class="editable-field" data-id="tr_air" contenteditable="false"><strong>🛩️ လေယာဉ်လမ်းကြောင်းဖြင့်</strong></div>
+                    <div class="editable-field" data-id="tr_air_p" contenteditable="false">မြန်မာမှ ထိုင်းနိုင်ငံ အရောက် ➡️ <span class="price-highlight">ဘတ် ၃၀,၀၀၀</span></div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-title editable-field" id="pickup-title" contenteditable="false">📍 ကြိုဆိုမည့် စတင်ရာနေရာများ</div>
-                <p class="editable-field" id="pickup-desc" contenteditable="false"><strong>မန္တလေးမြို့</strong> နှင့် <strong>ရန်ကုန်မြို့</strong> များမှ စတင်၍ သေချာစွာ တာဝန်ယူ ကြိုဆိုပေးပါသည်။</p>
+                <div class="card-title editable-field" data-id="route_title" contenteditable="false">📍 ကြိုဆိုမည့် စတင်ရာနေရာများ</div>
+                <p class="editable-field" data-id="route_desc" contenteditable="false"><strong>မန္တလေးမြို့</strong> နှင့် <strong>ရန်ကုန်မြို့</strong> များမှ စတင်၍ သေချာစွာ တာဝန်ယူ ကြိုဆိုပေးပါသည်။</p>
                 
                 <div class="route-info">
-                    <strong class="editable-field" id="route-status-title" contenteditable="false">🛣️ လမ်းကြောင်းအခြေအနေ:</strong>
-                    <div style="margin-top: 5px;" class="editable-field" id="route-status-mdy" contenteditable="false">• မန္တလေးမှ တာချီလိတ်</div>
-                    <div class="editable-field" id="route-status-ygn" contenteditable="false">• ရန်ကုန်မှ တာချီလိတ်</div>
+                    <strong class="editable-field" data-id="route_status" contenteditable="false">🛣️ လမ်းကြောင်းအခြေအနေ:</strong>
+                    <div style="margin-top: 5px;" class="editable-field" data-id="route_li1" contenteditable="false">• မန္တလေးမှ တာချီလိတ်</div>
+                    <div class="editable-field" data-id="route_li2" contenteditable="false">• ရန်ကုန်မှ တာချီလိတ်</div>
                 </div>
-
-                <p style="font-size: 13px; margin-top: 12px; color: var(--text-muted);" class="editable-field" id="route-warn-note" contenteditable="false">
-                    * လေယာဉ်ဖြင့်ဆိုလျှင် မည်သည့်နေရာမဆို အဆင်ပြေပါသည်။<br>
-                    * ကားလမ်းကြောင်းဖြင့်ဆိုပါက သွားလာ၍မရသော လမ်းပိုင်းအချို့ ရှိနိုင်ပါသည်။
-                </p>
             </div>
 
             <div class="card">
-                <div class="card-title editable-field" id="tcl-service-title" contenteditable="false">🤝 တတာချီလိတ်ရောက်သည်နှင့် အထူးဝန်ဆောင်မှုများ</div>
-                <p style="font-size: 14px;" class="editable-field" id="tcl-service-desc" contenteditable="false">တာချီလိတ်သို့ ရောက်ရှိသည်နှင့် ကျွန်တော်တို့ <strong>GoldenFuture</strong> မှ လူကိုယ်တိုင် လာရောက်ကြိုဆိုပေးမည် ဖြစ်ပြီး အောက်ပါ ဝန်ဆောင်မှုများကိုပါ တစ်ပါတည်း စီစဉ်ပေးသွားပါမည် -</p>
+                <div class="card-title editable-field" data-id="sp_title" contenteditable="false">🤝 တာချီလိတ်ရောက်သည်နှင့် အထူးဝန်ဆောင်မှုများ</div>
+                <p style="font-size: 14px;" class="editable-field" data-id="sp_desc" contenteditable="false">တာချီလိတ်သို့ ရောက်ရှိသည်နှင့် ကျွန်တော်တို့ <strong>GoldenFuture</strong> မှ လူကိုယ်တိုင် လာရောက်ကြိုဆိုပေးမည် ဖြစ်ပြီး အောက်ပါ ဝန်ဆောင်မှုများကိုပါ တစ်ပါတည်း စီစဉ်ပေးသွားပါမည် -</p>
                 
                 <div class="gift-grid">
-                    <div class="gift-item editable-field" id="gift-1" contenteditable="false">🌉 ဆိုင်တံတား ကူးပေးခြင်း</div>
-                    <div class="gift-item editable-field" id="gift-2" contenteditable="false">🎫 ဘန်ကောက် ကားလက်မှတ် ဖြတ်ပေးခြင်း</div>
-                    <div class="gift-item editable-field" id="gift-3" contenteditable="false">🏠 နေစရာ စီစဉ်ပေးခြင်း</div>
-                    <div class="gift-item editable-field" id="gift-4" contenteditable="false">🍽️ ထမင်း အခမဲ့ ကျွေးမွေးခြင်း</div>
+                    <div class="gift-item editable-field" data-id="gift1" contenteditable="false">🌉 ဆိုင်တံတား ကူးပေးခြင်း</div>
+                    <div class="gift-item editable-field" data-id="gift2" contenteditable="false">🎫 ဘန်ကောက် ကားလက်မှတ် ဖြတ်ပေးခြင်း</div>
+                    <div class="gift-item editable-field" data-id="gift3" contenteditable="false">🏠 နေစရာ စီစဉ်ပေးခြင်း</div>
+                    <div class="gift-item editable-field" data-id="gift4" contenteditable="false">🍽️ ထမင်း အခမဲ့ ကျွေးမွေးခြင်း</div>
                 </div>
 
-                <div class="price-tag" style="text-align: center; font-weight: bold; background: #fffdf7;" class="editable-field" id="gift-sim" contenteditable="false">
+                <div class="price-tag" style="text-align: center; font-weight: bold; background: #fffdf7;" class="editable-field" data-id="gift_sim" contenteditable="false">
                     🎁 ဖုန်းဆင်းကတ် (Sim Card) လည်း လက်ဆောင် ထည့်ပေးပါမည်။
                 </div>
             </div>
+        </div>
 
+        <div id="contact" class="content-section">
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-address-book" style="color: var(--accent-color);"></i> ဆက်သွယ်ရန် လိပ်စာများ</div>
+                <div class="info-list">
+                    <div class="info-item">
+                        <div class="info-icon-wrapper icon-viber"><i class="fa-brands fa-viber"></i></div>
+                        <div class="info-details">
+                            <div class="info-label">Viber Number</div>
+                            <div class="info-value editable-field" data-id="con_viber" contenteditable="false">+95 9 123 456 789</div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon-wrapper icon-line"><i class="fa-brands fa-line"></i></div>
+                        <div class="info-details">
+                            <div class="info-label">Line ID</div>
+                            <div class="info-value editable-field" data-id="con_line" contenteditable="false">goldenfuture.th</div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon-wrapper icon-facebook"><i class="fa-brands fa-facebook-f"></i></div>
+                        <div class="info-details">
+                            <div class="info-label">Facebook Page</div>
+                            <div class="info-value editable-field" data-id="con_fb" contenteditable="false">GoldenFuture Passport Service</div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon-wrapper icon-phone-mm"><i class="fa-solid fa-phone"></i></div>
+                        <div class="info-details">
+                            <div class="info-label">မြန်မာဖုန်းနံပါတ်</div>
+                            <div class="info-value editable-field" data-id="con_ph_mm" contenteditable="false">09 777 888 999</div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon-wrapper icon-phone-th"><i class="fa-solid fa-phone-flip"></i></div>
+                        <div class="info-details">
+                            <div class="info-label">ထိုင်းဖုန်းနံပါတ်</div>
+                            <div class="info-value editable-field" data-id="con_ph_th" contenteditable="false">081 234 5678</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="payment" class="content-section">
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-credit-card" style="color: var(--accent-color);"></i> ငွေပေးချေရန် ဘဏ်အကောင့်များ</div>
+                <div class="info-list">
+                    <div class="info-item">
+                        <div class="info-icon-wrapper icon-bank"><i class="fa-solid fa-building-columns"></i></div>
+                        <div class="info-details">
+                            <div class="info-label">KBZ Bank</div>
+                            <div class="info-value editable-field" data-id="pay_kbz" contenteditable="false">ဦးအောင်လှ (၁၂၃၄၅၆၇၈၉၀၁၂၃၄၅၆)</div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon-wrapper icon-phone-mm"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                        <div class="info-details">
+                            <div class="info-label">KBZ Pay (Kpay)</div>
+                            <div class="info-value editable-field" data-id="pay_kpay" contenteditable="false">09 777 888 999 (U Aung Hla)</div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon-wrapper icon-bank" style="background-color: #4e2a84;"><i class="fa-solid fa-building-columns"></i></div>
+                        <div class="info-details">
+                            <div class="info-label">SCB Bank (Thai)</div>
+                            <div class="info-value editable-field" data-id="pay_scb" contenteditable="false">GoldenFuture Co.,Ltd (987-6-54321-0)</div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon-wrapper icon-line" style="background-color: #00A86B;"><i class="fa-solid fa-wallet"></i></div>
+                        <div class="info-details">
+                            <div class="info-label">K+ Bank (Kasikorn)</div>
+                            <div class="info-value editable-field" data-id="pay_kbank" contenteditable="false">012-3-45678-9 (Mr. Aung Hla)</div>
+                        </div>
+                    </div>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 15px;" class="editable-field" data-id="pay_note" contenteditable="false">
+                    ⚠️ ငွေလွှဲပြီးပါက ငွေလွှဲဖြတ်ပိုင်း (Screenshot) ကို ပေးပို့ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။
+                </p>
+            </div>
+        </div>
+
+        <div id="profile" class="content-section">
+            <div class="card">
+                <div class="profile-container">
+                    <div class="profile-img-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="profile-pic" id="profile-display" onclick="triggerPhotoUpload()">
+                        <input type="file" id="photo-input" accept="image/*" style="display: none;" onchange="loadPhoto(event)">
+                        <div class="upload-hint" id="upload-text">📸 ပုံပြောင်းရန် နှိပ်ပါ</div>
+                    </div>
+                    
+                    <h2 class="editable-field" data-id="prof_name" contenteditable="false" style="font-size: 20px; color: var(--primary-color); margin-bottom: 5px;">GoldenFuture ဝန်ဆောင်မှုအဖွဲ့</h2>
+                    <div class="bio-text editable-field" data-id="prof_bio" contenteditable="false">"လူကြီးမင်းတို့၏ စိတ်ချချမ်းမြေ့ဖွယ်ရာ အနာဂတ်ခရီးလမ်းအတွက် သစ္စာရှိစွာ တာဝန်ယူဆောင်ရွက်ပေးနေပါသည်။"</div>
+                    
+                    <div class="blessing-box">
+                        <p class="editable-field" data-id="prof_greet" contenteditable="false" style="font-weight: bold; color: var(--primary-color); margin-bottom: 8px;">✨ လေးစားစွာဖြင့် နှုတ်ခွန်းဆက်သအပ်ပါသည်။ ✨</p>
+                        <p class="editable-field" data-id="prof_thanks" contenteditable="false">
+                            ကျွန်တော်တို့ <strong style="color:var(--accent-color)">GoldenFuture</strong> ဝန်ဆောင်မှုလုပ်ငန်းကို ယုံကြည်စိတ်ချစွာ ရွေးချယ်ပေးကြသော မိဘပြည်သူ ခရီးသွား ညီအစ်ကိုမောင်နှမများအားလုံးကို အထူးပင် ကျေးဇူးဥပကာရ တင်ရှိပါသည်။
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
 
     <script>
-        // Tab switching function
+        let isEditable = false;
+
+        // App စတင်ပွင့်ချိန်တွင် သိမ်းဆည်းထားသော ဒေတာများကို ပြန်ခေါ်ယူခြင်း
+        document.addEventListener("DOMContentLoaded", () => {
+            loadSavedData();
+        });
+
+        // သော့ပုံစံ ခလုတ်ဖြင့် Edit Mode ထိန်းချုပ်စနစ်
+        function toggleEditMode() {
+            const fields = document.querySelectorAll('.editable-field');
+            const lockBtn = document.getElementById('lock-btn');
+            const lockIcon = document.getElementById('lock-icon');
+            const uploadText = document.getElementById('upload-text');
+
+            if (!isEditable) {
+                const password = prompt("စာသားများနှင့် အချက်အလက်များ ပြင်ဆင်ရန် Password ရိုက်ထည့်ပါ:");
+                if (password === "246810") {
+                    isEditable = true;
+                    fields.forEach(field => field.setAttribute('contenteditable', 'true'));
+                    lockIcon.className = "fa-solid fa-lock-open"; // သော့ပွင့်ပုံပြောင်းရန်
+                    lockBtn.classList.add('unlocked-status');
+                    if(uploadText) uploadText.style.display = "block";
+                    
+                    // ပြင်ဆင်မှုတိုင်းကို ချက်ချင်းသိမ်းဆည်းရန် Listener ထည့်ခြင်း
+                    fields.forEach(field => {
+                        field.addEventListener('input', saveData);
+                    });
+
+                    alert("Password (၂၄၆၈၁၀) မှန်ကန်ပါသည်။ ပြင်ဆင်လိုသော စာသားပေါ်နှိပ်၍ ပြင်ဆင်နိုင်ပါပြီ။ (ပြင်ဆင်မှုများသည် Auto Save ဖြစ်သွားပါမည်)");
+                } else if (password !== null) {
+                    alert("⚠️ Password မှားယွင်းနေပါသည်။");
+                }
+            } else {
+                isEditable = false;
+                fields.forEach(field => {
+                    field.setAttribute('contenteditable', 'false');
+                    field.removeEventListener('input', saveData);
+                });
+                lockIcon.className = "fa-solid fa-lock"; // သော့ပိတ်ပုံပြန်ပြောင်းရန်
+                lockBtn.classList.remove('unlocked-status');
+                if(uploadText) uploadText.style.display = "none";
+                alert("ပြင်ဆင်မှုများကို ပိတ်သိမ်းပြီး အောင်မြင်စွာ သိမ်းဆည်းလိုက်ပါပြီ။");
+            }
+        }
+
+        // စာသားများကို LocalStorage တွင် သိမ်းဆည်းခြင်း
+        function saveData() {
+            const fields = document.querySelectorAll('.editable-field');
+            fields.forEach(field => {
+                const id = field.getAttribute('data-id');
+                if (id) {
+                    localStorage.setItem('gf_' + id, field.innerHTML);
+                }
+            });
+        }
+
+        // LocalStorage မှ စာသားများကို ပြန်လည်ဖတ်ရှုခြင်း
+        function loadSavedData() {
+            const fields = document.querySelectorAll('.editable-field');
+            fields.forEach(field => {
+                const id = field.getAttribute('data-id');
+                if (id) {
+                    const savedValue = localStorage.getItem('gf_' + id);
+                    if (savedValue !== null) {
+                        field.innerHTML = savedValue;
+                    }
+                }
+            });
+
+            // သိမ်းဆည်းထားသော Profile ပုံကို ပြန်ခေါ်ခြင်း
+            const savedPhoto = localStorage.getItem('gf_profile_photo');
+            if (savedPhoto) {
+                document.getElementById('profile-display').src = savedPhoto;
+            }
+        }
+
+        // Tab ပြောင်းလဲပေးသည့်စနစ်
         function openTab(evt, tabName) {
             var i, contentSection, tabBtn;
             
@@ -471,6 +721,36 @@
             document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.className += " active";
+
+            // Tab ကို အလယ်ဗဟိုရောက်အောင် အလိုအလျောက် ရွှေ့ပေးသည့်စနစ်
+            const container = document.querySelector('.tab-container');
+            const target = evt.currentTarget;
+            container.scrollTo({
+                left: target.offsetLeft - (container.offsetWidth / 2) + (target.offsetWidth / 2),
+                behavior: 'smooth'
+            });
+        }
+
+        function triggerPhotoUpload() {
+            if (isEditable) {
+                document.getElementById('photo-input').click();
+            } else {
+                alert("🔒 Profile ပုံကို ပြောင်းလဲရန် ပထမဦးစွာ သော့ခလုတ်ကို နှိပ်၍ Edit Mode ဖွင့်ပေးပါ။");
+            }
+        }
+
+        // ပုံကို Base64 Format ဖြင့် LocalStorage တွင် သိမ်းဆည်းခြင်း
+        function loadPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Url = e.target.result;
+                    document.getElementById('profile-display').src = base64Url;
+                    localStorage.setItem('gf_profile_photo', base64Url); // ပုံကို သိမ်းဆည်းခြင်း
+                }
+                reader.readAsDataURL(file);
+            }
         }
     </script>
 
