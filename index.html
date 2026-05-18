@@ -36,7 +36,7 @@
             background: linear-gradient(135deg, var(--primary-color), #4e0013);
             color: #ffffff;
             text-align: center;
-            padding: 45px 20px 25px 20px;
+            padding: 55px 20px 25px 20px;
             border-bottom: 4px solid var(--accent-color);
             box-shadow: 0 4px 15px rgba(128,0,32,0.15);
             position: relative;
@@ -65,6 +65,10 @@
             top: 15px; 
             right: 15px;
             z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
         }
 
         /* Premium Admin Auth Button */
@@ -95,6 +99,48 @@
             background-color: #2e7d32;
             border-color: #a3e635;
             box-shadow: 0 3px 8px rgba(46,125,50,0.4);
+        }
+
+        /* ညာဘက်အပေါ်ဆုံးထောင့် ငွေလဲနှုန်းပြကွက် */
+        .exchange-rate-box {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1.5px solid var(--accent-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            color: var(--text-main);
+            font-size: 12px;
+            font-weight: bold;
+            text-align: right;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .exchange-rate-title {
+            font-size: 10px;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .rate-value-container {
+            color: #2e7d32;
+            font-size: 14px;
+        }
+
+        #live-indicator {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background-color: #2e7d32;
+            border-radius: 50%;
+            margin-right: 3px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
         }
 
         /* Admin ဆိုင်းဘုတ်ပြသချက် */
@@ -142,7 +188,7 @@
         }
 
         .tab-btn {
-            flex: 1 0 0;               
+            flex: 1 0 0;              
             min-width: 90px;
             border: none;
             background: none;
@@ -328,6 +374,14 @@
             <button class="auth-btn" id="lock-btn" onclick="toggleAdminAccess()">
                 <i class="fa-solid fa-user-gear" id="lock-icon"></i> <span id="btn-text">Admin ဝင်ရန်</span>
             </button>
+            
+            <!-- Realtime Live ငွေလဲနှုန်းပြကွက် -->
+            <div class="exchange-rate-box">
+                <span class="exchange-rate-title"><span id="live-indicator"></span> တိုက်ရိုက်ငွေလဲနှုန်း</span>
+                <span class="rate-value-container">
+                    1 ฿ = <span class="editable-field" id="rate-display" data-id="exchange_rate_value" contenteditable="false">...</span> ကျပ်
+                </span>
+            </div>
         </div>
 
         <h1 class="editable-field" data-id="h1_title" contenteditable="false">GoldenFuture</h1>
@@ -348,6 +402,7 @@
             </div>
         </div>
 
+        <!-- နေ့စဉ်သတင်းကဏ္ဍ -->
         <div id="news" class="content-section active">
             <div class="card">
                 <div class="card-title editable-field" data-id="news_tab_title" contenteditable="false"><i class="fa-solid fa-bullhorn"></i> ပြည်တွင်း/ပြည်ပ နေ့စဉ်သတင်းဦးများ</div>
@@ -371,6 +426,7 @@
             </div>
         </div>
 
+        <!-- ပတ်စပို့ကဏ္ဍ -->
         <div id="passport" class="content-section">
             <div class="card">
                 <div class="card-title editable-field" data-id="pass_title1" contenteditable="false"><i class="fa-solid fa-passport"></i> မြန်မာပြည်ပတ်စပို့ ဆောင်ရွက်ပေးခြင်း</div>
@@ -407,6 +463,7 @@
             </div>
         </div>
 
+        <!-- ထိုင်းခရီးစဉ်ကဏ္ဍ -->
         <div id="travel" class="content-section">
             <div class="card">
                 <div class="card-title editable-field" data-id="tr_title" contenteditable="false"><i class="fa-solid fa-earth-asia"></i> Thailand သို့ လာရောက်နိုင်မည့် လမ်းကြောင်းများ</div>
@@ -453,6 +510,7 @@
             </div>
         </div>
 
+        <!-- ဆက်သွယ်ရေးနှင့် ငွေပေးချေမှု -->
         <div id="contact_payment" class="content-section">
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-address-book"></i> ဆက်သွယ်ရန် လိပ်စာများ</div>
@@ -533,6 +591,7 @@
             </div>
         </div>
 
+        <!-- ပရိုဖိုင်ကဏ္ဍ -->
         <div id="profile" class="content-section">
             <div class="card">
                 <div class="profile-container">
@@ -557,6 +616,7 @@
 
     </div>
 
+    <!-- Firebase SDK Links -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -575,15 +635,54 @@
         const database = firebase.database();
 
         let isAdminMode = false;
+        let useLiveApiRate = true; // Live API သုံးမသုံး သတ်မှတ်ချက်
+
+        // API ကနေ Live Rate တိုက်ရိုက်ဆွဲယူသည့် Function
+        async function fetchLiveExchangeRate() {
+            if (!useLiveApiRate) return; 
+            
+            try {
+                // ExchangeRate-API (Free & No Key Required for Standard Pair)
+                const response = await fetch('https://open.er-api.com/v6/latest/THB');
+                if (!response.ok) throw new Error('API Network error');
+                
+                const data = await response.json();
+                const mmkRate = data.rates.MMK;
+                
+                if (mmkRate) {
+                    // ဒသမကိန်းရှင်းအောင် အနီးစပ်ဆုံး ကိန်းပြည့်ပြောင်းလဲခြင်း
+                    const roundedRate = Math.round(mmkRate);
+                    const rateDisplay = document.getElementById('rate-display');
+                    
+                    if (rateDisplay && document.activeElement !== rateDisplay) {
+                        rateDisplay.innerHTML = roundedRate;
+                    }
+                }
+            } catch (error) {
+                console.error("Live Rate ဆွဲမရပါသဖြင့် Firebase ဒေတာကို ဆက်လက်သုံးပါမည်- ", error);
+            }
+        }
 
         document.addEventListener("DOMContentLoaded", () => {
-            // စာသားများ Realtime ဆွဲယူခြင်း
+            // App စဖွင့်လျှင် Live Rate ကို ချက်ချင်းဆွဲယူပြသရန်
+            fetchLiveExchangeRate();
+            // ၅ မိနစ်တစ်ကြိမ် Rate ကို auto update လုပ်ရန်
+            setInterval(fetchLiveExchangeRate, 300000);
+
+            // Firebase မှ စာသားများနှင့် ဓာတ်ပုံများ Realtime ဆွဲယူခြင်း
             database.ref('gf_app_data').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
                     const fields = document.querySelectorAll('.editable-field');
                     fields.forEach(field => {
                         const id = field.getAttribute('data-id');
+                        
+                        // အကယ်၍ Admin က လက်ဖြင့် ကိုယ်တိုင်ပြင်ထားလျှင် API အစား Firebase က ဈေးနှုန်းကို ယူသုံးမည်
+                        if (id === 'exchange_rate_value' && data[id]) {
+                            useLiveApiRate = false; 
+                            document.getElementById('live-indicator').style.backgroundColor = '#7d6e63'; // API မဟုတ်ကြောင်း အရောင်ပြောင်းခြင်း
+                        }
+
                         if (id && data[id] !== undefined) {
                             if (document.activeElement !== field) {
                                 field.innerHTML = data[id];
@@ -609,7 +708,7 @@
                 }
             });
 
-            // Admin Mode ဖြစ်ပြီး စာသားတစ်ခုခုပြင်ပြီး အပြင်ကိုနှိပ်လိုက်ရင် (Blur) Firebase ထဲ တိုက်ရိုက်သိမ်းရန်
+            // Admin ပြင်ဆင်ပြီး အပြင်ကိုနှိပ်လျှင် (Blur) သိမ်းဆည်းရန်
             const fields = document.querySelectorAll('.editable-field');
             fields.forEach(field => {
                 field.addEventListener('blur', () => {
@@ -617,6 +716,11 @@
                         const id = field.getAttribute('data-id');
                         const updatedValue = field.innerHTML;
                         if (id) {
+                            if (id === 'exchange_rate_value') {
+                                useLiveApiRate = false; // လက်နဲ့ပြင်လိုက်ရင် auto စနစ်ကို ပိတ်ရန်
+                                document.getElementById('live-indicator').style.animation = 'none';
+                                document.getElementById('live-indicator').style.backgroundColor = '#cda33b';
+                            }
                             database.ref('gf_app_data/' + id).set(updatedValue);
                         }
                     }
@@ -634,19 +738,20 @@
 
             if (!isAdminMode) {
                 const password = prompt("စီမံခန့်ခွဲသူစနစ် (Admin Mode) သို့ ဝင်ရောက်ရန် Password ရိုက်ထည့်ပါ:");
-                if (password === "000000") {
+                
+                if (password === "1234321") {
                     isAdminMode = true;
                     document.body.classList.add('admin-mode-unlocked');
                     lockBtn.classList.add('admin-mode-active');
                     btnText.innerText = "Admin ထွက်ရန်";
                     if(uploadText) uploadText.style.display = "block";
-                    adminIndicator.style.display = "block";
-
+                    if(adminIndicator) adminIndicator.style.display = "block";
+                    
                     fields.forEach(field => {
                         field.setAttribute('contenteditable', 'true');
                     });
-                    alert("Admin Mode သို့ အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။ စာသားများနှင့် ဓာတ်ပုံများကို စိတ်ကြိုက် ပြင်ဆင်နိုင်ပါပြီ။");
-                } else {
+                    alert("Admin Mode သို့ ဝင်ရောက်ပြီးပါပြီ။ စာသားများနှင့် ငွေလဲနှုန်းကို စိတ်ကြိုက် ပြင်နိုင်ပါပြီ။");
+                } else if (password !== null) {
                     alert("Password မှားယွင်းနေပါသည်။");
                 }
             } else {
@@ -655,8 +760,8 @@
                 lockBtn.classList.remove('admin-mode-active');
                 btnText.innerText = "Admin ဝင်ရန်";
                 if(uploadText) uploadText.style.display = "none";
-                adminIndicator.style.display = "none";
-
+                if(adminIndicator) adminIndicator.style.display = "none";
+                
                 fields.forEach(field => {
                     field.setAttribute('contenteditable', 'false');
                 });
@@ -664,27 +769,21 @@
             }
         }
 
-        // Tab စနစ်ပြောင်းလဲခြင်း လုပ်ဆောင်ချက်
+        // Tab ပြောင်းလဲခြင်း
         function openTab(evt, tabName) {
             const contentSections = document.querySelectorAll('.content-section');
-            contentSections.forEach(section => {
-                section.classList.remove('active');
-            });
+            contentSections.forEach(section => section.classList.remove('active'));
 
             const tabButtons = document.querySelectorAll('.tab-btn');
-            tabButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
+            tabButtons.forEach(btn => btn.classList.remove('active'));
 
             document.getElementById(tabName).classList.add('active');
             evt.currentTarget.classList.add('active');
         }
 
-        // Profile Photo Upload တင်ခြင်းများ
+        // ဓာတ်ပုံ Upload ပိုင်းဆိုင်ရာ လုပ်ဆောင်ချက်များ
         function triggerPhotoUpload() {
-            if (isAdminMode) {
-                document.getElementById('photo-input').click();
-            }
+            if (isAdminMode) document.getElementById('photo-input').click();
         }
 
         function loadPhoto(event) {
@@ -695,16 +794,13 @@
                     const base64Img = e.target.result;
                     document.getElementById('profile-display').src = base64Img;
                     database.ref('gf_profile_photo').set(base64Img);
-                };
+                }
                 reader.readAsDataURL(file);
             }
         }
 
-        // News Photo Upload တင်ခြင်းများ
         function triggerNewsPhotoUpload() {
-            if (isAdminMode) {
-                document.getElementById('news-photo-input').click();
-            }
+            if (isAdminMode) document.getElementById('news-photo-input').click();
         }
 
         function loadNewsPhoto(event) {
@@ -715,7 +811,7 @@
                     const base64Img = e.target.result;
                     document.getElementById('news-display').src = base64Img;
                     database.ref('gf_news_photo').set(base64Img);
-                };
+                }
                 reader.readAsDataURL(file);
             }
         }
