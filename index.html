@@ -348,34 +348,29 @@
             </div>
         </div>
 
-        <!-- News Tab (နေ့စဉ်သတင်းများ) -->
         <div id="news" class="content-section active">
             <div class="card">
                 <div class="card-title editable-field" data-id="news_tab_title" contenteditable="false"><i class="fa-solid fa-bullhorn"></i> ပြည်တွင်း/ပြည်ပ နေ့စဉ်သတင်းဦးများ</div>
                 
-                <!-- သတင်းဓာတ်ပုံတင်ရန်နေရာ -->
                 <div class="news-img-wrapper" onclick="triggerNewsPhotoUpload()">
                     <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=500&q=80" alt="News Image" class="news-pic" id="news-display">
                     <input type="file" id="news-photo-input" accept="image/*" style="display: none;" onchange="loadNewsPhoto(event)">
                 </div>
 
-                <!-- သတင်းခေါင်းစဉ် -->
                 <h3 class="editable-field" data-id="news_heading" contenteditable="false" style="font-size: 18px; color: var(--primary-color); margin-bottom: 8px; font-weight: 700;">
                     အရေးကြီးသတင်းခေါင်းစဉ်ကို ဤနေရာတွင် ရေးသားရန်...
                 </h3>
                 
-                <!-- သတင်းအသေးစိတ်စာသား -->
                 <p class="editable-field" data-id="news_details" contenteditable="false" style="font-size: 14px; color: var(--text-main); text-align: justify; white-space: pre-wrap;">
                     သတင်းအသေးစိတ် အချက်အလက်များနှင့် နေ့စဉ်ကြေညာချက်များကို ဤနေရာတွင် စိတ်ကြိုက် ရေးသားဖော်ပြနိုင်ပါသည်။ Admin Mode ကိုဖွင့်၍ စာသားများကို တိုက်ရိုက် ပြင်ဆင်နိုင်ပါသည်။
                 </p>
                 
                 <div style="font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 15px;" class="editable-field" data-id="news_date" contenteditable="false">
-                    📅 ဖော်ပြသည့်နေ့စွဲ - ၁၇ မေလ ၂၀၂၆
+                    📅 ဖော်ပြသည့်နေ့စွဲ - ၁၇ မေလ ၂၀၁၆
                 </div>
             </div>
         </div>
 
-        <!-- Passport Tab -->
         <div id="passport" class="content-section">
             <div class="card">
                 <div class="card-title editable-field" data-id="pass_title1" contenteditable="false"><i class="fa-solid fa-passport"></i> မြန်မာပြည်ပတ်စပို့ ဆောင်ရွက်ပေးခြင်း</div>
@@ -412,7 +407,6 @@
             </div>
         </div>
 
-        <!-- Travel Tab -->
         <div id="travel" class="content-section">
             <div class="card">
                 <div class="card-title editable-field" data-id="tr_title" contenteditable="false"><i class="fa-solid fa-earth-asia"></i> Thailand သို့ လာရောက်နိုင်မည့် လမ်းကြောင်းများ</div>
@@ -459,9 +453,7 @@
             </div>
         </div>
 
-        <!-- Contact & Payment Combined Tab -->
         <div id="contact_payment" class="content-section">
-            <!-- ဆက်သွယ်ရန်အပိုင်း -->
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-address-book"></i> ဆက်သွယ်ရန် လိပ်စာများ</div>
                 <div class="info-list">
@@ -503,7 +495,6 @@
                 </div>
             </div>
 
-            <!-- ငွေပေးချေရန်အပိုင်း -->
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-credit-card"></i> Ngwe Pay Chya Ran Bank Account Myar</div>
                 <div class="info-list">
@@ -542,7 +533,6 @@
             </div>
         </div>
 
-        <!-- Profile Tab -->
         <div id="profile" class="content-section">
             <div class="card">
                 <div class="profile-container">
@@ -567,7 +557,6 @@
 
     </div>
 
-    <!-- Firebase Realtime Database Libraries -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -619,134 +608,116 @@
                     document.getElementById('news-display').src = newsPhotoUrl;
                 }
             });
+
+            // Admin Mode ဖြစ်ပြီး စာသားတစ်ခုခုပြင်ပြီး အပြင်ကိုနှိပ်လိုက်ရင် (Blur) Firebase ထဲ တိုက်ရိုက်သိမ်းရန်
+            const fields = document.querySelectorAll('.editable-field');
+            fields.forEach(field => {
+                field.addEventListener('blur', () => {
+                    if (isAdminMode) {
+                        const id = field.getAttribute('data-id');
+                        const updatedValue = field.innerHTML;
+                        if (id) {
+                            database.ref('gf_app_data/' + id).set(updatedValue);
+                        }
+                    }
+                });
+            });
         });
 
         // Admin Auth စနစ်
         function toggleAdminAccess() {
             const fields = document.querySelectorAll('.editable-field');
             const lockBtn = document.getElementById('lock-btn');
-            const lockIcon = document.getElementById('lock-icon');
             const btnText = document.getElementById('btn-text');
             const uploadText = document.getElementById('upload-text');
             const adminIndicator = document.getElementById('admin-indicator');
 
             if (!isAdminMode) {
                 const password = prompt("စီမံခန့်ခွဲသူစနစ် (Admin Mode) သို့ ဝင်ရောက်ရန် Password ရိုက်ထည့်ပါ:");
-                if (password === "246810") {
+                if (password === "000000") {
                     isAdminMode = true;
                     document.body.classList.add('admin-mode-unlocked');
-                    fields.forEach(field => field.setAttribute('contenteditable', 'true'));
-                    
-                    lockIcon.className = "fa-solid fa-arrow-right-from-bracket"; 
-                    btnText.innerText = "Admin ထွက်ရန်";
                     lockBtn.classList.add('admin-mode-active');
+                    btnText.innerText = "Admin ထွက်ရန်";
                     if(uploadText) uploadText.style.display = "block";
-                    if(adminIndicator) adminIndicator.style.display = "block";
-                    
-                    fields.forEach(field => {
-                        field.addEventListener('input', pushDataToFirebase);
-                    });
+                    adminIndicator.style.display = "block";
 
-                    alert("🔓 Admin စနစ်သို့ ရောက်ရှိပါပြီ။ သတင်းပုံနှင့် စာသားများကို ပြင်ဆင်နိုင်ပါပြီ။");
-                } else if (password !== null) {
-                    alert("⚠️ Password မှားယွင်းနေပါသည်။");
+                    fields.forEach(field => {
+                        field.setAttribute('contenteditable', 'true');
+                    });
+                    alert("Admin Mode သို့ အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။ စာသားများနှင့် ဓာတ်ပုံများကို စိတ်ကြိုက် ပြင်ဆင်နိုင်ပါပြီ။");
+                } else {
+                    alert("Password မှားယွင်းနေပါသည်။");
                 }
             } else {
                 isAdminMode = false;
                 document.body.classList.remove('admin-mode-unlocked');
+                lockBtn.classList.remove('admin-mode-active');
+                btnText.innerText = "Admin ဝင်ရန်";
+                if(uploadText) uploadText.style.display = "none";
+                adminIndicator.style.display = "none";
+
                 fields.forEach(field => {
                     field.setAttribute('contenteditable', 'false');
-                    field.removeEventListener('input', pushDataToFirebase);
                 });
-                lockIcon.className = "fa-solid fa-user-gear"; 
-                btnText.innerText = "Admin ဝင်ရန်";
-                lockBtn.classList.remove('admin-mode-active');
-                if(uploadText) uploadText.style.display = "none";
-                if(adminIndicator) adminIndicator.style.display = "none";
-                alert("🔒 Admin စနစ်မှ ထွက်ပါပြီ။");
+                alert("Admin Mode မှ ထွက်လိုက်ပါပြီ။");
             }
         }
 
-        function pushDataToFirebase(event) {
-            if (!isAdminMode) return; 
-            const field = event.target;
-            const id = field.getAttribute('data-id');
-            if (id) {
-                database.ref('gf_app_data/' + id).set(field.innerHTML);
-            }
+        // Tab စနစ်ပြောင်းလဲခြင်း လုပ်ဆောင်ချက်
+        function openTab(evt, tabName) {
+            const contentSections = document.querySelectorAll('.content-section');
+            contentSections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
         }
 
-        // Bio ပုံတင်ခြင်းစနစ်
+        // Profile Photo Upload တင်ခြင်းများ
         function triggerPhotoUpload() {
-            if (isAdminMode) document.getElementById('photo-input').click();
-            else alert("🔒 Profile ပုံပြောင်းရန် Admin အရင်ဝင်ပါ။");
+            if (isAdminMode) {
+                document.getElementById('photo-input').click();
+            }
         }
 
         function loadPhoto(event) {
-            processAndUploadImage(event.target.files[0], 'gf_profile_photo', 'profile-display');
-        }
-
-        // သတင်းဓာတ်ပုံတင်ခြင်းစနစ်
-        function triggerNewsPhotoUpload() {
-            if (isAdminMode) document.getElementById('news-photo-input').click();
-            else alert("🔒 သတင်းဓာတ်ပုံပြောင်းရန် ပထမဦးစွာ Admin အရင်ဝင်ပါ။");
-        }
-
-        function loadNewsPhoto(event) {
-            processAndUploadImage(event.target.files[0], 'gf_news_photo', 'news-display');
-        }
-
-        // ပုံကို Compress လုပ်ပြီး Firebase သို့ Upload တင်ပေးသည့် စနစ်ခြုံငုံချက်
-        function processAndUploadImage(file, firebasePath, displayElementId) {
-            if (file && isAdminMode) {
+            const file = event.target.files[0];
+            if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        
-                        // သတင်းပုံအတွက် အချိုးအစား ပိုမိုကြည်လင်အောင် 500x350 သတ်မှတ်ပါသည်
-                        canvas.width = 500;
-                        canvas.height = 350;
-                        ctx.drawImage(img, 0, 0, 500, 350);
-                        
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
-                        document.getElementById(displayElementId).src = compressedBase64;
-                        
-                        database.ref(firebasePath).set(compressedBase64);
-                    }
-                }
+                    const base64Img = e.target.result;
+                    document.getElementById('profile-display').src = base64Img;
+                    database.ref('gf_profile_photo').set(base64Img);
+                };
                 reader.readAsDataURL(file);
             }
         }
 
-        // Tab Layout စနစ်
-        function openTab(evt, tabName) {
-            var i, contentSection, tabBtn;
-            
-            contentSection = document.getElementsByClassName("content-section");
-            for (i = 0; i < contentSection.length; i++) {
-                contentSection[i].style.display = "none";
-                contentSection[i].classList.remove("active");
+        // News Photo Upload တင်ခြင်းများ
+        function triggerNewsPhotoUpload() {
+            if (isAdminMode) {
+                document.getElementById('news-photo-input').click();
             }
-            
-            tabBtn = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tabBtn.length; i++) {
-                tabBtn[i].className = tabBtn[i].className.replace(" active", "");
-            }
-            
-            document.getElementById(tabName).style.display = "block";
-            document.getElementById(tabName).classList.add("active");
-            evt.currentTarget.className += " active";
+        }
 
-            const container = document.querySelector('.tab-container');
-            const target = evt.currentTarget;
-            container.scrollTo({
-                left: target.offsetLeft - (container.offsetWidth / 2) + (target.offsetWidth / 2),
-                behavior: 'smooth'
-            });
+        function loadNewsPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Img = e.target.result;
+                    document.getElementById('news-display').src = base64Img;
+                    database.ref('gf_news_photo').set(base64Img);
+                };
+                reader.readAsDataURL(file);
+            }
         }
     </script>
 </body>
