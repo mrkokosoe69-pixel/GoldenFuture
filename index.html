@@ -122,7 +122,7 @@
         .tab-scroll-wrapper {
             background: #ffffff;
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 12px;
             margin-top: 5px;
             margin-bottom: 25px;
             box-shadow: 0 4px 12px rgba(44,29,17,0.04);
@@ -142,12 +142,12 @@
         }
 
         .tab-btn {
-            flex: 0 0 auto;
-            width: 105px;
+            flex: 1 0 0;               
+            min-width: 90px;
             border: none;
             background: none;
-            padding: 12px 5px;
-            font-size: 12px;
+            padding: 10px 4px;          
+            font-size: 11px;           
             font-weight: 700;
             color: var(--text-muted);
             cursor: pointer;
@@ -156,13 +156,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            border-bottom: 3px solid transparent;
+            gap: 5px;                  
+            border-bottom: 2.5px solid transparent;
             opacity: 0.75;
         }
 
         .tab-btn i {
-            font-size: 18px;
+            font-size: 14px;           
             color: var(--text-muted);
             transition: color 0.3s ease;
         }
@@ -198,7 +198,7 @@
         }
 
         .card-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--primary-color);
             border-bottom: 2px solid var(--accent-color);
@@ -207,6 +207,43 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .card-title i {
+            color: var(--accent-color);
+            font-size: 18px;
+        }
+
+        /* News Tab Specific Styles */
+        .news-img-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            background: #f7f5ee;
+        }
+
+        .news-pic {
+            width: 100%;
+            height: auto;
+            max-height: 260px;
+            object-fit: cover;
+            display: block;
+        }
+
+        body.admin-mode-unlocked .news-img-wrapper::after {
+            content: "📸 သတင်းဓာတ်ပုံပြောင်းရန် နှိပ်ပါ";
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(128, 0, 32, 0.85);
+            color: #ffffff;
+            text-align: center;
+            padding: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         /* Editable Text Setup */
@@ -303,18 +340,45 @@
         
         <div class="tab-scroll-wrapper">
             <div class="tab-container">
-                <button class="tab-btn active" onclick="openTab(event, 'passport')"><i class="fa-solid fa-passport"></i><span>ပတ်စပို့</span></button>
+                <button class="tab-btn active" onclick="openTab(event, 'news')"><i class="fa-solid fa-newspaper"></i><span>နေ့စဉ်သတင်း</span></button>
+                <button class="tab-btn" onclick="openTab(event, 'passport')"><i class="fa-solid fa-passport"></i><span>ပတ်စပို့</span></button>
                 <button class="tab-btn" onclick="openTab(event, 'travel')"><i class="fa-solid fa-route"></i><span>ထိုင်းခရီးစဉ်</span></button>
-                <button class="tab-btn" onclick="openTab(event, 'contact')"><i class="fa-solid fa-address-book"></i><span>ဆက်သွယ်ရန်</span></button>
-                <button class="tab-btn" onclick="openTab(event, 'payment')"><i class="fa-solid fa-credit-card"></i><span>ငွေပေးချေရန်</span></button>
+                <button class="tab-btn" onclick="openTab(event, 'contact_payment')"><i class="fa-solid fa-address-card"></i><span>ဆက်သွယ်/ငွေပေးရန်</span></button>
                 <button class="tab-btn" onclick="openTab(event, 'profile')"><i class="fa-solid fa-user"></i><span>Bio / Profile</span></button>
             </div>
         </div>
 
-        <!-- Passport Tab -->
-        <div id="passport" class="content-section active">
+        <!-- News Tab (နေ့စဉ်သတင်းများ) -->
+        <div id="news" class="content-section active">
             <div class="card">
-                <div class="card-title editable-field" data-id="pass_title1" contenteditable="false">🇲🇲 မြန်မာပြည်ပတ်စပို့ ဆောင်ရွက်ပေးခြင်း</div>
+                <div class="card-title editable-field" data-id="news_tab_title" contenteditable="false"><i class="fa-solid fa-bullhorn"></i> ပြည်တွင်း/ပြည်ပ နေ့စဉ်သတင်းဦးများ</div>
+                
+                <!-- သတင်းဓာတ်ပုံတင်ရန်နေရာ -->
+                <div class="news-img-wrapper" onclick="triggerNewsPhotoUpload()">
+                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=500&q=80" alt="News Image" class="news-pic" id="news-display">
+                    <input type="file" id="news-photo-input" accept="image/*" style="display: none;" onchange="loadNewsPhoto(event)">
+                </div>
+
+                <!-- သတင်းခေါင်းစဉ် -->
+                <h3 class="editable-field" data-id="news_heading" contenteditable="false" style="font-size: 18px; color: var(--primary-color); margin-bottom: 8px; font-weight: 700;">
+                    အရေးကြီးသတင်းခေါင်းစဉ်ကို ဤနေရာတွင် ရေးသားရန်...
+                </h3>
+                
+                <!-- သတင်းအသေးစိတ်စာသား -->
+                <p class="editable-field" data-id="news_details" contenteditable="false" style="font-size: 14px; color: var(--text-main); text-align: justify; white-space: pre-wrap;">
+                    သတင်းအသေးစိတ် အချက်အလက်များနှင့် နေ့စဉ်ကြေညာချက်များကို ဤနေရာတွင် စိတ်ကြိုက် ရေးသားဖော်ပြနိုင်ပါသည်။ Admin Mode ကိုဖွင့်၍ စာသားများကို တိုက်ရိုက် ပြင်ဆင်နိုင်ပါသည်။
+                </p>
+                
+                <div style="font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 15px;" class="editable-field" data-id="news_date" contenteditable="false">
+                    📅 ဖော်ပြသည့်နေ့စွဲ - ၁၇ မေလ ၂၀၂၆
+                </div>
+            </div>
+        </div>
+
+        <!-- Passport Tab -->
+        <div id="passport" class="content-section">
+            <div class="card">
+                <div class="card-title editable-field" data-id="pass_title1" contenteditable="false"><i class="fa-solid fa-passport"></i> မြန်မာပြည်ပတ်စပို့ ဆောင်ရွက်ပေးခြင်း</div>
                 <p style="font-size: 14px; color: var(--text-muted);" class="editable-field" data-id="pass_desc1" contenteditable="false">မြန်မာပြည်တွင် ပတ်စပို့ အမြန်ပြုလုပ်ပေးသည့် ဝန်ဆောင်မှု ဖြစ်ပါသည်။</p>
                 
                 <div class="price-tag">
@@ -325,7 +389,7 @@
             </div>
 
             <div class="card">
-                <div class="card-title editable-field" data-id="pv_title" contenteditable="false">📋 PV Passport လျှောက်ထားရန်</div>
+                <div class="card-title editable-field" data-id="pv_title" contenteditable="false"><i class="fa-solid fa-file-invoice"></i> PV Passport လျှောက်ထားရန်</div>
                 <ul class="req-list">
                     <li class="editable-field" data-id="pv_req1" contenteditable="false">အိမ်ထောင်စုစာရင်း</li>
                     <li class="editable-field" data-id="pv_req2" contenteditable="false">နိုင်ငံသားစိစစ်ရေး ကတ်ပြား (မှတ်ပုံတင်)</li>
@@ -335,7 +399,7 @@
             </div>
 
             <div class="card">
-                <div class="card-title editable-field" data-id="pj_title" contenteditable="false">📋 PJ Passport လျှောက်ထားရန်</div>
+                <div class="card-title editable-field" data-id="pj_title" contenteditable="false"><i class="fa-solid fa-address-card"></i> PJ Passport လျှောက်ထားရန်</div>
                 <ul class="req-list">
                     <li class="editable-field" data-id="pj_req1" contenteditable="false">အိမ်ထောင်စုစာရင်း</li>
                     <li class="editable-field" data-id="pj_req2" contenteditable="false">နိုင်ငံသားစိစစ်ရေး ကတ်ပြား (မှတ်ပုံတင်)</li>
@@ -351,7 +415,7 @@
         <!-- Travel Tab -->
         <div id="travel" class="content-section">
             <div class="card">
-                <div class="card-title editable-field" data-id="tr_title" contenteditable="false">🇹🇭 Thailand သို့ လာရောက်နိုင်မည့် လမ်းကြောင်းများ</div>
+                <div class="card-title editable-field" data-id="tr_title" contenteditable="false"><i class="fa-solid fa-earth-asia"></i> Thailand သို့ လာရောက်နိုင်မည့် လမ်းကြောင်းများ</div>
                 <p style="font-size: 14px; margin-bottom: 12px;" class="editable-field" data-id="tr_desc" contenteditable="false">မြန်မာနိုင်ငံမှ ထိုင်းနိုင်ငံသို့ <strong>တရားဝင်လမ်းကြောင်း</strong> ဖြင့် ဘေးကင်းစွာ လာရောက်နိုင်ပါသည်။</p>
                 
                 <div style="font-weight: bold; margin-bottom: 8px;" class="editable-field" data-id="tr_sub" contenteditable="false"> GoldenFuture မှ တရားဝင်လမ်းကြောင်း ဝန်ဆောင်မှုများ -</div>
@@ -368,7 +432,7 @@
             </div>
 
             <div class="card">
-                <div class="card-title editable-field" data-id="route_title" contenteditable="false">📍 ကြိုဆိုမည့် စတင်ရာနေရာများ</div>
+                <div class="card-title editable-field" data-id="route_title" contenteditable="false"><i class="fa-solid fa-map-location-dot"></i> 📍 ကြိုဆိုမည့် စတင်ရာနေရာများ</div>
                 <p class="editable-field" data-id="route_desc" contenteditable="false"><strong>မန္တလေးမြို့</strong> နှင့် <strong>ရန်ကုန်မြို့</strong> များမှ စတင်၍ သေချာစွာ တာဝန်ယူ ကြိုဆိုပေးပါသည်။</p>
                 
                 <div class="route-info">
@@ -379,7 +443,7 @@
             </div>
 
             <div class="card">
-                <div class="card-title editable-field" data-id="sp_title" contenteditable="false">🤝 တာချီလိတ်ရောက်သည်နှင့် အထူးဝန်ဆောင်မှုများ</div>
+                <div class="card-title editable-field" data-id="sp_title" contenteditable="false"><i class="fa-solid fa-handshake"></i> တာချီလိတ်ရောက်သည်နှင့် အထူးဝန်ဆောင်မှုများ</div>
                 <p style="font-size: 14px;" class="editable-field" data-id="sp_desc" contenteditable="false">တာချီလိတ်သို့ ရောက်ရှိသည်နှင့် ကျွန်တော်တို့ <strong>GoldenFuture</strong> မှ လူကိုယ်တိုင် လာရောက်ကြိုဆိုပေးမည် ဖြစ်ပြီး အောက်ပါ ဝန်ဆောင်မှုများကိုပါ တစ်ပါတည်း စီစဉ်ပေးသွားပါမည် -</p>
                 
                 <div class="gift-grid">
@@ -395,10 +459,11 @@
             </div>
         </div>
 
-        <!-- Contact Tab -->
-        <div id="contact" class="content-section">
+        <!-- Contact & Payment Combined Tab -->
+        <div id="contact_payment" class="content-section">
+            <!-- ဆက်သွယ်ရန်အပိုင်း -->
             <div class="card">
-                <div class="card-title"><i class="fa-solid fa-address-book" style="color: var(--accent-color);"></i> ဆက်သွယ်ရန် လိပ်စာများ</div>
+                <div class="card-title"><i class="fa-solid fa-address-book"></i> ဆက်သွယ်ရန် လိပ်စာများ</div>
                 <div class="info-list">
                     <div class="info-item">
                         <div class="info-icon-wrapper icon-viber"><i class="fa-brands fa-viber"></i></div>
@@ -437,12 +502,10 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Payment Tab -->
-        <div id="payment" class="content-section">
+            <!-- ငွေပေးချေရန်အပိုင်း -->
             <div class="card">
-                <div class="card-title"><i class="fa-solid fa-credit-card" style="color: var(--accent-color);"></i> Ngwe Pay Chya Ran Bank Account Myar</div>
+                <div class="card-title"><i class="fa-solid fa-credit-card"></i> Ngwe Pay Chya Ran Bank Account Myar</div>
                 <div class="info-list">
                     <div class="info-item">
                         <div class="info-icon-wrapper icon-bank"><i class="fa-solid fa-building-columns"></i></div>
@@ -509,7 +572,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
-        // လူကြီးမင်း ပေးပို့လာသော ကိုယ်ပိုင် Firebase Configuration အချက်အလက်များ
         const firebaseConfig = {
             apiKey: "AIzaSyC5_PJT9Pvv1L24TTUrAY85GDSjtKoSQjA",
             authDomain: "goldenfuture-cd579.firebaseapp.com",
@@ -520,14 +582,13 @@
             appId: "1:974767484310:web:c867994d5a8620ac9cc1b7"
         };
 
-        // Firebase စတင်အလုပ်လုပ်စေခြင်း
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
         let isAdminMode = false;
 
-        // Firebase database မှ ဒေတာများကို Realtime နားထောင်ပြီး အလိုအလျောက် ပြောင်းလဲပေးခြင်း
         document.addEventListener("DOMContentLoaded", () => {
+            // စာသားများ Realtime ဆွဲယူခြင်း
             database.ref('gf_app_data').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -543,16 +604,24 @@
                 }
             });
 
-            // Cloud ပေါ်မှ ပုံကို အလိုအလျောက် ဆွဲယူပြောင်းလဲပေးခြင်း
+            // Bio Profile ပုံ ဆွဲယူခြင်း
             database.ref('gf_profile_photo').on('value', (snapshot) => {
                 const photoUrl = snapshot.val();
                 if (photoUrl) {
                     document.getElementById('profile-display').src = photoUrl;
                 }
             });
+
+            // နေ့စဉ်သတင်းပုံ ဆွဲယူခြင်း
+            database.ref('gf_news_photo').on('value', (snapshot) => {
+                const newsPhotoUrl = snapshot.val();
+                if (newsPhotoUrl) {
+                    document.getElementById('news-display').src = newsPhotoUrl;
+                }
+            });
         });
 
-        // Admin စနစ်သို့ Password ဖြင့် ဝင်ရောက်ခြင်းနှင့် ထွက်ခြင်း
+        // Admin Auth စနစ်
         function toggleAdminAccess() {
             const fields = document.querySelectorAll('.editable-field');
             const lockBtn = document.getElementById('lock-btn');
@@ -578,7 +647,7 @@
                         field.addEventListener('input', pushDataToFirebase);
                     });
 
-                    alert("🔓 Admin စနစ်သို့ ရောက်ရှိပါပြီ။ ပြင်ဆင်မှုအားလုံးသည် User ဖုန်းများတွင် Auto Save ဖြစ်သွားပါမည်။");
+                    alert("🔓 Admin စနစ်သို့ ရောက်ရှိပါပြီ။ သတင်းပုံနှင့် စာသားများကို ပြင်ဆင်နိုင်ပါပြီ။");
                 } else if (password !== null) {
                     alert("⚠️ Password မှားယွင်းနေပါသည်။");
                 }
@@ -594,11 +663,10 @@
                 lockBtn.classList.remove('admin-mode-active');
                 if(uploadText) uploadText.style.display = "none";
                 if(adminIndicator) adminIndicator.style.display = "none";
-                alert("🔒 Admin စနစ်မှ ထွက်ပြီး သာမန် User စနစ်သို့ ပြန်ရောက်ပါပြီ။");
+                alert("🔒 Admin စနစ်မှ ထွက်ပါပြီ။");
             }
         }
 
-        // စာသားများကို Firebase Cloud ပေါ်သို့ တိုက်ရိုက်သိမ်းဆည်းခြင်း
         function pushDataToFirebase(event) {
             if (!isAdminMode) return; 
             const field = event.target;
@@ -608,18 +676,28 @@
             }
         }
 
-        // Profile ပုံကို ကလစ်နှိပ်၍ ရွေးချယ်စေခြင်း (Admin သာ ခွင့်ပြုသည်)
+        // Bio ပုံတင်ခြင်းစနစ်
         function triggerPhotoUpload() {
-            if (isAdminMode) {
-                document.getElementById('photo-input').click();
-            } else {
-                alert("🔒 Profile ပုံကို ပြောင်းလဲရန် ပထမဦးစွာ Admin ဝင်ပေးပါ။");
-            }
+            if (isAdminMode) document.getElementById('photo-input').click();
+            else alert("🔒 Profile ပုံပြောင်းရန် Admin အရင်ဝင်ပါ။");
         }
 
-        // ပုံအရွယ်အစားကို ချုံ့ပြီး Firebase သို့ တင်ခြင်း
         function loadPhoto(event) {
-            const file = event.target.files[0];
+            processAndUploadImage(event.target.files[0], 'gf_profile_photo', 'profile-display');
+        }
+
+        // သတင်းဓာတ်ပုံတင်ခြင်းစနစ်
+        function triggerNewsPhotoUpload() {
+            if (isAdminMode) document.getElementById('news-photo-input').click();
+            else alert("🔒 သတင်းဓာတ်ပုံပြောင်းရန် ပထမဦးစွာ Admin အရင်ဝင်ပါ။");
+        }
+
+        function loadNewsPhoto(event) {
+            processAndUploadImage(event.target.files[0], 'gf_news_photo', 'news-display');
+        }
+
+        // ပုံကို Compress လုပ်ပြီး Firebase သို့ Upload တင်ပေးသည့် စနစ်ခြုံငုံချက်
+        function processAndUploadImage(file, firebasePath, displayElementId) {
             if (file && isAdminMode) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -628,14 +706,16 @@
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        canvas.width = 250;
-                        canvas.height = 250;
-                        ctx.drawImage(img, 0, 0, 250, 250);
                         
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                        document.getElementById('profile-display').src = compressedBase64;
+                        // သတင်းပုံအတွက် အချိုးအစား ပိုမိုကြည်လင်အောင် 500x350 သတ်မှတ်ပါသည်
+                        canvas.width = 500;
+                        canvas.height = 350;
+                        ctx.drawImage(img, 0, 0, 500, 350);
                         
-                        database.ref('gf_profile_photo').set(compressedBase64);
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
+                        document.getElementById(displayElementId).src = compressedBase64;
+                        
+                        database.ref(firebasePath).set(compressedBase64);
                     }
                 }
                 reader.readAsDataURL(file);
