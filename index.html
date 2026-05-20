@@ -3,817 +3,1144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoldenFuture Premium App</title>
+    <title>24/7Exac - Express Cargo Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-color: #fbf9f3;          /* မြန်မာ့ရိုးရာ ကရေကရာရောင် ခပ်ဖျော့ဖျော့ */
-            --card-bg: #ffffff;           /* ကတ်ပြားနောက်ခံ အဖြူရောင် */
-            --text-main: #2c1d11;         /* စာသားအဓိက အရောင်ရင့် */
-            --text-muted: #7d6e63;        /* စာသားအဖျော့ */
-            --primary-color: #800020;     /* ပတ္တမြား နီညိုရောင် (Maroon) */
-            --accent-color: #cda33b;      /* နန်းတွင်း ရွှေဝါရောင် (Myanmar Gold) */
-            --border-color: #e7dfd1;      /* ဘောင်အရောင်ဖျော့ */
+            --bg-deep: #061121;
+            --card-navy: #0b1f38;
+            --royal-blue: #12335a;
+            --gold-premium: #d4af37;
+            --gold-glow: #ffdf7e;
+            --text-light: #ffffff;
+            --text-muted: #94a3b8;
+            --neon-blue: #38bdf8;
+            --success-green: #4ade80;
+            --danger-red: #f87171;
         }
 
         * {
+            box-shadow: none;
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Poppins', 'Noto Sans Myanmar', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding-bottom: 40px;
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(18, 51, 90, 0.6) 0, transparent 40%),
+                radial-gradient(at 100% 100%, rgba(11, 31, 56, 0.9) 0, transparent 50%);
+            color: var(--text-light);
+            min-height: 100vh;
         }
 
-        /* Premium Header Section */
-        .header {
-            background: linear-gradient(135deg, var(--primary-color), #4e0013);
-            color: #ffffff;
+        header {
+            background: linear-gradient(180deg, rgba(6,17,33,0.95) 0%, rgba(11,31,56,0.85) 100%);
+            padding: 22px 15px;
             text-align: center;
-            padding: 55px 20px 25px 20px;
-            border-bottom: 4px solid var(--accent-color);
-            box-shadow: 0 4px 15px rgba(128,0,32,0.15);
-            position: relative;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
         }
 
-        .header h1 {
-            font-size: 38px;
+        .brand-logo {
+            font-size: 2.3rem;
             font-weight: 700;
             letter-spacing: 1px;
-            color: var(--accent-color);
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-            display: inline-block;
-            min-width: 200px;
-        }
-
-        .header p {
-            font-size: 15px;
-            opacity: 0.9;
-            margin-top: 6px;
-            min-height: 20px;
-        }
-
-        /* စနစ်ခွဲခလုတ်နေရာ */
-        .edit-info-container {
-            position: absolute;
-            top: 15px; 
-            right: 15px;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 10px;
-        }
-
-        /* Premium Admin Auth Button */
-        .auth-btn {
-            background-color: rgba(0, 0, 0, 0.4); 
-            color: white;
-            border: 1.5px solid var(--accent-color);
-            padding: 0 14px;
-            height: 36px;
-            font-size: 12px;
-            font-weight: bold;
-            border-radius: 18px;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
+            color: var(--text-light);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 10px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
         }
 
-        .auth-btn:hover {
-            transform: scale(1.03);
-            background-color: rgba(0, 0, 0, 0.6);
+        .brand-logo span {
+            color: var(--gold-premium);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
         }
 
-        .auth-btn.admin-mode-active {
-            background-color: #2e7d32;
-            border-color: #a3e635;
-            box-shadow: 0 3px 8px rgba(46,125,50,0.4);
+        .brand-sub {
+            font-size: 0.95rem;
+            color: var(--gold-glow);
+            margin-top: 6px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        /* ညာဘက်အပေါ်ဆုံးထောင့် ငွေလဲနှုန်းပြကွက် */
-        .exchange-rate-box {
-            background: rgba(255, 255, 255, 0.95);
-            border: 1.5px solid var(--accent-color);
-            padding: 6px 12px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            color: var(--text-main);
-            font-size: 12px;
-            font-weight: bold;
-            text-align: right;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .exchange-rate-title {
-            font-size: 10px;
-            color: var(--primary-color);
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .rate-value-container {
-            color: #2e7d32;
-            font-size: 14px;
-        }
-
-        #live-indicator {
-            display: inline-block;
-            width: 7px;
-            height: 7px;
-            background-color: #2e7d32;
-            border-radius: 50%;
-            margin-right: 3px;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0% { opacity: 0.2; }
-            50% { opacity: 1; }
-            100% { opacity: 0.2; }
-        }
-
-        /* Admin ဆိုင်းဘုတ်ပြသချက် */
-        .admin-badge {
-            display: none;
-            background-color: #2e7d32;
-            color: white;
-            padding: 4px 14px;
-            font-size: 11px;
-            font-weight: bold;
-            border-radius: 4px;
-            margin: 12px auto 0 auto;
-            width: fit-content;
-            animation: fadeIn 0.3s ease;
-        }
-
-        /* Main Container Setup */
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Tab Layout */
-        .tab-scroll-wrapper {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            margin-top: 5px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(44,29,17,0.04);
-            overflow: hidden;
-        }
-
-        .tab-container {
+        .nav-dock {
             display: flex;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
+            background: rgba(11, 31, 56, 0.9);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
         }
 
-        .tab-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tab-btn {
-            flex: 1 0 0;              
-            min-width: 90px;
-            border: none;
+        .nav-tab {
+            flex: 1;
+            padding: 14px 5px;
             background: none;
-            padding: 10px 4px;          
-            font-size: 11px;           
-            font-weight: 700;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
             color: var(--text-muted);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;                  
-            border-bottom: 2.5px solid transparent;
-            opacity: 0.75;
+            gap: 5px;
+            border-bottom: 3px solid transparent;
         }
 
-        .tab-btn i {
-            font-size: 14px;           
-            color: var(--text-muted);
-            transition: color 0.3s ease;
+        .nav-tab.active {
+            color: var(--gold-premium);
+            border-bottom: 3px solid var(--gold-premium);
+            background: linear-gradient(to top, rgba(212,175,55,0.08), transparent);
         }
 
-        .tab-btn.active {
-            color: var(--primary-color);
-            border-bottom-color: var(--accent-color);
-            background-color: #fffbf2;
-            opacity: 1;
+        .main-container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 14px;
         }
 
-        .tab-btn.active i {
-            color: var(--primary-color);
+        .dashboard-card {
+            background: var(--card-navy);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
         }
 
-        /* Service Content Cards */
-        .content-section {
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 18px;
-            padding: 22px;
-            margin-bottom: 18px;
-            box-shadow: 0 4px 12px rgba(44,29,17,0.03);
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--gold-premium), var(--neon-blue));
+            border-top-left-radius: 16px;
+            border-bottom-left-radius: 16px;
         }
 
         .card-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 8px;
-            margin-bottom: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 10px;
         }
 
-        .card-title i {
-            color: var(--accent-color);
-            font-size: 18px;
+        .card-title i { color: var(--gold-premium); }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
         }
 
-        /* News Tab Specific Styles */
-        .news-img-wrapper {
-            position: relative;
+        @media (min-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+        }
+
+        .stack-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-field { 
             width: 100%;
+        }
+
+        .form-field label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .input-icon-group { position: relative; }
+
+        .input-icon-group i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold-premium);
+        }
+        
+        /* 📞 ပြင်ဆင်ချက် - ဖုန်း Icon လင့်ခ်များ အရောင်မပြောင်းစေရန် */
+        .input-icon-group a.icon-call-link i {
+            color: var(--gold-premium);
+            cursor: pointer;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 13px 15px 13px 42px;
+            background: rgba(6, 17, 33, 0.7);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: var(--gold-premium);
+            background: rgba(6, 17, 33, 0.9);
+        }
+
+        .image-upload-wrapper {
+            background: rgba(6, 17, 33, 0.5);
+            border: 2px dashed rgba(212, 175, 55, 0.4);
             border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-            background: #f7f5ee;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .image-upload-wrapper:hover {
+            border-color: var(--neon-blue);
+            background: rgba(56, 189, 248, 0.05);
+        }
+        .image-upload-wrapper i {
+            font-size: 2rem;
+            color: var(--gold-premium);
+            margin-bottom: 8px;
+        }
+        .image-upload-wrapper p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .image-preview-box {
+            width: 100%;
+            max-width: 180px;
+            height: 120px;
+            margin: 12px auto 0 auto;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background-size: cover;
+            background-position: center;
+            display: none;
         }
 
-        .news-pic {
-            width: 100%;
-            height: auto;
-            max-height: 260px;
-            object-fit: cover;
+        .city-quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 12px 0;
+        }
+
+        .city-icon-box {
+            background: rgba(6, 17, 33, 0.6);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .city-icon-box i {
+            font-size: 1.4rem;
+            color: var(--gold-premium);
+            margin-bottom: 5px;
             display: block;
         }
 
-        body.admin-mode-unlocked .news-img-wrapper::after {
-            content: "📸 သတင်းဓာတ်ပုံပြောင်းရန် နှိပ်ပါ";
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: rgba(128, 0, 32, 0.85);
-            color: #ffffff;
-            text-align: center;
-            padding: 6px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
+        .city-icon-box span {
+            font-size: 0.8rem;
+            display: block;
+            color: var(--text-light);
+            font-weight: 600;
         }
 
-        /* Editable Text Setup */
-        .editable-field {
-            border: 1px dashed transparent;
-            padding: 2px 4px;
+        .city-icon-box:hover, .city-icon-box.selected {
+            border-color: var(--gold-premium);
+            background: rgba(18, 51, 90, 0.5);
+        }
+
+        .network-showcase-box {
+            background: rgba(6, 17, 33, 0.5);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+        }
+
+        .network-header {
+            font-size: 0.88rem;
+            color: var(--gold-glow);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .region-segment { margin-bottom: 12px; }
+
+        .region-title-badge {
+            font-size: 0.78rem;
+            background: var(--royal-blue);
+            color: var(--gold-glow);
+            padding: 4px 10px;
             border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .badges-cluster {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        @media (min-width: 600px) {
+            .badges-cluster { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+        }
+
+        .township-badge {
+            background: rgba(11, 31, 56, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
             transition: all 0.2s;
         }
-        
-        body.admin-mode-unlocked .editable-field {
-            border-color: rgba(205, 163, 59, 0.4);
+
+        .township-badge i { color: var(--gold-premium); font-size: 0.85rem; }
+        .township-badge span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        .township-badge:hover {
+            border-color: var(--neon-blue);
+            background: rgba(56, 189, 248, 0.1);
         }
 
-        body.admin-mode-unlocked .editable-field:hover {
-            background-color: #fffef7;
-            border-color: var(--accent-color);
-            cursor: pointer;
-        }
-
-        body.admin-mode-unlocked .editable-field:focus {
-            background-color: #ffffff;
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 6px rgba(128,0,32,0.15);
-        }
-
-        /* Requirements List */
-        .req-list { list-style: none; }
-        .req-list li { position: relative; padding-left: 26px; margin-bottom: 12px; font-size: 15px; }
-        .req-list li::before { content: "✦"; position: absolute; left: 0; color: var(--accent-color); font-weight: bold; font-size: 16px; }
-
-        /* Pricing Badge */
-        .price-tag {
-            background: #fffefb;
-            border-left: 4px solid var(--accent-color);
+        .btn-action-master {
+            width: 100%;
+            background: linear-gradient(90deg, var(--gold-premium), #b59220);
+            color: var(--bg-deep);
+            border: none;
             padding: 14px;
-            border-radius: 6px;
-            margin-top: 14px;
-            font-size: 14px;
-            border-top: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
         }
 
-        .price-highlight { font-weight: 700; color: var(--primary-color); font-size: 17px; }
-        .route-info { background: #fffefc; border: 1px dashed var(--accent-color); padding: 14px; border-radius: 10px; margin-top: 12px; font-size: 14px; }
-        .gift-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 14px; }
-        .gift-item { background: #fffdf7; border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; text-align: center; font-size: 14px; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.01); }
+        .btn-action-call-premium {
+            width: 100%;
+            background: linear-gradient(90deg, #f5cc47, #d4af37);
+            color: #061121;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin-top: 12px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
 
-        /* Contact & Payment List Styling */
-        .info-list { display: flex; flex-direction: column; gap: 12px; }
-        .info-item { display: flex; align-items: center; background: #fffdf9; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; gap: 15px; }
-        .info-icon-wrapper { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 18px; flex-shrink: 0; }
+        .btn-action-call-premium:hover {
+            background: linear-gradient(90deg, #ffdf7e, #f5cc47);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
 
-        .icon-viber { background-color: #7328F1; }
-        .icon-line { background-color: #06C755; }
-        .icon-facebook { background-color: #1877F2; }
-        .icon-phone-mm { background-color: #4CAF50; }
-        .icon-phone-th { background-color: #FF9800; }
-        .icon-bank { background-color: var(--primary-color); }
+        .social-contact-wrapper {
+            margin: 20px 0 10px 0;
+            text-align: center;
+        }
+        .social-contact-title {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .social-tray { 
+            display: flex; 
+            gap: 16px; 
+            justify-content: center;
+        }
+        .social-circle-btn {
+            width: 42px;
+            height: 42px;
+            background: rgba(18, 51, 90, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        .social-circle-btn.fb:hover { background: #1877f2; }
+        .social-circle-btn.tt:hover { background: #000000; }
+        .social-circle-btn.vb:hover { background: #7360f2; }
 
-        .info-details { flex-grow: 1; }
-        .info-label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-        .info-value { font-size: 15px; font-weight: 700; color: var(--text-main); display: block; min-height: 22px; }
+        .tracking-status-monitor {
+            background: rgba(6, 17, 33, 0.9);
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 18px;
+            border-left: 4px solid var(--neon-blue);
+            display: none;
+        }
 
-        /* Profile Styles */
-        .profile-container { text-align: center; padding: 10px 0; }
-        .profile-img-wrapper { position: relative; width: 110px; height: 110px; margin: 0 auto 15px auto; }
-        .profile-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-color); box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; }
-        .upload-hint { font-size: 11px; color: var(--primary-color); margin-top: 5px; font-weight: bold; display: none; }
-        .bio-text { font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 20px; padding: 0 10px; min-height: 22px; }
-        .blessing-box { background: linear-gradient(135deg, #fffcf6, #f7f1e3); border: 1px solid var(--accent-color); border-radius: 12px; padding: 16px; font-size: 14px; text-align: center; color: var(--text-main); line-height: 1.7; }
+        /* 📊 REPORT TAB STYLES */
+        .report-filter-bar {
+            display: flex;
+            background: rgba(6, 17, 33, 0.8);
+            padding: 6px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .filter-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .filter-btn.active {
+            background: var(--royal-blue);
+            color: var(--gold-glow);
+        }
+        
+        .summary-box-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .summary-card {
+            background: rgba(18, 51, 90, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 14px 10px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .summary-card.wide { grid-column: span 2; background: rgba(6, 17, 33, 0.6); }
+        .summary-card p { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+        .summary-card h3 { font-size: 1.15rem; color: var(--gold-glow); margin-top: 4px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .order-log-item {
+            background: rgba(6, 17, 33, 0.5);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .order-log-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed rgba(255,255,255,0.06);
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            font-size: 0.82rem;
+        }
+        .order-log-flex-body {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .order-log-details { flex: 1; }
+        .order-log-details p { font-size: 0.88rem; margin-bottom: 4px; color: #cbd5e1; }
+        
+        .order-log-img-thum {
+            width: 80px;
+            height: 80px;
+            border-radius: 6px;
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            background-size: cover;
+            background-position: center;
+            background-color: rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .order-log-img-thum:hover {
+            transform: scale(1.05);
+            border-color: var(--neon-blue);
+        }
+        .order-log-img-thum.no-pic {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-align: center;
+            cursor: default;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .order-log-img-thum.no-pic:hover {
+            transform: none;
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .order-log-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        .delete-log-btn {
+            background: none;
+            border: none;
+            color: var(--danger-red);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .image-lightbox-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(3, 10, 20, 0.95);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .image-lightbox-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 8px;
+            border: 2px solid var(--gold-premium);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .image-lightbox-modal.show .lightbox-content {
+            transform: scale(1);
+        }
+        .lightbox-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: var(--text-light);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox-close-btn:hover {
+            color: var(--danger-red);
+            background: rgba(255,255,255,0.2);
+        }
+
+        footer {
+            background: #030a14;
+            color: var(--text-muted);
+            padding: 30px 15px;
+            border-top: 2px solid var(--royal-blue);
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="edit-info-container">
-            <button class="auth-btn" id="lock-btn" onclick="toggleAdminAccess()">
-                <i class="fa-solid fa-user-gear" id="lock-icon"></i> <span id="btn-text">Admin ဝင်ရန်</span>
-            </button>
-            
-            <!-- Realtime Live ငွေလဲနှုန်းပြကွက် -->
-            <div class="exchange-rate-box">
-                <span class="exchange-rate-title"><span id="live-indicator"></span> တိုက်ရိုက်ငွေလဲနှုန်း</span>
-                <span class="rate-value-container">
-                    1 ฿ = <span class="editable-field" id="rate-display" data-id="exchange_rate_value" contenteditable="false">...</span> ကျပ်
-                </span>
+    <header>
+        <div class="brand-logo"><i class="fa-solid fa-boxes-packing"></i> 24/7<span>Exac</span></div>
+        <div class="brand-sub">ထိုင်း - မြန်မာ ပစ္စည်းပို့ဆောင်ရေး (Express Cargo)</div>
+    </header>
+
+    <nav class="nav-dock">
+        <button class="nav-tab active" onclick="switchDashboardTab('order-segment')">
+            <i class="fa-solid fa-file-contract"></i><span>Order တင်ရန်</span>
+        </button>
+        <button class="nav-tab" onclick="switchDashboardTab('tracking-segment')">
+            <i class="fa-solid fa-satellite-dish"></i><span>Tracking စစ်ဆေးရန်</span>
+        </button>
+        <button class="nav-tab" onclick="switchDashboardTab('report-segment')">
+            <i class="fa-solid fa-chart-pie"></i><span>နေ့စဉ်/လစဉ် မှတ်တမ်း</span>
+        </button>
+    </nav>
+
+    <main class="main-container">
+
+        <div id="order-segment" class="tab-module-block">
+            <div class="grid-2">
+                <div class="dashboard-card">
+                    <div class="card-title"><i class="fa-solid fa-circle-user"></i>ပေးပို့သူဆက်သွယ်ရန် အချက်အလက်</div>
+                    <div class="stack-layout">
+                        <div class="form-field">
+                            <label>နာမည်</label>
+                            <div class="input-icon-group">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" id="order-sender-name" class="control-input" placeholder="အမည်ထည့်ပါ">
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label>ဖုန်းနံပါတ်</label>
+                            <div class="input-icon-group">
+                                <a href="tel:0950092658" class="icon-call-link"><i class="fa-solid fa-phone"></i></a>
+                                <input type="text" id="order-sender-phone" class="control-input" placeholder="ဥပမာ - 09xxxxxxxxx">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-title"><i class="fa-solid fa-map-location-dot"></i>ပစ္စည်းလက်ခံမည့်သူလိပ်စာ</div>
+                    <div class="stack-layout">
+                        <div class="form-field">
+                            <label>အိမ်အမှတ် / လမ်း / ရပ်ကွက်</label>
+                            <div class="input-icon-group">
+                                <i class="fa-solid fa-house-user"></i>
+                                <input type="text" id="order-recv-addr" class="control-input" placeholder="အသေးစိတ်လိပ်စာ ဖြည့်သွင်းပါ">
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label>မြို့နယ် (အောက်ပါစာရင်းမှ နှိပ်၍ရွေးချယ်နိုင်ပါသည်)</label>
+                            <div class="input-icon-group">
+                                <i class="fa-solid fa-city"></i>
+                                <input type="text" id="order-recv-township" class="control-input" placeholder="မြို့နယ်အမည်">
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label>ကားဂိတ်</label>
+                            <div class="input-icon-group">
+                                <i class="fa-solid fa-bus-simple"></i>
+                                <input type="text" id="order-recv-gate" class="control-input" placeholder="ဂိတ်အမည်(ရှိပါက)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <h1 class="editable-field" data-id="h1_title" contenteditable="false">GoldenFuture</h1>
-        <p class="editable-field" data-id="p_subtitle" contenteditable="false">ထိုင်း-မြန်မာ ခရီးသွားနှင့် ပတ်စပို့ဝန်ဆောင်မှု</p>
-        
-        <div class="admin-badge" id="admin-indicator">⚙️ Admin Mode (စီမံခန့်ခွဲသူစနစ်သို့ ရောက်ရှိနေပါသည်)</div>
-    </div>
-
-    <div class="container">
-        
-        <div class="tab-scroll-wrapper">
-            <div class="tab-container">
-                <button class="tab-btn active" onclick="openTab(event, 'news')"><i class="fa-solid fa-newspaper"></i><span>နေ့စဉ်သတင်း</span></button>
-                <button class="tab-btn" onclick="openTab(event, 'passport')"><i class="fa-solid fa-passport"></i><span>ပတ်စပို့</span></button>
-                <button class="tab-btn" onclick="openTab(event, 'travel')"><i class="fa-solid fa-route"></i><span>ထိုင်းခရီးစဉ်</span></button>
-                <button class="tab-btn" onclick="openTab(event, 'contact_payment')"><i class="fa-solid fa-address-card"></i><span>ဆက်သွယ်/ငွေပေးရန်</span></button>
-                <button class="tab-btn" onclick="openTab(event, 'profile')"><i class="fa-solid fa-user"></i><span>Bio / Profile</span></button>
-            </div>
-        </div>
-
-        <!-- နေ့စဉ်သတင်းကဏ္ဍ -->
-        <div id="news" class="content-section active">
-            <div class="card">
-                <div class="card-title editable-field" data-id="news_tab_title" contenteditable="false"><i class="fa-solid fa-bullhorn"></i> ပြည်တွင်း/ပြည်ပ နေ့စဉ်သတင်းဦးများ</div>
+            <div class="dashboard-card">
+                <div class="card-title"><i class="fa-solid fa-truck-fast"></i>ပို့ဆောင်ရေး အချက်အလက်</div>
                 
-                <div class="news-img-wrapper" onclick="triggerNewsPhotoUpload()">
-                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=500&q=80" alt="News Image" class="news-pic" id="news-display">
-                    <input type="file" id="news-photo-input" accept="image/*" style="display: none;" onchange="loadNewsPhoto(event)">
-                </div>
-
-                <h3 class="editable-field" data-id="news_heading" contenteditable="false" style="font-size: 18px; color: var(--primary-color); margin-bottom: 8px; font-weight: 700;">
-                    အရေးကြီးသတင်းခေါင်းစဉ်ကို ဤနေရာတွင် ရေးသားရန်...
-                </h3>
-                
-                <p class="editable-field" data-id="news_details" contenteditable="false" style="font-size: 14px; color: var(--text-main); text-align: justify; white-space: pre-wrap;">
-                    သတင်းအသေးစိတ် အချက်အလက်များနှင့် နေ့စဉ်ကြေညာချက်များကို ဤနေရာတွင် စိတ်ကြိုက် ရေးသားဖော်ပြနိုင်ပါသည်။ Admin Mode ကိုဖွင့်၍ စာသားများကို တိုက်ရိုက် ပြင်ဆင်နိုင်ပါသည်။
-                </p>
-                
-                <div style="font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 15px;" class="editable-field" data-id="news_date" contenteditable="false">
-                    📅 ဖော်ပြသည့်နေ့စွဲ - ၁၇ မေလ ၂၀၁၆
-                </div>
-            </div>
-        </div>
-
-        <!-- ပတ်စပို့ကဏ္ဍ -->
-        <div id="passport" class="content-section">
-            <div class="card">
-                <div class="card-title editable-field" data-id="pass_title1" contenteditable="false"><i class="fa-solid fa-passport"></i> မြန်မာပြည်ပတ်စပို့ ဆောင်ရွက်ပေးခြင်း</div>
-                <p style="font-size: 14px; color: var(--text-muted);" class="editable-field" data-id="pass_desc1" contenteditable="false">မြန်မာပြည်တွင် ပတ်စပို့ အမြန်ပြုလုပ်ပေးသည့် ဝန်ဆောင်မှု ဖြစ်ပါသည်။</p>
-                
-                <div class="price-tag">
-                    <div class="editable-field" data-id="pass_price1" contenteditable="false"><strong>QR ဝန်ဆောင်ခ:</strong> <span class="price-highlight">၇၀,၀၀၀ ကျပ်</span></div>
-                    <div class="editable-field" data-id="pass_price2" contenteditable="false"><strong>ရုံးအတွင်းကုန်ကျငွေ:</strong> ၃/၄ သောင်းခန့်</div>
-                    <div style="font-size: 12px; color: var(--text-muted);" class="editable-field" data-id="pass_price3" contenteditable="false">(စုစုပေါင်း ၁ သိန်းဝန်းကျင်ခန့်ဖြင့် အပြီးအစီး ရရှိနိုင်ပါသည်)</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title editable-field" data-id="pv_title" contenteditable="false"><i class="fa-solid fa-file-invoice"></i> PV Passport လျှောက်ထားရန်</div>
-                <ul class="req-list">
-                    <li class="editable-field" data-id="pv_req1" contenteditable="false">အိမ်ထောင်စုစာရင်း</li>
-                    <li class="editable-field" data-id="pv_req2" contenteditable="false">နိုင်ငံသားစိစစ်ရေး ကတ်ပြား (မှတ်ပုံတင်)</li>
-                    <li class="editable-field" data-id="pv_req3" contenteditable="false">စမတ်ကတ် (Smart Card)</li>
-                </ul>
-                <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;" class="editable-field" data-id="pv_note" contenteditable="false">⚠️ အထက်ပါအချက်အလက်များ ရှိရုံဖြင့် လျှောက်ထားနိုင်ပါပြီ။</p>
-            </div>
-
-            <div class="card">
-                <div class="card-title editable-field" data-id="pj_title" contenteditable="false"><i class="fa-solid fa-address-card"></i> PJ Passport လျှောက်ထားရန်</div>
-                <ul class="req-list">
-                    <li class="editable-field" data-id="pj_req1" contenteditable="false">အိမ်ထောင်စုစာရင်း</li>
-                    <li class="editable-field" data-id="pj_req2" contenteditable="false">နိုင်ငံသားစိစစ်ရေး ကတ်ပြား (မှတ်ပုံတင်)</li>
-                    <li class="editable-field" data-id="pj_req3" contenteditable="false">စမတ်ကတ် (Smart Card)</li>
-                    <li class="editable-field" data-id="pj_req4" contenteditable="false">လေဘာကတ် (Labour Card) လုပ်ဆောင်ရပါမည်</li>
-                </ul>
-                <div class="price-tag" style="background: #fffdf7;">
-                    <div class="editable-field" data-id="pj_note" contenteditable="false">ℹ️ <strong>ကုန်ကျစရိတ်:</strong> ၅,၀၀၀ / ၁၀,၀၀၀ ကျပ်ခန့် ပိုမို ကုန်ကျနိုင်ပါသည်။</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ထိုင်းခရီးစဉ်ကဏ္ဍ -->
-        <div id="travel" class="content-section">
-            <div class="card">
-                <div class="card-title editable-field" data-id="tr_title" contenteditable="false"><i class="fa-solid fa-earth-asia"></i> Thailand သို့ လာရောက်နိုင်မည့် လမ်းကြောင်းများ</div>
-                <p style="font-size: 14px; margin-bottom: 12px;" class="editable-field" data-id="tr_desc" contenteditable="false">မြန်မာနိုင်ငံမှ ထိုင်းနိုင်ငံသို့ <strong>တရားဝင်လမ်းကြောင်း</strong> ဖြင့် ဘေးကင်းစွာ လာရောက်နိုင်ပါသည်။</p>
-                
-                <div style="font-weight: bold; margin-bottom: 8px;" class="editable-field" data-id="tr_sub" contenteditable="false"> GoldenFuture မှ တရားဝင်လမ်းကြောင်း ဝန်ဆောင်မှုများ -</div>
-                
-                <div class="price-tag">
-                    <div class="editable-field" data-id="tr_car" contenteditable="false"><strong>🏎️ ကားလမ်းကြောင်းဖြင့်</strong></div>
-                    <div class="editable-field" data-id="tr_car_p" contenteditable="false">မြန်မာမှ ထိုင်းနိုင်ငံ အရောက် ➡️ <span class="price-highlight">ဘတ် ၂၄,၀၀၀</span></div>
-                </div>
-
-                <div class="price-tag">
-                    <div class="editable-field" data-id="tr_air" contenteditable="false"><strong>🛩️ လေယာဉ်လမ်းကြောင်းဖြင့်</strong></div>
-                    <div class="editable-field" data-id="tr_air_p" contenteditable="false">မြန်မာမှ ထိုင်းနိုင်ငံ အရောက် ➡️ <span class="price-highlight">ဘတ် ၃၀,၀၀၀</span></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title editable-field" data-id="route_title" contenteditable="false"><i class="fa-solid fa-map-location-dot"></i> 📍 ကြိုဆိုမည့် စတင်ရာနေရာများ</div>
-                <p class="editable-field" data-id="route_desc" contenteditable="false"><strong>မန္တလေးမြို့</strong> နှင့် <strong>ရန်ကုန်မြို့</strong> များမှ စတင်၍ သေချာစွာ တာဝန်ယူ ကြိုဆိုပေးပါသည်။</p>
-                
-                <div class="route-info">
-                    <strong class="editable-field" data-id="route_status" contenteditable="false">🛣️ လမ်းကြောင်းအခြေအနေ:</strong>
-                    <div style="margin-top: 5px;" class="editable-field" data-id="route_li1" contenteditable="false">• မန္တလေးမှ တာချီလိတ်</div>
-                    <div class="editable-field" data-id="route_li2" contenteditable="false">• ရန်ကုန်မှ တာချီလိတ်</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title editable-field" data-id="sp_title" contenteditable="false"><i class="fa-solid fa-handshake"></i> တာချီလိတ်ရောက်သည်နှင့် အထူးဝန်ဆောင်မှုများ</div>
-                <p style="font-size: 14px;" class="editable-field" data-id="sp_desc" contenteditable="false">တာချီလိတ်သို့ ရောက်ရှိသည်နှင့် ကျွန်တော်တို့ <strong>GoldenFuture</strong> မှ လူကိုယ်တိုင် လာရောက်ကြိုဆိုပေးမည် ဖြစ်ပြီး အောက်ပါ ဝန်ဆောင်မှုများကိုပါ တစ်ပါတည်း စီစဉ်ပေးသွားပါမည် -</p>
-                
-                <div class="gift-grid">
-                    <div class="gift-item editable-field" data-id="gift1" contenteditable="false">🌉 ဆိုင်တံတား ကူးပေးခြင်း</div>
-                    <div class="gift-item editable-field" data-id="gift2" contenteditable="false">🎫 ဘန်ကောက် ကားလက်မှတ် ဖြတ်ပေးခြင်း</div>
-                    <div class="gift-item editable-field" data-id="gift3" contenteditable="false">🏠 နေစရာ စီစဉ်ပေးခြင်း</div>
-                    <div class="gift-item editable-field" data-id="gift4" contenteditable="false">🍽️ ထမင်း အခမဲ့ ကျွေးမွေးခြင်း</div>
-                </div>
-
-                <div class="price-tag" style="text-align: center; font-weight: bold; background: #fffdf7;" class="editable-field" data-id="gift_sim" contenteditable="false">
-                    🎁 ဖုန်းဆင်းကတ် (Sim Card) လည်း လက်ဆောင် ထည့်ပေးပါမည်။
-                </div>
-            </div>
-        </div>
-
-        <!-- ဆက်သွယ်ရေးနှင့် ငွေပေးချေမှု -->
-        <div id="contact_payment" class="content-section">
-            <div class="card">
-                <div class="card-title"><i class="fa-solid fa-address-book"></i> ဆက်သွယ်ရန် လိပ်စာများ</div>
-                <div class="info-list">
-                    <div class="info-item">
-                        <div class="info-icon-wrapper icon-viber"><i class="fa-brands fa-viber"></i></div>
-                        <div class="info-details">
-                            <div class="info-label">Viber Number</div>
-                            <div class="info-value editable-field" data-id="con_viber" contenteditable="false">+95 9 123 456 789</div>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon-wrapper icon-line"><i class="fa-brands fa-line"></i></div>
-                        <div class="info-details">
-                            <div class="info-label">Line ID</div>
-                            <div class="info-value editable-field" data-id="con_line" contenteditable="false">goldenfuture.th</div>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon-wrapper icon-facebook"><i class="fa-brands fa-facebook-f"></i></div>
-                        <div class="info-details">
-                            <div class="info-label">Facebook Page</div>
-                            <div class="info-value editable-field" data-id="con_fb" contenteditable="false">GoldenFuture Passport Service</div>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon-wrapper icon-phone-mm"><i class="fa-solid fa-phone"></i></div>
-                        <div class="info-details">
-                            <div class="info-label">မြန်မာဖုန်းနံပါတ်</div>
-                            <div class="info-value editable-field" data-id="con_ph_mm" contenteditable="false">09 777 888 999</div>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon-wrapper icon-phone-th"><i class="fa-solid fa-phone-flip"></i></div>
-                        <div class="info-details">
-                            <div class="info-label">ထိုင်းဖုန်းနံပါတ်</div>
-                            <div class="info-value editable-field" data-id="con_ph_th" contenteditable="false">081 234 5678</div>
-                        </div>
+                <div class="form-field" style="margin-bottom: 16px;">
+                    <label>ဦးတည်ရာနိုင်ငံ *</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-globe"></i>
+                        <select id="order-route-direction" class="control-input" onchange="handleDirectionChange(this.value)">
+                            <option value="">-- နိုင်ငံရွေးချယ်ပါ --</option>
+                            <option value="mm-to-th" selected>🇲🇲 မြန်မာမှ -> ထိုင်းသို့ 🇹🇭</option>
+                            <option value="th-to-mm">🇹🇭 ထိုင်းမှ -> မြန်မာသို့ 🇲🇲</option>
+                        </select>
                     </div>
                 </div>
-            </div>
 
-            <div class="card">
-                <div class="card-title"><i class="fa-solid fa-credit-card"></i> Ngwe Pay Chya Ran Bank Account Myar</div>
-                <div class="info-list">
-                    <div class="info-item">
-                        <div class="info-icon-wrapper icon-bank"><i class="fa-solid fa-building-columns"></i></div>
-                        <div class="info-details">
-                            <div class="info-label">KBZ Bank</div>
-                            <div class="info-value editable-field" data-id="pay_kbz" contenteditable="false">U Aung Hla (1234567890123456)</div>
+                <div id="quick-city-panel" style="margin-bottom: 16px;">
+                    <label style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">အဓိကမြို့ကြီးများ အမြန်ရွေးချယ်ရန် -</label>
+                    <div class="city-quick-grid" id="quick-city-container">
                         </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon-wrapper icon-phone-mm"><i class="fa-solid fa-mobile-screen-button"></i></div>
-                        <div class="info-details">
-                            <div class="info-label">KBZ Pay (Kpay)</div>
-                            <div class="info-value editable-field" data-id="pay_kpay" contenteditable="false">09 777 888 999 (U Aung Hla)</div>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon-wrapper icon-bank" style="background-color: #4e2a84;"><i class="fa-solid fa-building-columns"></i></div>
-                        <div class="info-details">
-                            <div class="info-label">SCB Bank (Thai)</div>
-                            <div class="info-value editable-field" data-id="pay_scb" contenteditable="false">GoldenFuture Co.,Ltd (987-6-54321-0)</div>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon-wrapper icon-line" style="background-color: #00A86B;"><i class="fa-solid fa-wallet"></i></div>
-                        <div class="info-details">
-                            <div class="info-label">K+ Bank (Kasikorn)</div>
-                            <div class="info-value editable-field" data-id="pay_kbank" contenteditable="false">012-3-45678-9 (Mr. Aung Hla)</div>
-                        </div>
-                    </div>
                 </div>
-                <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 15px;" class="editable-field" data-id="pay_note" contenteditable="false">
-                    ⚠️ Ngwe Lwāl Pi Par Ka Ngwe Lwāl Phrat Puing (Screenshot) Ko Pay Phoat Pay Par Ran Myittar Rap Khan At Par Thee.
-                </p>
-            </div>
-        </div>
 
-        <!-- ပရိုဖိုင်ကဏ္ဍ -->
-        <div id="profile" class="content-section">
-            <div class="card">
-                <div class="profile-container">
-                    <div class="profile-img-wrapper">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="profile-pic" id="profile-display" onclick="triggerPhotoUpload()">
-                        <input type="file" id="photo-input" accept="image/*" style="display: none;" onchange="loadPhoto(event)">
-                        <div class="upload-hint" id="upload-text">📸 ပုံပြောင်းရန် နှိပ်ပါ</div>
+                <div id="visualizer-shell-box" class="network-showcase-box">
+                    <div class="network-header"><i class="fa-solid fa-circle-nodes"></i> ကျွန်ုပ်တို့ရောက်ရှိသော မြို့နယ်များ (Terminal Network) - <span style="color: var(--neon-blue); font-size: 0.78rem;">မြို့အမည်ကိုနှိပ်ပြီး ရွေးချယ်ပါ</span></div>
+                    <div id="dynamic-cluster-root">
+                        </div>
+                </div>
+
+                <div class="stack-layout" style="margin-top: 16px;">
+                    <div class="form-field">
+                        <label>ကုန်ပစ္စည်းအလေးချိန် (kg) *</label>
+                        <div class="input-icon-group">
+                            <i class="fa-solid fa-weight-scale"></i>
+                            <input type="number" id="order-cargo-weight" class="control-input" placeholder="0.00">
+                        </div>
                     </div>
                     
-                    <h2 class="editable-field" data-id="prof_name" contenteditable="false" style="font-size: 20px; color: var(--primary-color); margin-bottom: 5px;">GoldenFuture ဝန်ဆောင်မှုအဖွဲ့</h2>
-                    <div class="bio-text editable-field" data-id="prof_bio" contenteditable="false">"လူကြီးမင်းတို့၏ စိတ်ချချမ်းမြေ့ဖွယ်ရာ အနာဂတ်ခရီးလမ်းအတွက် သစ္စာရှိစွာ တာဝန်ယူဆောင်ရွက်ပေးနေပါသည်။"</div>
-                    
-                    <div class="blessing-box">
-                        <p class="editable-field" data-id="prof_greet" contenteditable="false" style="font-weight: bold; color: var(--primary-color); margin-bottom: 8px;">✨ လေးစားစွာဖြင့် နှုတ်ခွန်းဆက်သအပ်ပါသည်။ ✨</p>
-                        <p class="editable-field" data-id="prof_thanks" contenteditable="false">
-                            ကျွန်တော်တို့ <strong style="color:var(--accent-color)">GoldenFuture</strong> ဝန်ဆောင်မှုလုပ်ငန်းကို ယုံကြည်စိတ်ချစွာ ရွေးချယ်ပေးကြသော မိဘပြည်သူ ခရီးသွား ညီအစ်ကိုမောင်နှမများအားလုံးကို အထူးပင် ကျေးဇူးဥပကာရ တင်ရှိပါသည်။
-                        </p>
+                    <div class="form-field">
+                        <label>ကုန်ပစ္စည်းဓာတ်ပုံ ပူးတွဲတင်ရန်</label>
+                        <div class="image-upload-wrapper" onclick="document.getElementById('order-cargo-image').click()">
+                            <i class="fa-solid fa-camera-retro"></i>
+                            <p>ဓါတ်ပုံရိုက်ရန် သို့မဟုတ် ပုံရွေးရန် နှိပ်ပါ</p>
+                            <input type="file" id="order-cargo-image" accept="image/*" style="display:none;" onchange="previewSelectedCargoImage(this)">
+                            <div id="cargo-image-preview" class="image-preview-box"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label>မှတ်ချက် (ရှိပါက)</label>
+                        <div class="input-icon-group">
+                            <i class="fa-solid fa-comment-dots"></i>
+                            <input type="text" id="order-cargo-remark" class="control-input" placeholder="အပိုဆောင်းအချက်အလက်">
+                        </div>
                     </div>
                 </div>
+
+                <div style="margin-top: 25px;">
+                    <button class="btn-action-master" onclick="saveOrderToLocalDatabase()"><i class="fa-solid fa-square-plus"></i> ယခု Order တင်ရန်</button>
+                    <a href="tel:0950092658" class="btn-action-call-premium"><i class="fa-solid fa-phone-volume"></i> ဖုန်းဆက်ရန် (0950092658)</a>
+                </div>
+
+                <div class="social-contact-wrapper">
+                    <div class="social-contact-title">📣 ကျွန်ုပ်တို့၏ လူမှုကွန်ရက်စာမျက်နှာများသို့ ဆက်သွယ်ရန်</div>
+                    <div class="social-tray">
+                        <a href="https://www.facebook.com/share/1b7rnS9eH5/?mibextid=wwXIfr" target="_blank" class="social-circle-btn fb"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.tiktok.com/@koshine0050" target="_blank" class="social-circle-btn tt"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="viber://chat?number=%2B66950092658" target="_blank" class="social-circle-btn vb"><i class="fa-brands fa-viber"></i></a>
+                    </div>
+                </div>
+
             </div>
         </div>
 
+        <div id="tracking-segment" class="tab-module-block" style="display: none;">
+            <div class="dashboard-card">
+                <div class="card-title"><i class="fa-solid fa-magnifying-glass-location"></i>Shipment Tracking (ပစ္စည်းအခြေအနေ စစ်ဆေးရန်)</div>
+                <div class="form-field">
+                    <label>ဖုန်းနံပါတ် ရိုက်ထည့်ပါ</label>
+                    <div class="input-icon-group" style="display: flex; gap: 10px;">
+                        <a href="tel:0950092658" class="icon-call-link"><i class="fa-solid fa-phone-volume" style="z-index: 5;"></i></a>
+                        <input type="text" id="tracking-search-phone" class="control-input" placeholder="အော်ဒါတင်ခဲ့သည့် ဖုန်းနံပါတ်...">
+                        <button class="btn-action-master" style="width: auto; padding: 0 20px; border-radius: 10px;" onclick="executeLocalSearchTracking()"><i class="fa-solid fa-magnifying-glass" style="color: inherit;"></i></button>
+                    </div>
+                </div>
+                <div id="tracking-output-board" class="tracking-status-monitor"></div>
+            </div>
+        </div>
+
+        <div id="report-segment" class="tab-module-block" style="display: none;">
+            <div class="dashboard-card">
+                <div class="card-title"><i class="fa-solid fa-chart-line"></i>လုပ်ငန်းမှတ်တမ်းနှင့် စာရင်းချုပ်</div>
+                
+                <div class="report-filter-bar">
+                    <button class="filter-btn active" id="filter-daily-btn" onclick="toggleReportMode('daily')">နေ့စဉ်မှတ်တမ်း</button>
+                    <button class="filter-btn" id="filter-monthly-btn" onclick="toggleReportMode('monthly')">လစဉ်မှတ်တမ်း</button>
+                </div>
+
+                <div class="summary-box-grid">
+                    <div class="summary-card wide">
+                        <p id="summary-title-label">ယနေ့ စုစုပေါင်း အလေးချိန်</p>
+                        <h3 id="sum-total-weight">0 kg</h3>
+                    </div>
+                    <div class="summary-card">
+                        <p>စုစုပေါင်း ရငွေ (ကျပ်)</p>
+                        <h3 id="sum-total-mmk">0 MMK</h3>
+                    </div>
+                    <div class="summary-card">
+                        <p>စုစုပေါင်း ရငွေ (ဘတ်)</p>
+                        <h3 id="sum-total-thb">0 THB</h3>
+                    </div>
+                </div>
+
+                <div id="report-list-container">
+                    </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="image-lightbox" class="image-lightbox-modal" onclick="closeImageLightboxView()">
+        <span class="lightbox-close-btn" onclick="closeImageLightboxView()">&times;</span>
+        <img class="lightbox-content" id="lightbox-target-img" onclick="event.stopPropagation()">
     </div>
 
-    <!-- Firebase SDK Links -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <p>© 2026 24/7Exac Cargo Service. All Rights Reserved.</p>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">📍 101 Soi Thetsaban Bang Sao Thong 29, Samut Prakan, Thailand</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyC5_PJT9Pvv1L24TTUrAY85GDSjtKoSQjA",
-            authDomain: "goldenfuture-cd579.firebaseapp.com",
-            databaseURL: "https://goldenfuture-cd579-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "goldenfuture-cd579",
-            storageBucket: "goldenfuture-cd579.firebasestorage.app",
-            messagingSenderId: "974767484310",
-            appId: "1:974767484310:web:c867994d5a8620ac9cc1b7"
+        const mmNetworkMatrix = [
+            { region: "ရန်ကုန်တိုင်းဒေသကြီး", cities: ["ရန်ကုန် (လှိုင်သာယာ)", "ရန်ကုန် (ရွှေပြည်သာ)", "ရန်ကုန် (အင်းစိန်)", "ရန်ကုန် (မင်္ဂလာဒုံ)", "ရန်ကုန် (တောင်ဒဂုံ)", "ရန်ကုန် (မြောက်ဒဂုံ)", "ရန်ကုန် (သာကေတ)", "ရန်ကုန် (သင်္ဃန်းကျွန်း)"] },
+            { region: "မန္တလေးတိုင်းဒေသကြီး", cities: ["မန္တလေး (ချမ်းအေးသာစံ)", "မန္တလေး (အောင်မြေသာစံ)", "မန္တလေး (ချမ်းမြသာစည်)", "မန္တလေး (ပြည်ကြီးတံခွန်)", "မန္တလေး (မဟာအောင်မြေ)", "ပြင်ဦးလွင်မြို့", "မိထ္ထီလာမြို့", "ကျောက်ဆည်မြို့"] },
+            { region: "စစ်ကိုင်းနှင့် မကွေးတိုင်း", cities: ["မုံရွာမြို့", "ကလေးမြို့", "ရွှေဘိုမြို့", "စစ်ကိုင်းမြို့", "မကွေးမြို့", "ပခုက္ကူမြို့", "ချောက်မြို့"] },
+            { region: "ပဲခူးနှင့် ဧရာဝတီတိုင်း", cities: ["ပဲခူးမြို့", "တောင်ငူမြို့", "ပြည်မြို့", "ပုသိန်မြို့", "ဟင်္သာတမြို့", "မအူပင်မြို့"] },
+            { region: "ကရင်နှင့် မွန်ပြည်နယ်", cities: ["ဘားအံမြို့", "မြဝတီမြို့", "ကော့ကရိတ်မြို့", "မော်လမြိုင်မြို့", "သထုံမြို့", "ရေးမြို့"] },
+            { region: "ရှမ်းပြည်နယ်နှင့် အခြားဒေသများ", cities: ["တောင်ကြီးမြို့", "လားရှိုးမြို့", "တာချီလိတ်မြို့", "မူဆယ်မြို့", "မြစ်ကြီးနားမြို့", "ထားဝယ်မြို့", "မြိတ်မြို့"] }
+        ];
+
+        const thNetworkMatrix = [
+            { region: "၁။ ဘန်ကောက်နှင့် ဝန်းကျင် (Bangkok & Vicinity)", cities: ["ဘန်ကောက် (Bangkok)", "စမုတ်ပရာကန် (Samut Prakan)", "နွန်ထပူရီ (Nonthaburi)", "ပထုံထာနီ (Pathum Thani)", "မဟာချိုင် (Samut Sakhon)", "နခွန်ပထုံ (Nakhon Pathom)"] },
+            { region: "၂။ အလယ်ပိုင်းဒေသ (Central Thailand)", cities: ["အယုဒ္ဓယ", "ဆာရာဘူရီ", "လော့ပူရီ", "နခွန်စ၀မ်", "ဆူဖန်းဘူရီ"] },
+            { region: "၃။ အရှေ့ဘက်ကမ်းရိုးတန်း (Eastern Thailand)", cities: ["ချွန်ဘူရီ / ပတ္တရား", "ရရောင်း", "ဆာကဲ", "ချာချိုးငု"] },
+            { region: "၄။ မြောက်ပိုင်းဒေသ (Northern Thailand)", cities: ["ချင်းမိုင် (Chiang Mai)", "ချင်းရိုင်း (Chiang Rai)", "လန်ပန်း", "လမ်ဖွန်း"] },
+            { region: "၅။ အနောက်ပိုင်းဒေသ (Western Thailand)", cities: ["တက်ခ် / မဲဆောက်", "ကန်ချနဘူရီ", "ရာ့ခ်ဘူရီ", "ဖက်ချ်ဘူရီ"] },
+            { region: "၆။ အရှေ့မြောက်ပိုင်းဒေသ (Isan)", cities: ["နခွန်ရက်ချာဆီမာ", "ခွန်ကန်", "အူဒုံထာနီ", "အုဘွန်ရက်ချာထာနီ", "ဘူရီရမ်"] },
+            { region: "၇။ တောင်ပိုင်းဒေသ (Southern Thailand)", cities: ["ဖူးခက် (Phuket)", "သူရတ်ထာနီ", "ဟတ်ယိုင် (Songkhla)", "ကရာဘီ", "ရနောင်း"] }
+        ];
+
+        let reportViewMode = 'daily'; 
+        let base64ImageString = ""; 
+
+        window.onload = function() {
+            handleDirectionChange('mm-to-th'); 
+            loadReportDatabase();
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        let isAdminMode = false;
-        let useLiveApiRate = true; // Live API သုံးမသုံး သတ်မှတ်ချက်
-
-        // API ကနေ Live Rate တိုက်ရိုက်ဆွဲယူသည့် Function
-        async function fetchLiveExchangeRate() {
-            if (!useLiveApiRate) return; 
+        function switchDashboardTab(targetBlockId) {
+            document.querySelectorAll('.tab-module-block').forEach(block => block.style.display = 'none');
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(targetBlockId).style.display = 'block';
             
-            try {
-                // ExchangeRate-API (Free & No Key Required for Standard Pair)
-                const response = await fetch('https://open.er-api.com/v6/latest/THB');
-                if (!response.ok) throw new Error('API Network error');
-                
-                const data = await response.json();
-                const mmkRate = data.rates.MMK;
-                
-                if (mmkRate) {
-                    // ဒသမကိန်းရှင်းအောင် အနီးစပ်ဆုံး ကိန်းပြည့်ပြောင်းလဲခြင်း
-                    const roundedRate = Math.round(mmkRate);
-                    const rateDisplay = document.getElementById('rate-display');
-                    
-                    if (rateDisplay && document.activeElement !== rateDisplay) {
-                        rateDisplay.innerHTML = roundedRate;
-                    }
-                }
-            } catch (error) {
-                console.error("Live Rate ဆွဲမရပါသဖြင့် Firebase ဒေတာကို ဆက်လက်သုံးပါမည်- ", error);
+            let activeIndex = 0;
+            if (targetBlockId === 'tracking-segment') activeIndex = 1;
+            if (targetBlockId === 'report-segment') {
+                activeIndex = 2;
+                loadReportDatabase(); 
             }
+            document.querySelectorAll('.nav-tab')[activeIndex].classList.add('active');
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            // App စဖွင့်လျှင် Live Rate ကို ချက်ချင်းဆွဲယူပြသရန်
-            fetchLiveExchangeRate();
-            // ၅ မိနစ်တစ်ကြိမ် Rate ကို auto update လုပ်ရန်
-            setInterval(fetchLiveExchangeRate, 300000);
+        function handleDirectionChange(direction) {
+            renderQuickCityIcons(direction);
+            renderClickableNetworkBadges(direction);
+        }
 
-            // Firebase မှ စာသားများနှင့် ဓာတ်ပုံများ Realtime ဆွဲယူခြင်း
-            database.ref('gf_app_data').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    const fields = document.querySelectorAll('.editable-field');
-                    fields.forEach(field => {
-                        const id = field.getAttribute('data-id');
-                        
-                        // အကယ်၍ Admin က လက်ဖြင့် ကိုယ်တိုင်ပြင်ထားလျှင် API အစား Firebase က ဈေးနှုန်းကို ယူသုံးမည်
-                        if (id === 'exchange_rate_value' && data[id]) {
-                            useLiveApiRate = false; 
-                            document.getElementById('live-indicator').style.backgroundColor = '#7d6e63'; // API မဟုတ်ကြောင်း အရောင်ပြောင်းခြင်း
-                        }
+        function renderQuickCityIcons(direction) {
+            const container = document.getElementById('quick-city-container');
+            container.innerHTML = '';
 
-                        if (id && data[id] !== undefined) {
-                            if (document.activeElement !== field) {
-                                field.innerHTML = data[id];
-                            }
-                        }
-                    });
-                }
-            });
-
-            // Bio Profile ပုံ ဆွဲယူခြင်း
-            database.ref('gf_profile_photo').on('value', (snapshot) => {
-                const photoUrl = snapshot.val();
-                if (photoUrl) {
-                    document.getElementById('profile-display').src = photoUrl;
-                }
-            });
-
-            // နေ့စဉ်သတင်းပုံ ဆွဲယူခြင်း
-            database.ref('gf_news_photo').on('value', (snapshot) => {
-                const newsPhotoUrl = snapshot.val();
-                if (newsPhotoUrl) {
-                    document.getElementById('news-display').src = newsPhotoUrl;
-                }
-            });
-
-            // Admin ပြင်ဆင်ပြီး အပြင်ကိုနှိပ်လျှင် (Blur) သိမ်းဆည်းရန်
-            const fields = document.querySelectorAll('.editable-field');
-            fields.forEach(field => {
-                field.addEventListener('blur', () => {
-                    if (isAdminMode) {
-                        const id = field.getAttribute('data-id');
-                        const updatedValue = field.innerHTML;
-                        if (id) {
-                            if (id === 'exchange_rate_value') {
-                                useLiveApiRate = false; // လက်နဲ့ပြင်လိုက်ရင် auto စနစ်ကို ပိတ်ရန်
-                                document.getElementById('live-indicator').style.animation = 'none';
-                                document.getElementById('live-indicator').style.backgroundColor = '#cda33b';
-                            }
-                            database.ref('gf_app_data/' + id).set(updatedValue);
-                        }
-                    }
-                });
-            });
-        });
-
-        // Admin Auth စနစ်
-        function toggleAdminAccess() {
-            const fields = document.querySelectorAll('.editable-field');
-            const lockBtn = document.getElementById('lock-btn');
-            const btnText = document.getElementById('btn-text');
-            const uploadText = document.getElementById('upload-text');
-            const adminIndicator = document.getElementById('admin-indicator');
-
-            if (!isAdminMode) {
-                const password = prompt("စီမံခန့်ခွဲသူစနစ် (Admin Mode) သို့ ဝင်ရောက်ရန် Password ရိုက်ထည့်ပါ:");
-                
-                if (password === "1234321") {
-                    isAdminMode = true;
-                    document.body.classList.add('admin-mode-unlocked');
-                    lockBtn.classList.add('admin-mode-active');
-                    btnText.innerText = "Admin ထွက်ရန်";
-                    if(uploadText) uploadText.style.display = "block";
-                    if(adminIndicator) adminIndicator.style.display = "block";
-                    
-                    fields.forEach(field => {
-                        field.setAttribute('contenteditable', 'true');
-                    });
-                    alert("Admin Mode သို့ ဝင်ရောက်ပြီးပါပြီ။ စာသားများနှင့် ငွေလဲနှုန်းကို စိတ်ကြိုက် ပြင်နိုင်ပါပြီ။");
-                } else if (password !== null) {
-                    alert("Password မှားယွင်းနေပါသည်။");
-                }
+            let mainCities = [];
+            if(direction === 'mm-to-th') {
+                mainCities = [
+                    { name: "Bangkok", icon: "fa-solid fa-city" },
+                    { name: "Samut Prakan", icon: "fa-solid fa-warehouse" },
+                    { name: "Mae Sot", icon: "fa-solid fa-border-top-left" },
+                    { name: "Chiang Mai", icon: "fa-solid fa-gopuram" },
+                    { name: "Phuket", icon: "fa-solid fa-umbrella-beach" }
+                ];
             } else {
-                isAdminMode = false;
-                document.body.classList.remove('admin-mode-unlocked');
-                lockBtn.classList.remove('admin-mode-active');
-                btnText.innerText = "Admin ဝင်ရန်";
-                if(uploadText) uploadText.style.display = "none";
-                if(adminIndicator) adminIndicator.style.display = "none";
+                mainCities = [
+                    { name: "Yangon", icon: "fa-solid fa-pagoda" },
+                    { name: "Mandalay", icon: "fa-solid fa-archway" },
+                    { name: "Monywa", icon: "fa-solid fa-monument" },
+                    { name: "Myawaddy", icon: "fa-solid fa-dolly" },
+                    { name: "Taunggyi", icon: "fa-solid fa-mountain-sun" }
+                ];
+            }
+
+            mainCities.forEach(city => {
+                const box = document.createElement('div');
+                box.className = 'city-icon-box';
+                box.innerHTML = `<i class="${city.icon}"></i><span>${city.name}</span>`;
+                box.onclick = function() {
+                    selectCityToInput(city.name);
+                    document.querySelectorAll('.city-icon-box').forEach(b => b.classList.remove('selected'));
+                    box.classList.add('selected');
+                };
+                container.appendChild(box);
+            });
+        }
+
+        function renderClickableNetworkBadges(direction) {
+            const container = document.getElementById('dynamic-cluster-root');
+            container.innerHTML = '';
+
+            const dataSource = (direction === 'mm-to-th') ? thNetworkMatrix : mmNetworkMatrix;
+
+            dataSource.forEach(data => {
+                const segment = document.createElement('div');
+                segment.className = 'region-segment';
                 
-                fields.forEach(field => {
-                    field.setAttribute('contenteditable', 'false');
+                const title = document.createElement('div');
+                title.className = 'region-title-badge';
+                title.innerText = data.region;
+                segment.appendChild(title);
+
+                const cluster = document.createElement('div');
+                cluster.className = 'badges-cluster';
+
+                data.cities.forEach(city => {
+                    const badge = document.createElement('div');
+                    badge.className = 'township-badge';
+                    badge.innerHTML = `<i class="fa-solid fa-location-dot"></i> <span>${city}</span>`;
+                    badge.onclick = function() {
+                        selectCityToInput(city);
+                    };
+                    cluster.appendChild(badge);
                 });
-                alert("Admin Mode မှ ထွက်လိုက်ပါပြီ။");
-            }
+
+                segment.appendChild(cluster);
+                container.appendChild(segment);
+            });
         }
 
-        // Tab ပြောင်းလဲခြင်း
-        function openTab(evt, tabName) {
-            const contentSections = document.querySelectorAll('.content-section');
-            contentSections.forEach(section => section.classList.remove('active'));
-
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-
-            document.getElementById(tabName).classList.add('active');
-            evt.currentTarget.classList.add('active');
+        function selectCityToInput(cityName) {
+            document.getElementById('order-recv-township').value = cityName;
+            document.getElementById('order-recv-township').focus();
+            document.getElementById('order-recv-township').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        // ဓာတ်ပုံ Upload ပိုင်းဆိုင်ရာ လုပ်ဆောင်ချက်များ
-        function triggerPhotoUpload() {
-            if (isAdminMode) document.getElementById('photo-input').click();
-        }
-
-        function loadPhoto(event) {
-            const file = event.target.files[0];
+        function previewSelectedCargoImage(inputElement) {
+            const file = inputElement.files[0];
+            const previewBox = document.getElementById('cargo-image-preview');
+            
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const base64Img = e.target.result;
-                    document.getElementById('profile-display').src = base64Img;
-                    database.ref('gf_profile_photo').set(base64Img);
+                    base64ImageString = e.target.result; 
+                    previewBox.style.backgroundImage = `url('${base64ImageString}')`;
+                    previewBox.style.display = 'block';
                 }
                 reader.readAsDataURL(file);
+            } else {
+                base64ImageString = "";
+                previewBox.style.display = 'none';
             }
         }
 
-        function triggerNewsPhotoUpload() {
-            if (isAdminMode) document.getElementById('news-photo-input').click();
+        function saveOrderToLocalDatabase() {
+            const name = document.getElementById('order-sender-name').value.trim();
+            const phone = document.getElementById('order-sender-phone').value.trim();
+            const township = document.getElementById('order-recv-township').value.trim();
+            const direction = document.getElementById('order-route-direction').value;
+            const weight = parseFloat(document.getElementById('order-cargo-weight').value) || 0;
+            const remark = document.getElementById('order-cargo-remark').value.trim();
+
+            if(!name || !phone || !township || weight <= 0 || !direction) {
+                alert("⚠️ ကျေးဇူးပြု၍ လိုအပ်သောအချက်အလက်များကို မှန်ကန်စွာ ဖြည့်သွင်းပေးပါ။");
+                return;
+            }
+
+            let calculatedCost = 0;
+            let currencyUnit = 'MMK';
+            if(direction === 'mm-to-th') {
+                calculatedCost = weight * 7600;
+                currencyUnit = 'MMK';
+            } else {
+                calculatedCost = weight * 230;
+                currencyUnit = 'THB';
+            }
+
+            const today = new Date();
+            const dataPacket = {
+                trackingId: "EXAC-" + Math.floor(100000 + Math.random() * 900000),
+                sender: name,
+                phone: phone,
+                fullDestination: township,
+                routeMode: direction,
+                routeText: (direction === 'mm-to-th') ? 'မြန်မာမှ -> ထိုင်းသို့' : 'ထိုင်းမှ -> မြန်မာသို့',
+                weight: weight,
+                cost: calculatedCost,
+                currency: currencyUnit,
+                image: base64ImageString, 
+                remark: remark ? remark : '-',
+                status: 'Cargo Received (ဂိတ်သို့ ပစ္စည်းရောက်ရှိ)',
+                dateString: today.toLocaleDateString(), 
+                monthString: today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, '0') 
+            };
+
+            let currentDatabase = JSON.parse(localStorage.getItem('database_exac_orders')) || [];
+            currentDatabase.push(dataPacket);
+            localStorage.setItem('database_exac_orders', JSON.stringify(currentDatabase));
+
+            alert(`🎉 Order စာရင်းကို သိမ်းဆည်းပြီးပါပြီ။\nTracking ID: ${dataPacket.trackingId}`);
+            
+            document.getElementById('order-sender-name').value = '';
+            document.getElementById('order-sender-phone').value = '';
+            document.getElementById('order-recv-addr').value = '';
+            document.getElementById('order-recv-township').value = '';
+            document.getElementById('order-recv-gate').value = '';
+            document.getElementById('order-cargo-weight').value = '';
+            document.getElementById('order-cargo-remark').value = '';
+            document.getElementById('order-cargo-image').value = '';
+            document.getElementById('cargo-image-preview').style.display = 'none';
+            base64ImageString = ""; 
         }
 
-        function loadNewsPhoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64Img = e.target.result;
-                    document.getElementById('news-display').src = base64Img;
-                    database.ref('gf_news_photo').set(base64Img);
-                }
-                reader.readAsDataURL(file);
+        function executeLocalSearchTracking() {
+            const searchKey = document.getElementById('tracking-search-phone').value.trim();
+            const outputTerminal = document.getElementById('tracking-output-board');
+
+            if(!searchKey) return;
+
+            const database = JSON.parse(localStorage.getItem('database_exac_orders')) || [];
+            const filteredResults = database.filter(item => item.phone === searchKey);
+
+            outputTerminal.style.display = 'block';
+
+            if(filteredResults.length === 0) {
+                outputTerminal.innerHTML = `<p style="color:var(--gold-premium);"># ရှာဖွေမှုမတွေ့ရှိပါ။</p>`;
+                return;
             }
+
+            let responseHTML = ``;
+            filteredResults.reverse().forEach(record => {
+                let imgHTML = record.image ? `<div class="order-log-img-thum" style="background-image:url('${record.image}'); margin-top:8px;" onclick="openImageLightboxView('${record.image}')"></div>` : '';
+                responseHTML += `
+                    <div style="border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px; margin-bottom:10px;">
+                        <p style="color:var(--gold-glow);"><strong>Tracking ID:</strong> ${record.trackingId}</p>
+                        <p><strong>လမ်းကြောင်း:</strong> ${record.routeText} (${record.weight} kg)</p>
+                        <p><strong>မြို့နယ်:</strong> ${record.fullDestination}</p>
+                        <p><strong>ကျသင့်ငွေ:</strong> ${record.cost.toLocaleString()} ${record.currency}</p>
+                        ${imgHTML}
+                        <p style="color:var(--success-green); margin-top:5px;"><strong>အခြေအနေ:</strong> ${record.status}</p>
+                    </div>
+                `;
+            });
+            outputTerminal.innerHTML = responseHTML;
+        }
+
+        function toggleReportMode(mode) {
+            reportViewMode = mode;
+            document.getElementById('filter-daily-btn').classList.toggle('active', mode === 'daily');
+            document.getElementById('filter-monthly-btn').classList.toggle('active', mode === 'monthly');
+            document.getElementById('summary-title-label').innerText = (mode === 'daily') ? 'ယနေ့ စုစုပေါင်း အလေးချိန်' : 'ယခုလ စုစုပေါင်း အလေးချိန်';
+            loadReportDatabase();
+        }
+
+        function loadReportDatabase() {
+            const database = JSON.parse(localStorage.getItem('database_exac_orders')) || [];
+            const container = document.getElementById('report-list-container');
+            container.innerHTML = '';
+
+            const today = new Date();
+            const currentDayStr = today.toLocaleDateString();
+            const currentMonthStr = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, '0');
+
+            let filteredList = database.filter(item => {
+                if(reportViewMode === 'daily') {
+                    return item.dateString === currentDayStr;
+                } else {
+                    return item.monthString === currentMonthStr;
+                }
+            });
+
+            let totalWeight = 0;
+            let totalMMK = 0;
+            let totalTHB = 0;
+
+            if(filteredList.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px 0;">🚫 ဤအပိုင်းတွင် စာရင်းမှတ်တမ်း မရှိသေးပါ။</p>`;
+                document.getElementById('sum-total-weight').innerText = "0 kg";
+                document.getElementById('sum-total-mmk').innerText = "0 MMK";
+                document.getElementById('sum-total-thb').innerText = "0 THB";
+                return;
+            }
+
+            filteredList.reverse().forEach((record, index) => {
+                totalWeight += record.weight;
+                if(record.currency === 'MMK') {
+                    totalMMK += record.cost;
+                } else {
+                    totalTHB += record.cost;
+                }
+
+                let imageThumbnailHTML = ``;
+                if(record.image) {
+                    imageThumbnailHTML = `<div class="order-log-img-thum" style="background-image: url('${record.image}');" onclick="openImageLightboxView('${record.image}')"></div>`;
+                } else {
+                    imageThumbnailHTML = `<div class="order-log-img-thum no-pic"><i class="fa-regular fa-image" style="display:block;margin-bottom:2px;"></i>ပုံမရှိပါ</div>`;
+                }
+
+                const logCard = document.createElement('div');
+                logCard.className = 'order-log-item';
+                logCard.innerHTML = `
+                    <div class="order-log-header">
+                        <span style="color:var(--neon-blue); font-weight:600;">🆔 ${record.trackingId}</span>
+                        <span style="color:var(--text-muted);"><i class="fa-regular fa-calendar-days"></i> ${record.dateString}</span>
+                    </div>
+                    <div class="order-log-flex-body">
+                        <div class="order-log-details">
+                            <p><strong>ပို့သူ:</strong> ${record.sender} (${record.phone})</p>
+                            <p><strong>လိပ်စာ:</strong> ${record.fullDestination}</p>
+                            <p><strong>လမ်းကြောင်း:</strong> ${record.routeText}</p>
+                            <p><strong>အလေးချိန်:</strong> <span style="color:var(--gold-glow); font-weight:600;">${record.weight} kg</span></p>
+                            <p><strong>မှတ်ချက်:</strong> ${record.remark}</p>
+                        </div>
+                        ${imageThumbnailHTML}
+                    </div>
+                    <div class="order-log-footer">
+                        <div>ကျသင့်ငွေ: <span style="color:var(--success-green); font-weight:700;">${record.cost.toLocaleString()} ${record.currency}</span></div>
+                        <button class="delete-log-btn" onclick="deleteOrderRecord(${database.length - 1 - index})"><i class="fa-solid fa-trash-can"></i> ဖြတ်ရန်</button>
+                    </div>
+                `;
+                container.appendChild(logCard);
+            });
+
+            document.getElementById('sum-total-weight').innerText = totalWeight.toFixed(2) + " kg";
+            document.getElementById('sum-total-mmk').innerText = totalMMK.toLocaleString() + " MMK";
+            document.getElementById('sum-total-thb').innerText = totalTHB.toLocaleString() + " THB";
+        }
+
+        function deleteOrderRecord(actualIndex) {
+            if(confirm("❌ ဤအော်ဒါစာရင်းကို ဖျက်ပစ်ရန် သေချက်ပါသလား?")) {
+                let database = JSON.parse(localStorage.getItem('database_exac_orders')) || [];
+                database.splice(actualIndex, 1);
+                localStorage.setItem('database_exac_orders', JSON.stringify(database));
+                loadReportDatabase();
+            }
+        }
+
+        function openImageLightboxView(base64Src) {
+            const modal = document.getElementById('image-lightbox');
+            const modalImg = document.getElementById('lightbox-target-img');
+            modalImg.src = base64Src;
+            modal.classList.add('show');
+        }
+
+        function closeImageLightboxView() {
+            const modal = document.getElementById('image-lightbox');
+            modal.classList.remove('show');
         }
     </script>
 </body>
