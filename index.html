@@ -3,37 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOE SERVICE - Management System</title>
-    <!-- Font Awesome Icons CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase SDK (v8 Standalone Version - 100% Work in Standard HTML) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
+    <title>Management System (Firebase Cloud)</title>
     <style>
         :root {
             --bg-color: #0b0f19;
             --card-bg: #111827;
-            --card-border: #1f2937;
-            --text-color: #f9fafb;
-            --text-muted: #9ca3af;
+            --border-color: #1f2937;
+            --text-main: #f9fafb;
+            --text-sub: #9ca3af;
             --input-bg: #1f2937;
-            --primary-btn: #2563eb;
-            --primary-btn-hover: #1d4ed8;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent-cyan: #38bdf8;
+            --accent-green: #34d399;
+            --accent-yellow: #fbbf24;
+            --accent-red: #f87171;
+            --row-hover: #1e293b;
         }
 
         [data-theme="light"] {
-            --bg-color: #f3f4f6;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --card-border: #e5e7eb;
-            --text-color: #111827;
-            --text-muted: #6b7280;
-            --input-bg: #f9fafb;
-            --primary-btn: #2563eb;
-            --primary-btn-hover: #1d4ed8;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --border-color: #cbd5e1;
+            --text-main: #0f172a;
+            --text-sub: #475569;
+            --input-bg: #f1f5f9;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent-cyan: #0284c7;
+            --accent-green: #059669;
+            --accent-yellow: #d97706;
+            --accent-red: #dc2626;
+            --row-hover: #f1f5f9;
         }
 
         * {
@@ -41,980 +42,929 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            transition: background-color 0.2s, color 0.2s;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 12px;
-            width: 100%;
-            min-height: 100vh;
-        }
-
-        /* LOGIN MODAL OVERLAY */
-        #loginOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(11, 15, 25, 0.95);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            backdrop-filter: blur(5px);
-        }
-
-        .login-box {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            width: 90%;
-            max-width: 360px;
-            text-align: center;
-        }
-
-        .login-box h2 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-            color: #00f5d4;
-        }
-
-        .login-box p {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        .login-input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 1rem;
-            text-align: center;
-            outline: none;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            background-color: var(--primary-btn);
-            color: #fff;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .login-btn:hover { background-color: var(--primary-btn-hover); }
-
-        .error-msg {
-            color: #ef4444;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            display: none;
+            color: var(--text-main);
+            padding: 20px;
+            font-size: 14px;
         }
 
         .container {
-            max-width: 100%;
+            max-width: 1400px;
             margin: 0 auto;
-            display: none;
         }
 
-        .top-bar {
+        .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
         }
 
-        .app-title {
-            font-size: 1.4rem;
-            letter-spacing: 2px;
-            font-weight: bold;
+        .profile-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .profile-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-cyan);
+            box-shadow: 0 6px 12px rgba(56, 189, 248, 0.4);
+            background: linear-gradient(135deg, #e0f2fe, #38bdf8);
+            padding: 4px;
+            animation: fly3d 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes fly3d {
+            0% {
+                transform: translateY(0px) rotateY(0deg) rotateZ(0deg) scale(1);
+                box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3);
+            }
+            50% {
+                transform: translateY(-6px) rotateY(15deg) rotateZ(-3deg) scale(1.05);
+                box-shadow: 0 12px 20px rgba(56, 189, 248, 0.5);
+            }
+            100% {
+                transform: translateY(3px) rotateY(-15deg) rotateZ(3deg) scale(0.98);
+                box-shadow: 0 6px 10px rgba(56, 189, 248, 0.2);
+            }
+        }
+
+        .nav-controls {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .live-clock {
+        .clock-badge {
             background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            color: #00f5d4;
+            border: 1px solid var(--border-color);
             padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: var(--shadow);
+            border-radius: 16px;
+            font-size: 13px;
+            color: var(--text-sub);
+            font-weight: 600;
         }
 
-        .theme-toggle, .lang-select, .logout-btn {
+        .theme-btn, .lang-select {
             background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
             padding: 6px 12px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 13px;
+            outline: none;
+            font-weight: 600;
+        }
+
+        .menu-toggle-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .menu-toggle-btn:hover { border-color: var(--primary); }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            display: none;
+        }
+
+        .sidebar-overlay.active { display: block; }
+
+        .settings-sidebar {
+            position: fixed;
+            top: 0; right: -360px;
+            width: 320px; height: 100%;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 20px;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .settings-sidebar.active { right: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .close-sidebar-btn {
+            background: none; border: none;
+            color: var(--text-sub);
+            font-size: 22px; cursor: pointer;
+        }
+
+        .sidebar-group {
+            display: flex;
+            flex-direction: column;
             gap: 6px;
         }
 
-        .logout-btn { background-color: #ef4444; color: #fff; border: none; }
+        .sidebar-group label {
+            font-size: 12px; font-weight: 700;
+            color: var(--text-sub);
+        }
 
-        .dashboard {
+        .sidebar-select {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px; border-radius: 8px;
+            outline: none; font-size: 13px; width: 100%;
+        }
+
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 10px;
-            margin-bottom: 15px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px; margin-bottom: 20px;
         }
 
         .stat-card {
             background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 12px 15px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: var(--shadow);
+            padding: 16px; border-radius: 10px;
+            border: 1px solid var(--border-color);
         }
 
-        .stat-card h3 {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 6px;
+        .stat-title {
+            font-size: 11px; color: var(--text-sub);
+            font-weight: 700; margin-bottom: 6px;
             text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
         }
 
-        .stat-card .num-total { font-size: 1.5rem; font-weight: bold; color: #00f5d4; }
-        .stat-card .num-working { font-size: 1.5rem; font-weight: bold; color: #facc15; }
-        .stat-card .num-finished { font-size: 1.5rem; font-weight: bold; color: #22c55e; }
-        .stat-card .num-revenue { font-size: 1.5rem; font-weight: bold; color: #ff9f1c; }
+        .stat-value {
+            font-size: 22px; font-weight: 800;
+            color: var(--accent-cyan);
+        }
 
-        .form-card {
+        .section-header {
+            font-size: 16px; font-weight: 800;
+            margin-bottom: 12px; display: flex;
+            align-items: center; justify-content: space-between; gap: 8px;
+        }
+
+        .form-container {
             background-color: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--card-border);
-            margin-bottom: 15px;
-            box-shadow: var(--shadow);
-        }
-
-        .form-card h2 {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid var(--card-border);
-            padding-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            padding: 18px; border-radius: 10px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px 15px;
-            align-items: start;
+            gap: 12px; margin-bottom: 16px;
         }
 
         .form-group { display: flex; flex-direction: column; }
 
         .form-group label {
-            margin-bottom: 6px;
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            height: 20px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            white-space: nowrap;
+            font-size: 12px; color: var(--text-sub);
+            margin-bottom: 4px; font-weight: 700;
         }
 
         .form-group input, .form-group select {
-            padding: 9px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
             background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 0.9rem;
-            outline: none;
-            width: 100%;
-            height: 38px;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px; border-radius: 6px;
+            outline: none; font-size: 13px; font-weight: 600;
         }
 
-        .uppercase-input { text-transform: uppercase; }
-        .age-display { font-size: 0.78rem; color: #3b82f6; margin-top: 3px; font-weight: 600; min-height: 16px; }
+        .btn-save {
+            width: 100%; background-color: var(--primary);
+            color: white; border: none; padding: 12px;
+            border-radius: 6px; font-weight: 800;
+            font-size: 14px; cursor: pointer;
+        }
 
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-save:hover { background-color: var(--primary-hover); }
 
-        .btn {
-            background-color: var(--primary-btn);
-            color: #ffffff;
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.95rem;
+        /* Top Search Box */
+        .top-search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .top-search-input {
             flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn:hover { background-color: var(--primary-btn-hover); }
-        .btn-cancel { background-color: #6b7280; }
-        .btn-cancel:hover { background-color: #4b5563; }
-
-        .filter-section {
             background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .search-box { position: relative; flex: 1; min-width: 250px; }
-
-        .search-box i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 9px 12px 9px 36px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
             outline: none;
+            font-size: 13px;
+            font-weight: 600;
         }
 
-        .status-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-
-        .tab-btn {
-            background-color: var(--input-bg);
-            border: 1px solid var(--card-border);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: bold;
+        .top-search-input:focus {
+            border-color: var(--accent-cyan);
         }
 
-        .tab-btn.active {
-            background-color: var(--primary-btn);
-            color: #ffffff;
-            border-color: var(--primary-btn);
+        .controls-row {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 16px;
+            gap: 12px; flex-wrap: wrap;
         }
 
-        .filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .filter-group label { font-size: 0.8rem; color: var(--text-muted); }
-
-        .filter-group input[type="month"] {
-            padding: 6px 10px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 0.85rem;
-        }
-
-        .summary-banner {
-            background-color: rgba(37, 99, 235, 0.1);
-            border: 1px solid var(--primary-btn);
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            font-size: 0.9rem;
-        }
-
-        .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .list-header h2 { font-size: 1rem; display: flex; align-items: center; gap: 8px; }
-
-        .btn-danger {
-            background-color: #ef4444;
-            color: white;
-            padding: 6px 12px;
-            font-size: 0.85rem;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-danger:hover { background-color: #dc2626; }
-
-        .client-card {
+        .filter-buttons {
+            display: flex; gap: 6px;
             background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 10px;
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: var(--shadow);
-            overflow-x: auto;
+            padding: 3px; border-radius: 6px;
+            border: 1px solid var(--border-color);
         }
 
-        .checkbox-container { display: flex; align-items: center; justify-content: center; padding-right: 4px; }
+        .filter-btn {
+            background: none; border: none;
+            color: var(--text-sub); padding: 6px 12px;
+            border-radius: 4px; cursor: pointer;
+            font-size: 12px; font-weight: 700;
+        }
 
-        .client-info {
-            display: grid;
-            grid-template-columns: minmax(110px, 1.2fr) minmax(130px, 1.5fr) minmax(130px, 1.2fr) minmax(180px, 1.8fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(90px, 1fr) minmax(100px, 1fr);
-            gap: 10px;
-            flex-grow: 1;
-            align-items: center;
+        .filter-btn.active {
+            background-color: var(--primary); color: white;
+        }
+
+        .btn-clear-all {
+            background-color: rgba(248, 113, 113, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            padding: 8px 14px; border-radius: 6px;
+            cursor: pointer; font-size: 12px; font-weight: 800;
+        }
+
+        /* TABLE STYLING */
+        .table-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px; overflow: hidden;
+        }
+
+        .table-responsive { width: 100%; overflow-x: auto; }
+
+        table {
+            width: 100%; border-collapse: collapse;
+            text-align: left; font-size: 13px;
+        }
+
+        thead {
+            background-color: var(--input-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--text-sub); padding: 10px 12px;
+            font-weight: 700; font-size: 11px;
+            text-transform: uppercase; letter-spacing: 0.5px;
             white-space: nowrap;
         }
 
-        .info-item { font-size: 0.82rem; overflow: hidden; text-overflow: ellipsis; }
-        .info-item span { display: block; color: var(--text-muted); font-size: 0.72rem; margin-bottom: 2px; }
-
-        .badge {
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.72rem;
-            font-weight: 800;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            user-select: none;
-            transition: transform 0.1s ease;
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap; vertical-align: middle;
+            color: var(--text-main); font-size: 13px;
         }
 
-        .badge:hover { transform: scale(1.05); }
-        .badge-working { background-color: #facc15; color: #000000; }
-        .badge-finished { background-color: #22c55e; color: #000000; }
+        tbody tr:hover { background-color: var(--row-hover); }
 
-        .action-icons { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-        .icon-btn { background: none; border: none; cursor: pointer; font-size: 1rem; transition: transform 0.2s; }
-        .icon-btn:hover { transform: scale(1.2); }
-        .icon-print { color: #3b82f6; }
-        .icon-edit { color: #f59e0b; }
-        .icon-delete { color: #ef4444; }
+        .name-text { font-size: 13px; font-weight: 700; color: var(--text-main); }
+        .date-badge { font-size: 12px; color: var(--accent-cyan); font-weight: 600; font-family: monospace; }
+        .id-badge {
+            font-family: monospace; background-color: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan); padding: 3px 6px; border-radius: 4px;
+            font-weight: 700; font-size: 12px;
+        }
+        .pin-badge {
+            font-family: monospace; background-color: rgba(251, 191, 36, 0.15);
+            color: var(--accent-yellow); padding: 3px 6px; border-radius: 4px;
+            font-weight: 700; font-size: 12px;
+        }
 
-        @media (max-width: 1024px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) {
-            body { padding: 8px; }
-            .app-title { font-size: 1.2rem; }
-            .form-grid { grid-template-columns: 1fr; }
-            .filter-section { flex-direction: column; align-items: stretch; }
-            .filter-group { justify-content: space-between; }
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px; border-radius: 12px;
+            font-size: 11px; font-weight: 700; cursor: pointer;
+        }
+
+        .status-pill.working {
+            background-color: rgba(56, 189, 248, 0.15); color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .status-pill.finished {
+            background-color: rgba(52, 211, 153, 0.15); color: var(--accent-green);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .action-group { display: flex; align-items: center; gap: 5px; }
+
+        .btn-icon-only {
+            border: none; width: 28px; height: 28px;
+            border-radius: 6px; cursor: pointer; font-size: 13px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* အဆင်ပြေ/အဆင်မပြေ Icon Button Styling */
+        .btn-icon-status-ok { background-color: rgba(248, 113, 113, 0.15); color: #f43f5e; }
+        .btn-icon-status-issue { background-color: rgba(239, 68, 68, 0.25); color: #ef4444; font-weight: bold; }
+
+        .btn-icon-edit { background-color: rgba(251, 191, 36, 0.15); color: var(--accent-yellow); }
+        .btn-icon-share { background-color: rgba(52, 211, 153, 0.15); color: var(--accent-green); }
+        .btn-icon-delete { background-color: rgba(248, 113, 113, 0.15); color: var(--accent-red); }
+
+        .no-data {
+            text-align: center; color: var(--text-sub);
+            padding: 30px 15px; font-weight: 700; font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid, .form-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 500px) {
+            .stats-grid, .form-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-<body data-theme="dark">
+<body>
 
-<!-- LOGIN MODAL SCREEN -->
-<div id="loginOverlay">
-    <div class="login-box">
-        <i class="fa-solid fa-lock" style="font-size: 2.5rem; color: #2563eb; margin-bottom: 12px;"></i>
-        <h2>DOE SERVICE</h2>
-        <p>Admin PIN (သို့မဟုတ်) မိမိ၏ Passport/Work Permit နံပါတ် ရိုက်ထည့်ပါ</p>
-        <input type="text" id="loginPin" class="login-input" placeholder="Enter PIN / Passport No.">
-        <button class="login-btn" onclick="checkLogin()">LOGIN ဝင်မည်</button>
-        <div id="loginError" class="error-msg"><i class="fa-solid fa-circle-exclamation"></i> ရိုက်ထည့်ထားသော နံပါတ် မမှန်ကန်ပါ။</div>
-    </div>
-</div>
+<div class="container">
+    <div class="top-nav">
+        <div class="profile-container">
+            <img class="profile-img" id="userProfileImg" src="https://api.iconify.design/fluent-emoji-flat:dove.svg" alt="3D Flying Bird">
+        </div>
 
-<!-- MAIN APP CONTAINER -->
-<div class="container" id="mainContainer">
-    <div class="top-bar">
-        <div class="app-title"><i class="fa-solid fa-briefcase"></i> DOE SERVICE</div>
-        
-        <div class="controls">
-            <div class="live-clock">
-                <i class="fa-regular fa-clock"></i>
-                <span id="clockDisplay">00:00:00 AM</span>
-            </div>
-
-            <select id="langSelect" class="lang-select" onchange="changeLanguage()">
-                <option value="my">🇲🇲 မြန်မာ (Myanmar)</option>
-                <option value="en">🇬🇧 English</option>
-                <option value="th">🇹🇭 ไทย (Thai)</option>
-                <option value="zh">🇨🇳 中文 (Chinese)</option>
-                <option value="ja">🇯🇵 日本語 (Japanese)</option>
-                <option value="ko">🇰🇷 한국어 (Korean)</option>
-                <option value="vi">🇻🇳 Tiếng Việt (Vietnamese)</option>
-                <option value="id">🇮🇩 Bahasa Indonesia</option>
-                <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+        <div class="nav-controls">
+            <span class="clock-badge" id="currentTime">🕒 00:00:00 PM</span>
+            <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Night Mode</button>
+            <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="MM">MM မြန်မာ</option>
+                <option value="EN">EN English</option>
+                <option value="TH">TH ไทย</option>
             </select>
-
-            <button class="theme-toggle" onclick="toggleTheme()">
-                <i id="themeIcon" class="fa-solid fa-sun" style="color: #f59e0b;"></i>
-                <span id="themeText">Day</span>
-            </button>
-
-            <button class="logout-btn" onclick="logout()">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </button>
+            <button class="menu-toggle-btn" onclick="toggleSidebar()" title="Settings">☰</button>
         </div>
     </div>
 
-    <!-- Dashboards (Admin Only) -->
-    <div class="dashboard admin-only">
-        <div class="stat-card">
-            <h3><i class="fa-solid fa-users"></i> <span data-lang="total_clients">Total Clients</span></h3>
-            <p id="totalClients" class="num-total">0</p>
+    <!-- Sidebar Menu Settings -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="settings-sidebar" id="settingsSidebar">
+        <div class="sidebar-header">
+            <span>⚙️ SETTINGS</span>
+            <button class="close-sidebar-btn" onclick="toggleSidebar()">&times;</button>
         </div>
-        <div class="stat-card">
-            <h3><i class="fa-solid fa-spinner"></i> <span data-lang="working">Working</span></h3>
-            <p id="workingClients" class="num-working">0</p>
+
+        <div class="sidebar-group">
+            <label>📅 လချုပ်စာရင်း စစ်ဆေးရန် (၁၂ လ)</label>
+            <select class="sidebar-select" id="monthFilter" onchange="applyFilters()">
+                <option value="ALL">📅 လချုပ်စာရင်း (အားလုံး)</option>
+            </select>
         </div>
-        <div class="stat-card">
-            <h3><i class="fa-solid fa-circle-check"></i> <span data-lang="finished">Finished</span></h3>
-            <p id="finishedClients" class="num-finished">0</p>
-        </div>
-        <div class="stat-card">
-            <h3><i class="fa-solid fa-money-bill-wave"></i> <span data-lang="revenue">Total Revenue</span></h3>
-            <p id="totalRevenue" class="num-revenue">0</p>
+
+        <div class="sidebar-group">
+            <label>⚠️ စာရင်း အခြေအနေ စစ်ဆေးရန်</label>
+            <select class="sidebar-select" id="bannedFilter" onchange="applyFilters()">
+                <option value="ALL">စာရင်း အားလုံးပြပါ</option>
+                <option value="OK">❤️ အဆင်ပြေသော စာရင်းများသာပြပါ</option>
+                <option value="ISSUE">❌ အဆင်မပြေသော စာရင်းများသာပြပါ</option>
+            </select>
         </div>
     </div>
 
-    <!-- Form (Admin Only) -->
-    <div class="form-card admin-only">
-        <h2 id="formTitle"><i class="fa-solid fa-user-plus"></i> <span data-lang="add_new">စာရင်းသစ်ထည့်ရန်</span></h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-title" id="lbl_total_clients">TOTAL CLIENTS</div>
+            <div class="stat-value" id="totalClients">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title" id="lbl_working">WORKING</div>
+            <div class="stat-value" id="totalWorking">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title" id="lbl_finished">FINISHED</div>
+            <div class="stat-value" id="totalFinished" style="color: var(--accent-green);">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title" id="lbl_revenue">TOTAL REVENUE (THB)</div>
+            <div class="stat-value" id="totalRevenue" style="color: var(--accent-yellow);">0</div>
+        </div>
+    </div>
+
+    <div class="section-header">
+        <span id="lbl_form_title">👤 စာရင်းသစ်ထည့်သွင်းရန်</span>
+    </div>
+
+    <div class="form-container">
         <form id="clientForm">
-            <input type="hidden" id="editFirebaseId" value="">
-
+            <input type="hidden" id="editId" value="">
             <div class="form-grid">
                 <div class="form-group">
-                    <label><i class="fa-solid fa-id-card"></i> <span data-lang="doc_no">Passport / Work Permit နံပါတ်</span> *</label>
-                    <input type="text" id="docNo" required placeholder="" class="uppercase-input">
+                    <label id="lbl_doc_id">💳 Pass/Work နံပါတ် *</label>
+                    <input type="text" id="docId" placeholder="CC8142321" required oninput="checkDocIdAutoFill(this.value)">
                 </div>
-
                 <div class="form-group">
-                    <label><i class="fa-solid fa-user"></i> <span data-lang="name">နာမည် (English အကြီးဖြင့်)</span> *</label>
-                    <input type="text" id="fullName" class="uppercase-input" required placeholder="" oninput="this.value = this.value.toUpperCase()">
+                    <label id="lbl_name">👤 နာမည် (English စာလုံးကြီး) *</label>
+                    <input type="text" id="name" placeholder="NAME" required oninput="this.value = this.value.toUpperCase()">
                 </div>
-
                 <div class="form-group">
-                    <label><i class="fa-solid fa-cake-candles"></i> <span data-lang="dob">မွေးနေ့</span> *</label>
-                    <input type="date" id="dob" required onchange="calculateAge()">
-                    <div id="ageDisplay" class="age-display"></div>
+                    <label id="lbl_dob">🎂 မွေးနေ့ *</label>
+                    <input type="date" id="dob" required onchange="calcAge()">
+                    <div style="color: var(--accent-cyan); font-size: 11px; margin-top: 2px; font-weight: 700;" id="ageLabel"></div>
                 </div>
-
                 <div class="form-group">
-                    <label><i class="fa-solid fa-envelope"></i> <span data-lang="gmail">Gmail</span></label>
-                    <input type="email" id="gmail" placeholder="example@gmail.com">
+                    <label id="lbl_email">✉ Gmail</label>
+                    <input type="email" id="email" placeholder="example@gmail.com">
                 </div>
-
                 <div class="form-group">
-                    <label><i class="fa-solid fa-key"></i> <span data-lang="password">Password</span></label>
-                    <input type="text" id="password" placeholder="Enter Password">
+                    <label id="lbl_pass">🔑 Password</label>
+                    <input type="text" id="password" placeholder="112025">
                 </div>
-
                 <div class="form-group">
-                    <label><i class="fa-solid fa-shield-halved"></i> <span data-lang="pincode">Pincode</span></label>
-                    <input type="text" id="pincode" placeholder="Enter Pincode">
+                    <label id="lbl_pin">📍 Pincode</label>
+                    <input type="text" id="pincode" placeholder="64000">
                 </div>
-
                 <div class="form-group">
-                    <label><i class="fa-solid fa-list-check"></i> <span data-lang="status">လုပ်ငန်းအခြေအနေ</span></label>
+                    <label id="lbl_status">⚙ လုပ်ငန်းအခြေအနေ</label>
                     <select id="status">
                         <option value="WORKING">WORKING</option>
                         <option value="FINISHED">FINISHED</option>
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <label><i class="fa-solid fa-baht-sign"></i> <span data-lang="price">ဝင်ငွေ/ကျသင့်ငွေ (THB)</span></label>
-                    <input type="number" id="revenue" value="0" min="0">
+                    <label id="lbl_fee">💰 ဝန်ဆောင်ခ / ကျသင့်ငွေ (THB)</label>
+                    <input type="number" id="revenue" placeholder="1000" value="0">
                 </div>
             </div>
-
-            <div class="btn-group">
-                <button type="submit" id="submitBtn" class="btn"><i class="fa-solid fa-floppy-disk"></i> <span data-lang="save_btn">စာရင်းသိမ်းဆည်းမည်</span></button>
-                <button type="button" id="cancelBtn" class="btn btn-cancel" style="display: none;" onclick="resetForm()"><i class="fa-solid fa-xmark"></i> <span data-lang="cancel_btn">ပယ်ဖျက်မည်</span></button>
-            </div>
+            <button type="submit" class="btn-save" id="btn_save">💾 စာရင်းသိမ်းဆည်းမည်</button>
         </form>
     </div>
 
-    <!-- Filter (Admin Only) -->
-    <div class="filter-section admin-only">
-        <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Passport (သို့) Work Permit နံပါတ်ရိုက်ရှာပါ..." onkeyup="renderClients()">
+    <div class="controls-row">
+        <div class="filter-buttons">
+            <button class="filter-btn active" id="btn_f_all" onclick="setFilter('ALL', this)">အားလုံး</button>
+            <button class="filter-btn" id="btn_f_work" onclick="setFilter('WORKING', this)">Working</button>
+            <button class="filter-btn" id="btn_f_done" onclick="setFilter('FINISHED', this)">Completed</button>
         </div>
-
-        <div class="status-tabs">
-            <button type="button" class="tab-btn active" onclick="setStatusFilter('ALL', this)" data-lang="tab_all">အားလုံး</button>
-            <button type="button" class="tab-btn" onclick="setStatusFilter('WORKING', this)" data-lang="tab_working">Working (စောင့်ဆိုင်းဆဲ)</button>
-            <button type="button" class="tab-btn" onclick="setStatusFilter('FINISHED', this)" data-lang="tab_finished">Completed (ပြီးပြီသား)</button>
-        </div>
-
-        <div class="filter-group">
-            <label><i class="fa-solid fa-calendar-days"></i> <span data-lang="monthly_filter">လချုပ်စရင်း</span>:</label>
-            <input type="month" id="filterMonth" onchange="renderClients()">
-            <button onclick="clearMonthFilter()" style="padding: 4px 8px; border-radius: 6px; border: 1px solid var(--card-border); cursor: pointer;" data-lang="clear_btn">ပြန်ဖြုတ်</button>
-        </div>
+        <button class="btn-clear-all" id="btn_clear_all" onclick="clearAllData()">🗑 အားလုံးဖျက်မည်</button>
     </div>
 
-    <div id="summaryBanner" class="summary-banner admin-only" style="display: none;">
-        <div><b><i class="fa-solid fa-chart-pie"></i> <span id="summaryTitle">လချုပ်စရင်း</span>:</b></div>
-        <div>စုစုပေါင်း စာရင်း: <b id="summaryCount" style="color: #00f5d4;">0</b> ခု</div>
-        <div>စုစုပေါင်း ဝင်ငွေ: <b id="summaryRevenue" style="color: #ff9f1c;">0 THB</b></div>
+    <!-- စာရင်းဇယားအပေါ် ရွှေ့ထားသော ရှာဖွေရေး Search Box -->
+    <div class="top-search-box">
+        <input type="text" class="top-search-input" id="searchInput" placeholder="🔍 Pass/Work နံပါတ် သို့မဟုတ် နာမည် ရိုက်ရှာပါ..." oninput="handleSearch(this.value)">
     </div>
 
-    <div class="list-header">
-        <h2><i class="fa-solid fa-folder-open"></i> <span data-lang="saved_list">သိမ်းဆည်းထားသော စာရင်းများ</span></h2>
-        <button class="btn-danger admin-only" onclick="deleteSelected()"><i class="fa-solid fa-trash-can"></i> <span data-lang="delete_selected">အမှတ်ခြစ်ထားသည်များကို ဖျက်မည်</span></button>
+    <div class="section-header" id="lbl_list_title">📁 သိမ်းဆည်းထားသော စာရင်းများ</div>
+    <div class="table-card">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th id="th_saved_time">SAVED DATE</th>
+                        <th id="th_name">အမည်</th>
+                        <th id="th_doc_id">Pass/Work</th>
+                        <th id="th_dob">မွေးနေ့ (အသက်)</th>
+                        <th>Gmail</th>
+                        <th>Pincode</th>
+                        <th id="th_status">အခြေအနေ</th>
+                        <th id="th_fee">ကျသင့်ငွေ</th>
+                        <th id="th_action">လုပ်ဆောင်ချက်</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
     </div>
-
-    <div id="clientList"></div>
 </div>
 
-<script>
-    // Firebase Configuration Initialization
+<!-- Firebase SDK Modern Imports -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Firebase Configurations
     const firebaseConfig = {
-        apiKey: "AIzaSyAbKzhPRH8m9vi62nSl1cFhZi4PzyflZP4",
-        authDomain: "doeservice-f5991.firebaseapp.com",
-        databaseURL: "https://doeservice-f5991-default-rtdb.firebaseio.com",
-        projectId: "doeservice-f5991",
-        storageBucket: "doeservice-f5991.firebasestorage.app",
-        messagingSenderId: "966320006999",
-        appId: "1:966320006999:web:b8050e2c17f15d5de84012"
+      apiKey: "AIzaSyAbKzhPRH8m9vi62nSl1cFhZi4PzyflZP4",
+      authDomain: "doeservice-f5991.firebaseapp.com",
+      projectId: "doeservice-f5991",
+      storageBucket: "doeservice-f5991.firebasestorage.app",
+      messagingSenderId: "966320006999",
+      appId: "1:966320006999:web:b8050e2c17f15d5de84012",
+      measurementId: "G-L72FYQ1YGH"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const clientsRef = database.ref('clients');
+    // Firebase Initialize
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const clientsCollection = collection(db, "clients");
 
-    window.clients = [];
-    window.currentLang = 'my';
-    window.currentStatusFilter = 'ALL';
-    const ADMIN_PIN = "112025";
-    window.isAdmin = false;
-    window.currentUserDocNo = "";
+    let clients = [];
+    let currentFilter = 'ALL';
+    let currentLang = 'MM';
 
-    // Fetch Realtime Data
-    clientsRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        window.clients = [];
-        if (data) {
-            Object.keys(data).forEach(key => {
-                window.clients.unshift({
-                    firebaseKey: key,
-                    ...data[key]
-                });
-            });
+    const i18n = {
+        MM: {
+            total_clients: "TOTAL CLIENTS", working: "WORKING", finished: "FINISHED", revenue: "TOTAL REVENUE (THB)",
+            form_title: "👤 စာရင်းသစ်ထည့်သွင်းရန်", form_title_edit: "✏️ စာရင်း ပြန်လည်ပြင်ဆင်ရန်", doc_id: "💳 Pass/Work နံပါတ် *", name: "👤 နာမည် (English စာလုံးကြီး) *",
+            dob: "🎂 မွေးနေ့ *", email: "✉ Gmail", pass: "🔑 Password", pin: "📍 Pincode", status: "⚙ လုပ်ငန်းအခြေအနေ",
+            fee: "💰 ဝန်ဆောင်ခ / ကျသင့်ငွေ (THB)", save: "💾 စာရင်းသိမ်းဆည်းမည်", update: "🔄 ပြင်ဆင်ချက် သိမ်းမည်", search: "🔍 Pass/Work နံပါတ် သို့မဟုတ် နာမည် ရိုက်ရှာပါ...",
+            f_all: "အားလုံး", f_work: "Working", f_done: "Completed", clear_all: "🗑 အားလုံးဖျက်မည်",
+            list_title: "📁 သိမ်းဆည်းထားသော စာရင်းများ", age_suffix: " နှစ်", no_data: "သိမ်းဆည်းထားသော စာရင်း မရှိသေးပါ။",
+            th_saved_time: "SAVED DATE", th_name: "အမည်", th_doc_id: "Pass/Work", th_dob: "မွေးနေ့ (အသက်)", th_status: "အခြေအနေ", th_fee: "ကျသင့်ငွေ", th_action: "လုပ်ဆောင်ချက်"
+        },
+        EN: {
+            total_clients: "TOTAL CLIENTS", working: "WORKING", finished: "FINISHED", revenue: "TOTAL REVENUE (THB)",
+            form_title: "👤 Add New Client", form_title_edit: "✏️ Edit Client Record", doc_id: "💳 Pass/Work No. *", name: "👤 Full Name (UPPERCASE) *",
+            dob: "🎂 Date of Birth *", email: "✉ Gmail", pass: "🔑 Password", pin: "📍 Pincode", status: "⚙ Work Status",
+            fee: "💰 Revenue / Fee (THB)", save: "💾 Save Record", update: "🔄 Update Record", search: "🔍 Search Pass/Work or Name...",
+            f_all: "All", f_work: "Working", f_done: "Completed", clear_all: "🗑 Delete All",
+            list_title: "📁 Saved Records", age_suffix: " yrs", no_data: "No records found.",
+            th_saved_time: "SAVED DATE", th_name: "Name", th_doc_id: "Pass/Work", th_dob: "DOB (Age)", th_status: "Status", th_fee: "Fee (THB)", th_action: "Actions"
+        },
+        TH: {
+            total_clients: "ลูกค้าทั้งหมด", working: "กำลังดำเนินการ", finished: "เสร็จสิ้น", revenue: "รายได้ทั้งหมด (THB)",
+            form_title: "👤 เพิ่มข้อมูลใหม่", form_title_edit: "✏️ แก้ไขข้อมูล", doc_id: "💳 Pass/Work *", name: "👤 ชื่อ-นามสกุล (ตัวพิมพ์ใหญ่) *",
+            dob: "🎂 วันเกิด *", email: "✉ อีเมล", pass: "🔑 รหัสผ่าน", pin: "📍 พินโค้ด", status: "⚙ สถานะงาน",
+            fee: "💰 ค่าบริการ (THB)", save: "💾 บันทึกข้อมูล", update: "🔄 อัปเดตข้อมูล", search: "🔍 ค้นหาด้วย Pass/Work หรือชื่อ...",
+            f_all: "ทั้งหมด", f_work: "กำลังดำเนินการ", f_done: "เสร็จสิ้น", clear_all: "🗑 ลบทั้งหมด",
+            list_title: "📁 บันทึกข้อมูลแล้ว", age_suffix: " ปี", no_data: "ไม่พบข้อมูล",
+            th_saved_time: "วันที่บันทึก", th_name: "ชื่อ", th_doc_id: "Pass/Work", th_dob: "วันเกิด (อายุ)", th_status: "สถานะ", th_fee: "ค่าบริการ", th_action: "จัดการ"
         }
-        updateDashboard();
-        renderClients();
+    };
+
+    // Realtime Data Sync from Firebase Cloud
+    onSnapshot(clientsCollection, (snapshot) => {
+        clients = [];
+        snapshot.forEach((doc) => {
+            clients.push({ id: doc.id, ...doc.data() });
+        });
+        populateMonthFilter();
+        applyFilters();
     });
 
-    // Handle Form Submit (Save / Update)
-    document.getElementById('clientForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const firebaseKey = document.getElementById('editFirebaseId').value;
-        const todayStr = new Date().toISOString().split('T')[0];
+    window.toggleSidebar = function() {
+        document.getElementById('settingsSidebar').classList.toggle('active');
+        document.getElementById('sidebarOverlay').classList.toggle('active');
+    }
 
-        const clientData = {
-            docNo: document.getElementById('docNo').value.toUpperCase().trim(),
-            fullName: document.getElementById('fullName').value.toUpperCase().trim(),
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('currentTime').textContent = '🕒 ' + now.toLocaleTimeString('en-US');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    window.toggleTheme = function() {
+        const currentTheme = document.body.getAttribute('data-theme');
+        const themeBtn = document.getElementById('themeBtn');
+        if (currentTheme === 'light') {
+            document.body.removeAttribute('data-theme');
+            themeBtn.textContent = '🌙 Night Mode';
+        } else {
+            document.body.setAttribute('data-theme', 'light');
+            themeBtn.textContent = '☀️ Day Mode';
+        }
+    }
+
+    window.changeLanguage = function(lang) {
+        currentLang = lang;
+        const t = i18n[lang];
+
+        document.getElementById('lbl_total_clients').textContent = t.total_clients;
+        document.getElementById('lbl_working').textContent = t.working;
+        document.getElementById('lbl_finished').textContent = t.finished;
+        document.getElementById('lbl_revenue').textContent = t.revenue;
+        
+        const isEdit = document.getElementById('editId').value !== "";
+        document.getElementById('lbl_form_title').textContent = isEdit ? t.form_title_edit : t.form_title;
+        document.getElementById('btn_save').textContent = isEdit ? t.update : t.save;
+
+        document.getElementById('lbl_doc_id').textContent = t.doc_id;
+        document.getElementById('lbl_name').textContent = t.name;
+        document.getElementById('lbl_dob').textContent = t.dob;
+        document.getElementById('lbl_email').textContent = t.email;
+        document.getElementById('lbl_pass').textContent = t.pass;
+        document.getElementById('lbl_pin').textContent = t.pin;
+        document.getElementById('lbl_status').textContent = t.status;
+        document.getElementById('lbl_fee').textContent = t.fee;
+        document.getElementById('searchInput').placeholder = t.search;
+        document.getElementById('btn_f_all').textContent = t.f_all;
+        document.getElementById('btn_f_work').textContent = t.f_work;
+        document.getElementById('btn_f_done').textContent = t.f_done;
+        document.getElementById('btn_clear_all').textContent = t.clear_all;
+        document.getElementById('lbl_list_title').textContent = t.list_title;
+
+        document.getElementById('th_saved_time').textContent = t.th_saved_time;
+        document.getElementById('th_name').textContent = t.th_name;
+        document.getElementById('th_doc_id').textContent = t.th_doc_id;
+        document.getElementById('th_dob').textContent = t.th_dob;
+        document.getElementById('th_status').textContent = t.th_status;
+        document.getElementById('th_fee').textContent = t.th_fee;
+        document.getElementById('th_action').textContent = t.th_action;
+
+        calcAge();
+        applyFilters();
+    }
+
+    window.calcAge = function() {
+        const dobVal = document.getElementById('dob').value;
+        if (dobVal) {
+            const dob = new Date(dobVal);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+            document.getElementById('ageLabel').textContent = age + i18n[currentLang].age_suffix;
+        } else {
+            document.getElementById('ageLabel').textContent = '';
+        }
+    }
+
+    window.checkDocIdAutoFill = function(val) {
+        const cleanVal = val.trim().toUpperCase();
+        if(!cleanVal) return;
+        
+        const match = clients.find(c => c.docId.toUpperCase() === cleanVal);
+        if(match) {
+            editItem(match.id);
+        }
+    }
+
+    window.handleSearch = function(val) {
+        applyFilters();
+        const cleanVal = val.trim().toUpperCase();
+        if(cleanVal) {
+            const match = clients.find(c => c.docId.toUpperCase() === cleanVal);
+            if(match) {
+                editItem(match.id);
+            }
+        }
+    }
+
+    // Toggle Issue/OK Status (❤️ အဆင်ပြေ <-> ❌ အဆင်မပြေ ကြက်ခြေခတ်)
+    window.toggleIssueStatus = async function(id) {
+        const client = clients.find(c => c.id === id);
+        if (client) {
+            const isIssue = !client.isIssue;
+            await updateDoc(doc(db, "clients", id), { isIssue: isIssue });
+        }
+    }
+
+    // Save or Update Client Data on Firebase
+    document.getElementById('clientForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const editId = document.getElementById('editId').value;
+        const inputDocId = document.getElementById('docId').value.trim().toUpperCase();
+        const inputName = document.getElementById('name').value.trim().toUpperCase();
+
+        const now = new Date();
+        const savedDateOnly = now.getFullYear() + '-' + 
+            String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+            String(now.getDate()).padStart(2, '0');
+
+        const monthKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+
+        const dataObj = {
+            createdAt: savedDateOnly,
+            monthKey: monthKey,
+            docId: inputDocId,
+            name: inputName,
             dob: document.getElementById('dob').value,
-            gmail: document.getElementById('gmail').value.trim(),
+            email: document.getElementById('email').value.trim(),
             password: document.getElementById('password').value.trim(),
             pincode: document.getElementById('pincode').value.trim(),
             status: document.getElementById('status').value,
             revenue: parseFloat(document.getElementById('revenue').value) || 0
         };
 
-        if (firebaseKey) {
-            clientsRef.child(firebaseKey).update(clientData)
-            .then(() => {
-                alert("စာရင်း ပြင်ဆင်ပြီးပါပြီ!");
-                resetForm();
-            })
-            .catch(err => alert("Error: " + err.message));
+        if (editId) {
+            await updateDoc(doc(db, "clients", editId), dataObj);
         } else {
-            clientData.createdDate = todayStr;
-            clientsRef.push(clientData)
-            .then(() => {
-                alert("စာရင်း အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ!");
-                resetForm();
-            })
-            .catch(err => alert("Error: " + err.message));
+            dataObj.isIssue = false; // မူလ default အနေဖြင့် ❤️ အဆင်ပြေ
+            await addDoc(clientsCollection, dataObj);
         }
+
+        this.reset();
+        document.getElementById('editId').value = "";
+        document.getElementById('ageLabel').textContent = '';
+        changeLanguage(currentLang);
     });
 
-    function checkLogin() {
-        const inputVal = document.getElementById('loginPin').value.trim().toUpperCase();
-        const errorMsg = document.getElementById('loginError');
+    function populateMonthFilter() {
+        const monthSelect = document.getElementById('monthFilter');
+        const selectedVal = monthSelect.value;
+        monthSelect.innerHTML = `<option value="ALL">📅 လချုပ်စာရင်း (အားလုံး)</option>`;
 
-        if (!inputVal) {
-            errorMsg.style.display = 'block';
-            return;
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const currentYear = new Date().getFullYear();
+
+        for (let i = 0; i < 12; i++) {
+            const mNum = String(i + 1).padStart(2, '0');
+            const mKey = `${currentYear}-${mNum}`;
+            const option = document.createElement('option');
+            option.value = mKey;
+            option.textContent = `📅 ${monthNames[i]} ${currentYear} လချုပ်`;
+            monthSelect.appendChild(option);
         }
 
-        if (inputVal === ADMIN_PIN) {
-            window.isAdmin = true;
-            window.currentUserDocNo = "";
-            showApp();
-            return;
-        }
-
-        const matchedClient = (window.clients || []).find(c => c.docNo && c.docNo.toUpperCase() === inputVal);
-        if (matchedClient) {
-            window.isAdmin = false;
-            window.currentUserDocNo = inputVal;
-            showApp();
-        } else {
-            errorMsg.style.display = 'block';
-        }
+        monthSelect.value = selectedVal;
     }
 
-    function showApp() {
-        document.getElementById('loginOverlay').style.display = 'none';
-        document.getElementById('mainContainer').style.display = 'block';
-        document.getElementById('loginError').style.display = 'none';
-
-        const adminElements = document.querySelectorAll('.admin-only');
-        adminElements.forEach(el => {
-            el.style.display = window.isAdmin ? '' : 'none';
-        });
-
-        renderClients();
-    }
-
-    document.getElementById('loginPin').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') checkLogin();
-    });
-
-    function logout() {
-        document.getElementById('loginOverlay').style.display = 'flex';
-        document.getElementById('mainContainer').style.display = 'none';
-        document.getElementById('loginPin').value = '';
-        window.isAdmin = false;
-        window.currentUserDocNo = "";
-    }
-
-    function updateClock() {
-        const now = new Date();
-        let hours = now.getHours();
-        let minutes = now.getMinutes();
-        let seconds = now.getSeconds();
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-
-        hours = hours % 12;
-        hours = hours ? hours : 12;
-        hours = hours < 10 ? '0' + hours : hours;
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-        seconds = seconds < 10 ? '0' + seconds : seconds;
-
-        document.getElementById('clockDisplay').innerText = `${hours}:${minutes}:${seconds} ${ampm}`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    const translations = {
-        my: { total_clients: "Total Clients", working: "Working", finished: "Finished", revenue: "Total Revenue", add_new: "စာရင်းသစ်ထည့်ရန်", edit_title: "စာရင်း ပြင်ဆင်ရန်", doc_no: "Passport / Work Permit နံပါတ်", name: "နာမည် (English အကြီးဖြင့်)", dob: "မွေးနေ့", gmail: "Gmail", password: "Password", pincode: "Pincode", status: "လုပ်ငန်းအခြေအနေ", price: "ဝင်ငွေ/ကျသင့်ငွေ (THB)", save_btn: "စာရင်းသိမ်းဆည်းမည်", update_btn: "စာရင်းပြင်ဆင်မည်", cancel_btn: "ပယ်ဖျက်မည်", saved_list: "သိမ်းဆည်းထားသော စာရင်းများ", delete_selected: "ရွေးထားသည်များ ဖျက်မည်", age_unit: "နှစ်", tab_all: "အားလုံး", tab_working: "Working (စောင့်ဆိုင်းဆဲ)", tab_finished: "Completed (ပြီးပြီသား)", monthly_filter: "လချုပ်စရင်း", clear_btn: "ပြန်ဖြုတ်" },
-        en: { total_clients: "Total Clients", working: "Working", finished: "Finished", revenue: "Total Revenue", add_new: "Add New Record", edit_title: "Edit Record", doc_no: "Passport / Work Permit No.", name: "Full Name (CAPITAL)", dob: "Date of Birth", gmail: "Gmail", password: "Password", pincode: "Pincode", status: "Status", price: "Revenue (THB)", save_btn: "Save Record", update_btn: "Update Record", cancel_btn: "Cancel", saved_list: "Saved Client List", delete_selected: "Delete Selected", age_unit: "yrs", tab_all: "All", tab_working: "Working", tab_finished: "Completed", monthly_filter: "Monthly", clear_btn: "Clear" }
-    };
-
-    function toggleTheme() {
-        const body = document.body;
-        const themeIcon = document.getElementById('themeIcon');
-        const themeText = document.getElementById('themeText');
-
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.setAttribute('data-theme', 'light');
-            themeIcon.className = 'fa-solid fa-moon';
-            themeIcon.style.color = '#111827';
-            themeText.innerText = 'Night';
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            themeIcon.className = 'fa-solid fa-sun';
-            themeIcon.style.color = '#f59e0b';
-            themeText.innerText = 'Day';
-        }
-    }
-
-    function changeLanguage() {
-        window.currentLang = document.getElementById('langSelect').value;
-        const t = translations[window.currentLang] || translations['en'];
-
-        document.querySelectorAll('[data-lang]').forEach(el => {
-            const key = el.getAttribute('data-lang');
-            if (t[key]) el.innerText = t[key];
-        });
-
-        renderClients();
-    }
-
-    function setStatusFilter(status, btnElement) {
-        window.currentStatusFilter = status;
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        btnElement.classList.add('active');
-        renderClients();
-    }
-
-    function calculateAge() {
-        const dobInput = document.getElementById('dob').value;
-        const ageDisplay = document.getElementById('ageDisplay');
-        if (dobInput) {
-            const birthDate = new Date(dobInput);
-            const today = new Date();
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const m = today.getMonth() - birthDate.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-            const langObj = translations[window.currentLang] || translations['en'];
-            ageDisplay.innerText = `${age} ${langObj.age_unit}`;
-        } else {
-            ageDisplay.innerText = '';
-        }
-    }
-
-    function resetForm() {
-        document.getElementById('clientForm').reset();
-        document.getElementById('editFirebaseId').value = "";
-        const langObj = translations[window.currentLang] || translations['en'];
-        document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-user-plus"></i> <span data-lang="add_new">${langObj.add_new}</span>`;
-        document.getElementById('submitBtn').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span data-lang="save_btn">${langObj.save_btn}</span>`;
-        document.getElementById('cancelBtn').style.display = "none";
-        document.getElementById('ageDisplay').innerText = '';
-    }
-
-    function toggleStatus(key) {
-        if(!window.isAdmin) return;
-        const client = window.clients.find(c => c.firebaseKey === key);
+    window.toggleStatus = async function(id) {
+        const client = clients.find(c => c.id === id);
         if (client) {
-            const newStatus = client.status === 'WORKING' ? 'FINISHED' : 'WORKING';
-            clientsRef.child(key).update({ status: newStatus });
+            const newStatus = (client.status === 'WORKING') ? 'FINISHED' : 'WORKING';
+            await updateDoc(doc(db, "clients", id), { status: newStatus });
         }
     }
 
-    function deleteSingle(key) {
-        if (confirm('ဤစရင်းကို ဖျက်ရန် သေချာပါသလား?')) {
-            clientsRef.child(key).remove();
-        }
-    }
-
-    function deleteSelected() {
-        const checkboxes = document.querySelectorAll('.delete-checkbox:checked');
-        if (checkboxes.length === 0) return alert('ဖျက်လိုသည့် စာရင်းများကို ရွေးပါ။');
-
-        if (confirm(`ရွေးချယ်ထားသော စာရင်း (${checkboxes.length}) ခုကို ဖျက်ရန် သေချာပါသလား?`)) {
-            checkboxes.forEach(cb => {
-                const key = cb.getAttribute('data-key');
-                clientsRef.child(key).remove();
-            });
-        }
-    }
-
-    function editClient(key) {
-        const client = window.clients.find(c => c.firebaseKey === key);
-        if (client) {
-            const langObj = translations[window.currentLang] || translations['en'];
-            document.getElementById('editFirebaseId').value = key;
-            document.getElementById('docNo').value = client.docNo || '';
-            document.getElementById('fullName').value = client.fullName || '';
-            document.getElementById('dob').value = client.dob || '';
-            document.getElementById('gmail').value = client.gmail || '';
-            document.getElementById('password').value = client.password || '';
-            document.getElementById('pincode').value = client.pincode || '';
-            document.getElementById('status').value = client.status || 'WORKING';
-            document.getElementById('revenue').value = client.revenue || 0;
-
-            calculateAge();
-
-            document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-user-pen"></i> <span>${langObj.edit_title}</span>`;
-            document.getElementById('submitBtn').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> <span>${langObj.update_btn}</span>`;
-            document.getElementById('cancelBtn').style.display = "flex";
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }
-
-    function clearMonthFilter() {
-        document.getElementById('filterMonth').value = '';
-        renderClients();
-    }
-
-    function printClient(key) {
-        const client = window.clients.find(c => c.firebaseKey === key);
+    window.editItem = function(id) {
+        const client = clients.find(c => c.id === id);
         if (!client) return;
 
-        const printWindow = window.open('', '', 'width=600,height=600');
-        printWindow.document.write(`
-            <html>
-            <head><title>DOE SERVICE</title>
-            <style>
-                body { font-family: sans-serif; padding: 20px; }
-                .card { border: 2px solid #000; padding: 20px; border-radius: 10px; }
-                h2 { text-align: center; margin-bottom: 15px; }
-                p { font-size: 15px; line-height: 1.8; }
-            </style>
-            </head>
-            <body>
-                <div class="card">
-                    <h2>DOE SERVICE - Client Details</h2>
-                    <hr><br>
-                    <p><b>Doc No:</b> ${client.docNo}</p>
-                    <p><b>Full Name:</b> ${client.fullName}</p>
-                    <p><b>Date of Birth:</b> ${client.dob}</p>
-                    <p><b>Gmail:</b> ${client.gmail || '-'}</p>
-                    <p><b>Password:</b> ${client.password || '-'}</p>
-                    <p><b>Pincode:</b> ${client.pincode || '-'}</p>
-                    <p><b>Status:</b> ${client.status}</p>
-                    <p><b>Total Amount:</b> ${(client.revenue || 0).toLocaleString()} THB</p>
-                    <p><b>Created Date:</b> ${client.createdDate || '-'}</p>
-                </div>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.print();
+        document.getElementById('editId').value = client.id;
+        document.getElementById('docId').value = client.docId;
+        document.getElementById('name').value = client.name;
+        document.getElementById('dob').value = client.dob;
+        document.getElementById('email').value = client.email;
+        document.getElementById('password').value = client.password;
+        document.getElementById('pincode').value = client.pincode;
+        document.getElementById('status').value = client.status;
+        document.getElementById('revenue').value = client.revenue;
+
+        calcAge();
+        changeLanguage(currentLang);
     }
 
-    function updateDashboard() {
-        const list = window.clients || [];
-        document.getElementById('totalClients').innerText = list.length;
-        document.getElementById('workingClients').innerText = list.filter(c => c.status === 'WORKING').length;
-        document.getElementById('finishedClients').innerText = list.filter(c => c.status === 'FINISHED').length;
-        const totalRev = list.reduce((sum, c) => sum + (c.revenue || 0), 0);
-        document.getElementById('totalRevenue').innerText = totalRev.toLocaleString('en-US') + " THB";
-    }
+    window.shareItem = function(id) {
+        const c = clients.find(item => item.id === id);
+        if (!c) return;
 
-    function renderClients() {
-        const clientListDiv = document.getElementById('clientList');
-        clientListDiv.innerHTML = '';
-
-        let filtered = [];
-
-        if (window.isAdmin) {
-            const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
-            const monthFilter = document.getElementById('filterMonth').value;
-
-            filtered = (window.clients || []).filter(c => {
-                const matchesSearch = (c.docNo && c.docNo.toLowerCase().includes(searchQuery)) || 
-                                      (c.fullName && c.fullName.toLowerCase().includes(searchQuery)) ||
-                                      (c.gmail && c.gmail.toLowerCase().includes(searchQuery));
-                const matchesMonth = monthFilter ? (c.createdDate && c.createdDate.startsWith(monthFilter)) : true;
-                const matchesStatus = window.currentStatusFilter === 'ALL' ? true : c.status === window.currentStatusFilter;
-                return matchesSearch && matchesMonth && matchesStatus;
-            });
-
-            const summaryBanner = document.getElementById('summaryBanner');
-            if (monthFilter) {
-                summaryBanner.style.display = 'flex';
-                document.getElementById('summaryTitle').innerText = `${monthFilter} လချုပ်စရင်း`;
-                document.getElementById('summaryCount').innerText = filtered.length;
-                const sumRev = filtered.reduce((s, c) => s + (c.revenue || 0), 0);
-                document.getElementById('summaryRevenue').innerText = sumRev.toLocaleString() + " THB";
-            } else {
-                summaryBanner.style.display = 'none';
-            }
-        } else {
-            filtered = (window.clients || []).filter(c => c.docNo && c.docNo.toUpperCase() === window.currentUserDocNo);
+        let age = '';
+        if(c.dob) {
+            const dob = new Date(c.dob);
+            const today = new Date();
+            age = today.getFullYear() - dob.getFullYear();
         }
 
-        if (filtered.length === 0) {
-            clientListDiv.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">မည်သည့် စာရင်းမှ မရှိပါ။</p>`;
+        const issueStatusText = c.isIssue ? "❌ အဆင်မပြေပါ" : "❤️ အဆင်ပြေပါသည်";
+
+        const text = `📋 *Client Data*\n\n` +
+                     `📅 *Saved Date:* ${c.createdAt || '-'}\n` +
+                     `👤 *Name:* ${c.name}\n` +
+                     `💳 *Pass/Work:* ${c.docId}\n` +
+                     `🎂 *DOB:* ${c.dob || '-'} (${age} yrs)\n` +
+                     `✉ *Email:* ${c.email || '-'}\n` +
+                     `📍 *Pincode:* ${c.pincode || '-'}\n` +
+                     `⚙ *Status:* ${c.status}\n` +
+                     `⚠️ *အခြေအနေ:* ${issueStatusText}\n` +
+                     `💰 *Fee:* ${c.revenue.toLocaleString()} THB`;
+
+        if (navigator.share) {
+            navigator.share({ title: 'Client Data', text: text }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(text);
+            alert('အချက်အလက်များကို Copy ကူးပြီးပါပြီ!');
+        }
+    }
+
+    function updateDashboard(currentDataList) {
+        document.getElementById('totalClients').textContent = currentDataList.length;
+        document.getElementById('totalWorking').textContent = currentDataList.filter(c => c.status === 'WORKING').length;
+        document.getElementById('totalFinished').textContent = currentDataList.filter(c => c.status === 'FINISHED').length;
+        const revSum = currentDataList.reduce((sum, c) => sum + (c.revenue || 0), 0);
+        document.getElementById('totalRevenue').textContent = revSum.toLocaleString();
+    }
+
+    window.setFilter = function(status, btn) {
+        currentFilter = status;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+    }
+
+    window.applyFilters = function() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const selectedMonth = document.getElementById('monthFilter').value;
+        const bannedVal = document.getElementById('bannedFilter').value;
+
+        const filtered = clients.filter(c => {
+            const docMatch = c.docId ? c.docId.toLowerCase().includes(query) : false;
+            const nameMatch = c.name ? c.name.toLowerCase().includes(query) : false;
+            const pinMatch = c.pincode ? c.pincode.toLowerCase().includes(query) : false;
+            
+            const matchesSearch = query === '' || docMatch || nameMatch || pinMatch;
+            const matchesFilter = (currentFilter === 'ALL') || (c.status === currentFilter);
+            const cMonth = c.monthKey || c.createdAt?.substring(0, 7);
+            const matchesMonth = (selectedMonth === 'ALL') || (cMonth === selectedMonth);
+            
+            let matchesBanned = true;
+            if (bannedVal === 'OK') matchesBanned = !c.isIssue;
+            if (bannedVal === 'ISSUE') matchesBanned = !!c.isIssue;
+
+            return matchesSearch && matchesFilter && matchesMonth && matchesBanned;
+        });
+
+        updateDashboard(filtered);
+        renderTable(filtered);
+    }
+
+    function renderTable(data) {
+        const tbody = document.getElementById('tableBody');
+        const t = i18n[currentLang];
+
+        if (data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="10" class="no-data">${t.no_data}</td></tr>`;
             return;
         }
 
-        const langObj = translations[window.currentLang] || translations['en'];
-
-        filtered.forEach(client => {
-            let ageText = '-';
-            if(client.dob) {
-                const birthDate = new Date(client.dob);
+        tbody.innerHTML = data.map((c, index) => {
+            let age = '';
+            if(c.dob) {
+                const dob = new Date(c.dob);
                 const today = new Date();
-                let age = today.getFullYear() - birthDate.getFullYear();
-                const m = today.getMonth() - birthDate.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-                ageText = `${age} ${langObj.age_unit}`;
+                age = today.getFullYear() - dob.getFullYear();
             }
 
-            const isWorking = client.status === 'WORKING';
-
-            const card = document.createElement('div');
-            card.className = 'client-card';
-            card.innerHTML = `
-                ${window.isAdmin ? `
-                <div class="checkbox-container">
-                    <input type="checkbox" class="delete-checkbox" data-key="${client.firebaseKey}">
-                </div>` : ''}
-                <div class="client-info">
-                    <div class="info-item"><span>Doc No.</span><b>${client.docNo}</b></div>
-                    <div class="info-item"><span>Name</span><b>${client.fullName}</b></div>
-                    <div class="info-item"><span>DOB</span>${client.dob || '-'} (${ageText})</div>
-                    <div class="info-item"><span>Gmail</span><b style="color:#60a5fa;">${client.gmail || '-'}</b></div>
-                    <div class="info-item"><span>Password</span><b>${client.password || '-'}</b></div>
-                    <div class="info-item"><span>Pincode</span><b>${client.pincode || '-'}</b></div>
-                    <div class="info-item"><span>ရက်စွဲ</span><b style="color:#3b82f6;">${client.createdDate || '-'}</b></div>
-                    <div class="info-item"><span>ဝင်ငွေ</span><b style="color:#ff9f1c;">${(client.revenue || 0).toLocaleString()} THB</b></div>
-                    <div class="info-item">
-                        <span>Status</span>
-                        <span class="badge ${isWorking ? 'badge-working' : 'badge-finished'}" ${window.isAdmin ? `onclick="toggleStatus('${client.firebaseKey}')"` : ''} title="${window.isAdmin ? 'နှိပ်၍ Status ပြောင်းရန်' : ''}">
-                            <i class="${isWorking ? 'fa-solid fa-spinner' : 'fa-solid fa-check'}"></i>
-                            ${client.status}
+            return `
+                <tr>
+                    <td><strong>${index + 1}</strong></td>
+                    <td><span class="date-badge">${c.createdAt || '-'}</span></td>
+                    <td><span class="name-text">${c.name}</span></td>
+                    <td><span class="id-badge">${c.docId}</span></td>
+                    <td><strong>${c.dob || '-'}</strong> <small style="color: var(--accent-cyan); font-weight:700;">(${age}${t.age_suffix})</small></td>
+                    <td><strong>${c.email || '-'}</strong></td>
+                    <td><span class="pin-badge">${c.pincode || '-'}</span></td>
+                    <td>
+                        <span class="status-pill ${c.status === 'WORKING' ? 'working' : 'finished'}" onclick="toggleStatus('${c.id}')">
+                            ${c.status === 'WORKING' ? '⏳' : '✔'} ${c.status}
                         </span>
-                    </div>
-                </div>
-                <div class="action-icons">
-                    <button class="icon-btn icon-print" onclick="printClient('${client.firebaseKey}')" title="Print Record"><i class="fa-solid fa-print"></i></button>
-                    ${window.isAdmin ? `
-                    <button class="icon-btn icon-edit" onclick="editClient('${client.firebaseKey}')" title="Edit Record"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button class="icon-btn icon-delete" onclick="deleteSingle('${client.firebaseKey}')" title="Delete Record"><i class="fa-solid fa-trash"></i></button>
-                    ` : ''}
-                </div>
+                    </td>
+                    <td style="color: var(--accent-yellow); font-weight: 800; font-size: 13px;">${c.revenue.toLocaleString()} THB</td>
+                    <td>
+                        <div class="action-group">
+                            <button class="btn-icon-only ${c.isIssue ? 'btn-icon-status-issue' : 'btn-icon-status-ok'}" onclick="toggleIssueStatus('${c.id}')" title="${c.isIssue ? 'အဆင်မပြေပါ (ကြက်ခြေခတ်)' : 'အဆင်ပြေပါသည် (အသည်းပုံ)'}">
+                                ${c.isIssue ? '❌' : '❤️'}
+                            </button>
+                            <button class="btn-icon-only btn-icon-edit" onclick="editItem('${c.id}')" title="ပြင်မည်">✏️</button>
+                            <button class="btn-icon-only btn-icon-share" onclick="shareItem('${c.id}')" title="ပို့မည်">🔗</button>
+                            <button class="btn-icon-only btn-icon-delete" onclick="deleteItem('${c.id}')" title="ဖျက်မည်">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
             `;
-            clientListDiv.appendChild(card);
-        });
+        }).join('');
+    }
+
+    window.deleteItem = async function(id) {
+        if(confirm('ဒီစာရင်းကို ဖျက်ရန် သေချာပါသလား?')) {
+            await deleteDoc(doc(db, "clients", id));
+        }
+    }
+
+    window.clearAllData = async function() {
+        if(confirm('စာရင်းအားလုံးကို ဖျက်ပစ်ရန် သေချာပါသလား?')) {
+            for (let c of clients) {
+                await deleteDoc(doc(db, "clients", c.id));
+            }
+        }
     }
 </script>
-
 </body>
 </html>
